@@ -1,0 +1,88 @@
+#!/usr/bin/env python
+import re, sys, os.path
+install_path = sys.argv[1]
+target_platform = sys.argv[2]
+if target_platform != "iPhone": sys.exit()
+mod_path = os.path.join('.', 'Assets', 'Editor', 'NeatPlug', 'Common', 'lib')
+sys.path.append(mod_path)
+def extractData(regex, content, index=1):
+  r = '0'
+  p = re.compile(regex)
+  m = p.search(content)
+  if m:
+    r = m.group(index)
+  return r
+info_plist_path = os.path.join(install_path, 'Info.plist')
+file = open(info_plist_path, 'r')
+plist = file.read()
+file.close()
+if plist.find('fb${FACEBOOK_APP_ID}') < 0:
+  if plist.find('CFBundleURLTypes') < 0:
+    elements_to_add = '''
+<key>CFBundleURLTypes</key>
+<array>
+ <dict>
+  <key>CFBundleURLSchemes</key>
+  <array>
+   <string>fb${FACEBOOK_APP_ID}</string>
+  </array>
+ </dict>
+</array>
+'''
+    plist = plist.replace('<key>', elements_to_add + '<key>', 1)
+  else:
+    elements_to_add = '''
+<key>CFBundleURLSchemes</key>
+<array>
+ <string>fb${FACEBOOK_APP_ID}</string>'''
+    plist = re.sub(r'<key>\s*CFBundleURLSchemes\s*</key>\s*<array>', elements_to_add, plist)
+  file = open(info_plist_path, 'w')
+  file.write(plist)
+  file.close()
+targetController = 'AppController'
+appcontroller_path = os.path.join(install_path, 'Classes', targetController + '.mm')
+if os.path.isfile(appcontroller_path) == False:
+  targetController = 'UnityAppController'
+  appcontroller_path = os.path.join(install_path, 'Classes', targetController + '.mm')
+if os.path.isfile(appcontroller_path) == True:
+  file = open(appcontroller_path, 'r')
+  appcontroller = file.read()
+  file.close()
+  if appcontroller.find('_em_FacebookSNS_handleOpenUrl') < 0:
+    elements_to_add = '''
+extern "C" bool _em_FacebookSNS_handleOpenUrl(void* urlData);
+'''
+    appcontroller = appcontroller.replace('@implementation ' + targetController, '@implementation ' + targetController + '\n\n' + elements_to_add, 1)
+    if appcontroller.find('openURL') < 0:
+      elements_to_add = '''
+extern "C" bool _em_FacebookSNS_handleOpenUrl(void* urlData);
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    _em_FacebookSNS_handleOpenUrl((void*)url);
+    return YES;
+}
+'''
+      appcontroller = appcontroller.replace('extern "C" bool _em_FacebookSNS_handleOpenUrl(void* urlData);', elements_to_add, 1)
+    else:
+      elements_to_add = '''
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    _em_FacebookSNS_handleOpenUrl((void*)url);
+'''
+      appcontroller = re.sub(r'-\s*\(BOOL\)\s*application\s*\:\s*\(UIApplication\s*\*\)application\s*openURL\s*\:\s*\(NSURL\s*\*\)\s*url\s*sourceApplication\s*\:\s*\(NSString\s*\*\)\s*sourceApplication\s*annotation\s*\:\s*\(id\)\s*annotation\s*\{', elements_to_add, appcontroller)
+    file = open(appcontroller_path, 'w')
+    file.write(appcontroller)
+    file.close()
+from mod_pbxproj import XcodeProject
+project_path = os.path.join(install_path, 'Unity-iPhone.xcodeproj', 'project.pbxproj')
+project = XcodeProject.Load(project_path)
+project.add_other_ldflags('-ObjC')
+project.add_file_if_doesnt_exist('System/Library/Frameworks/Social.framework', tree='SDKROOT', weak=True)
+project.add_file_if_doesnt_exist('System/Library/Frameworks/Accounts.framework', tree='SDKROOT', weak=True)
+project.add_file_if_doesnt_exist('System/Library/Frameworks/AdSupport.framework', tree='SDKROOT', weak=True)
+project.add_file_if_doesnt_exist('System/Library/Frameworks/Security.framework', tree='SDKROOT', weak=True)
+project.add_file_if_doesnt_exist('System/Library/Frameworks/SystemConfiguration.framework', tree='SDKROOT', weak=True)
+project.add_file_if_doesnt_exist('usr/lib/libsqlite3.dylib', tree='SDKROOT')
+if project.modified: project.backup()
+project.saveFormat3_2()
