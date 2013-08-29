@@ -19,7 +19,7 @@ public class GameManager : MonoSingleton< GameManager > {
 		}
 	}
 	
-	private string _trackName = "Track03";
+	private string _trackName = "Track01";
 	public string trackName {
 		get { return _trackName; }
 		set { _trackName = value; }

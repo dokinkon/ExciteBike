@@ -6,9 +6,9 @@ PhysicMaterial:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Tyre
-  dynamicFriction: .00999999978
-  staticFriction: .00999999978
-  bounciness: .5
+  dynamicFriction: .00100000005
+  staticFriction: .00100000005
+  bounciness: .150000006
   frictionCombine: 2
   bounceCombine: 3
   frictionDirection2: {x: 0, y: 0, z: 0}

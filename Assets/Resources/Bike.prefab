@@ -794,8 +794,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8945b7d28097c4924ac0c2094f8ea8c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horsePower: 30
-  maxSpeedZ: 20
+  horsePower: 200
+  maxSpeedZ: 25
   maxSpeedX: 10
   jumpSpeed: 10
   lookAt: {fileID: 0}
@@ -803,8 +803,11 @@ MonoBehaviour:
   rearWheel: {fileID: 11400008}
   controlByNPC: 0
   lookAtSnapGround: 1
-  lookAtOffset: 7
+  lookAtOffset: 17
   blobShadowPrefab: {fileID: 100000, guid: 2d396c91cd798423fb698aebd706ee5f, type: 2}
+  boostParticleEmitter: {fileID: 1500000}
+  boostMaxSpeed: 30
+  boostDuration: 2
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1

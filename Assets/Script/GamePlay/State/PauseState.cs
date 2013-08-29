@@ -11,6 +11,7 @@ namespace GamePlay.State {
 			_viewController = viewController;
 			_stateName = "PauseState";
 			AddTransition(Transitions.Playing, "PlayState");
+            AddTransition(Transitions.CountDown, "CountDownState");
 		}
 		
 		public override void DoBeforeEntering() {
