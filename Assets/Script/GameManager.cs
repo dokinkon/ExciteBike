@@ -25,7 +25,7 @@ public class GameManager : MonoSingleton< GameManager > {
 		set { _trackName = value; }
 	}
 	
-	private int _totalLaps = 2;
+	private int _totalLaps = 3;
 	public int totalLaps {
 		get { return _totalLaps; }
 		set { _totalLaps = value; }

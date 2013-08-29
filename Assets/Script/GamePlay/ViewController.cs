@@ -51,7 +51,7 @@ namespace GamePlay {
 		}
 		
 		private bool _shouldEnterFinishState = false;
-		private int _lapCount = 0;
+		private int _lapCount = 1;
 		
 	
 		// Use this for initialization
@@ -177,7 +177,7 @@ namespace GamePlay {
                 _lapTimer = 0;
 
                 UpdateLapText();
-				if ( _lapCount >= GameManager.Instance.totalLaps ) {
+				if ( _lapCount > GameManager.Instance.totalLaps ) {
 					_shouldEnterFinishState = true;
 				}
 			}
