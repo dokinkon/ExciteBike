@@ -48,7 +48,7 @@ namespace HostSetting {
 			Debug.Log("OnButtonGoToLobbyPressed:" + _hostTitleInput.label.text + ", " + _popupList.selection);
 			Server.title =  _hostTitleInput.label.text;
 			Server.maxPlayers = 4;//int.Parse(_popupList.selection);
-			Server.Instance.Launch();
+			Server.Instance.Launch(true);
 		}
 		
 		void OnServerInitialized() {

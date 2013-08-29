@@ -7,6 +7,7 @@ namespace GamePlay.State {
 	public class PlayState : FSMState {
 		
 		private ViewController _viewController;
+        private float _lapTimer;
 		
 		public PlayState(ViewController viewController) {
 			_stateName = "PlayState";
@@ -26,6 +27,7 @@ namespace GamePlay.State {
 				_viewController.joystick.SetActive(false);
 			}
 			_viewController.localBike.StartEngine();
+            _viewController.isPlaying = true;
 		}
 		
 		// Update is called once per frame
@@ -62,6 +64,7 @@ namespace GamePlay.State {
 			_viewController.joystick.SetActive(false);
 			_viewController.joystickPane.SetActive(false);
 			_viewController.localBike.StopEngine();
+            _viewController.isPlaying = false;
 		}
 	}
 	

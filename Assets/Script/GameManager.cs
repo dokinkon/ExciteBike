@@ -25,7 +25,7 @@ public class GameManager : MonoSingleton< GameManager > {
 		set { _trackName = value; }
 	}
 	
-	private int _totalLaps = 1;
+	private int _totalLaps = 2;
 	public int totalLaps {
 		get { return _totalLaps; }
 		set { _totalLaps = value; }
@@ -51,7 +51,7 @@ public class GameManager : MonoSingleton< GameManager > {
 	}
 	
 	public static int microVersion {
-		get { return 1; }
+		get { return 2; }
 	}
 	
 	public static string version {
@@ -82,12 +82,9 @@ public class GameManager : MonoSingleton< GameManager > {
 		}
 	}
 	
-	//private Dictionary<NetworkPlayer, bool> _levelGamePlayLoadedDict;
-	//private Dictionary<NetworkPlayer, bool> _playerReadyDict;
 	private Dictionary<NetworkPlayer, Bike> _bikes;
 	private Bike _localBike;
 	private bool _gamePlayStarted;
-	private int _currentRank;
 	private bool _isPaused;
 	private FSMSystem _fsm;
 	
@@ -119,26 +116,10 @@ public class GameManager : MonoSingleton< GameManager > {
 	void Start () {
 		_bikes = new Dictionary<NetworkPlayer, Bike>();
 		_isPaused = false;
-		
-		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (_gamePlayStarted) {
-			// update current Rank
-			_currentRank = 1;
-			foreach (KeyValuePair<NetworkPlayer, Bike> item in _bikes) {
-				if (item.Key != Network.player) {
-					Bike otherBike = item.Value;
-					if (otherBike.transform.position.z > _localBike.transform.position.z ) {
-						_currentRank++;
-					}
-				}
-			}
-		}
-		
-		//_fsm.Update();
 	}
 	
 	public void SetPaused(bool paused) {
@@ -191,34 +172,8 @@ public class GameManager : MonoSingleton< GameManager > {
 		}
 	}
 	
-	//private void OnNetworkLoadedLevel() {
-	//	
-	//	Debug.Log("GameManager.OnNetworkLoadedLevel");
-	//	Debug.Log("LocalPlayer:" + Network.player.ToString());
-		
-	//	if ( Network.isServer ) {
-	//		Debug.Log("[GameManager] isServer");
-	//	} else if ( Network.isClient ) {
-	//		Debug.Log ( "[GameManager] isClient");
-	//	} else {
-	//		Debug.Log ( "[GameManager] unknown");
-	//	}
-		
-	//	if (Network.isClient) {
-	//		networkView.RPC ("NotifyLevelLoaded", RPCMode.Server, Network.player);
-	//	} else if (Network.isServer) {
-	//		NotifyLevelLoaded(Network.player);
-	//	}
-		
-	//	Debug.Log ("[GameManager] Connections:" + Network.connections.Length);
-	//}
-	
 	void OnLevelWasLoaded(int level) {
 		Debug.Log ("[GameManager] OnLevelWasLoaded:" + level);
-	}
-	
-	public void RegisterBike(Bike bike) {
-		//_bikes.Add(bike.GetNetworkPlayer(), bike);
 	}
 	
 	public Bike SpawnBike(int track) {
@@ -316,30 +271,6 @@ public class GameManager : MonoSingleton< GameManager > {
 		}
 	}
 	
-	//[RPC]
-	//void SetTrackIndex(int trackIndex) {
-	//	Debug.Log("[RPC]SetInitialTrack:" + trackIndex);
-		/*
-		string tagName = "init_spawn_" + trackIndex;
-		GameObject spawn = GameObject.FindWithTag(tagName);
-		if (spawn == null ) {
-			Debug.LogError("[GameManager] can not find:" + tagName);
-			return;
-		}
-		
-		GameObject localBikeGo = (GameObject)Network.Instantiate(bikePrefab, spawn.transform.position, Quaternion.identity, 0);
-		_localBike = localBikeGo.GetComponent<Bike>();
-		*/
-		//_localBike = SpawnBike(trackIndex);
-		//_localBike.StartEngine();
-		
-		//if (Network.isClient) {
-		//	networkView.RPC ("RPC2Server_NotifyReadyToStart", RPCMode.Server, Network.player);
-		//} else if (Network.isServer) {
-		//	RPC2Server_NotifyReadyToStart(Network.player);
-		//}
-	//}
-	
 	private static System.Random random = new System.Random((int)DateTime.Now.Ticks);//thanks to McAden
 	public static string RandomString(int size) {
         StringBuilder builder = new StringBuilder();
@@ -352,54 +283,4 @@ public class GameManager : MonoSingleton< GameManager > {
 
         return builder.ToString();
     }
-	
-	//[RPC]
-	//void RPC2All_NotifyCountDownStart() {
-	//	_localBike.StartEngine();
-	//}
-	
-	//[RPC]
-	//void RPC2Server_NotifyReadyToStart(NetworkPlayer player) {
-	//	if (Network.isServer) {
-	//		Debug.Log("[GameManager] NofityServerReady, player:" + player.ToString() + "LocalTime:" + Time.timeSinceLevelLoad);
-	//	}
-	//}
-	
-	//[RPC]
-	//void NotifyLevelLoaded(NetworkPlayer player) {
-		// Server Side RPC		
-	//	if (Network.isServer) {
-	//		Debug.Log ("[GameManager] NotifyLevelLoaded. NetworkPlayer:" + player.ToString() + " guid:" + player.guid);
-	//		if (!_levelGamePlayLoadedDict.ContainsKey(player)) {
-	//			Debug.LogError("[GameManager] No such player:" + player.ToString());
-	//			return;
-	//		}
-	//		_levelGamePlayLoadedDict[player] = true;
-	//		bool allLevelReady = true;
-	//		foreach ( KeyValuePair<NetworkPlayer, bool> item in _levelGamePlayLoadedDict ) {
-	//			if (!item.Value) {
-	//				allLevelReady = false;
-	//			}
-	//		}
-			
-	//		if (allLevelReady) {
-	//			int trackIndex = 1;
-	//			foreach ( NetworkPlayer item in Network.connections ) {
-	//				networkView.RPC ("SetTrackIndex", item, trackIndex);
-	//				trackIndex++;
-	//			}
-				
-				// for Server player
-	//			SetTrackIndex(0);
-	//			_gamePlayStarted = true;
-	//		}	
-			
-	//	} else {
-	//		Debug.LogWarning("[GameManager] NotifyLevelLoaded was called, but is not in Server Side"); 
-	//	}
-	//}
-	
-	//void OnPlayerConnected(NetworkPlayer player) {
-	//	Debug.Log ("[GameManager] OnPlayerConnected:" + player.ToString() + " guid:" + player.guid );
-	//}	
 }

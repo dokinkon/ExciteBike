@@ -23,6 +23,8 @@ namespace GamePlay {
 		public UILabel totalTimeLabel;
 		public UILabel lapTimeLabel;
 		public UILabel bestTimeLabel;
+        public UILabel speedLabel;
+        public UILabel lapLabel;
 		
 		public UILabel rankLabel;
 
@@ -32,8 +34,17 @@ namespace GamePlay {
 		public Bike localBike {
 			get { return _localBike; }
 		}
+
+        private bool _isPlaying = false;
+        public bool isPlaying {
+            set { _isPlaying = value; }
+            get { return _isPlaying; }
+        }
+        
+        private float _lapTimer = 0.0f;
+        private float _bestLapTime = 100000.0f;
+        private float _totalTimer = 0;
 			
-		
 		FSMSystem _fsm = new FSMSystem();
 		public FSMSystem fsm {
 			get { return _fsm; }
@@ -52,6 +63,7 @@ namespace GamePlay {
 			pauseMenuPanel.SetActive(false);
 			gamePlayPanel.SetActive(false);
 			finishPanel.SetActive(false);
+            UpdateLapText();
             
             _cameraInitPosition = Camera.main.transform.position;
 			
@@ -84,7 +96,30 @@ namespace GamePlay {
 				_fsm.PerformTransition(State.Transitions.Finish);
 			}
 			_fsm.Update();
+            float speed = _localBike.rigidbody.velocity.z;
+            speedLabel.text = speed.ToString();
+
+            if (_isPlaying) {
+                _lapTimer += Time.deltaTime;
+                _totalTimer += Time.deltaTime;
+                UpdateTimerText(_lapTimer, lapTimeLabel);
+                UpdateTimerText(_totalTimer, totalTimeLabel);
+            }
 		}
+
+        void UpdateTimerText(float t, UILabel label) {
+
+            int sec = (int)t;
+            int min = (int)(sec / 60);
+            if (min > 99 ) {
+                min = 99;
+            }
+            int msec = (int)((t - sec)*100);
+            sec = sec % 60;
+            
+            label.text = System.String.Format("{0:00}:{1:00}:{2:00}", min, sec, msec);
+
+        }
 		
 		void OnPlayerReadyStart(float deltaTime) {
 			_fsm.PerformTransition(State.Transitions.CountDown);
@@ -134,11 +169,25 @@ namespace GamePlay {
 			if (bikeGo.networkView.owner == Network.player) {
 				Debug.Log("[GamePlay.ViewController.OnPlayerFinished]");
 				_lapCount++;
+
+                if (_lapTimer < _bestLapTime) {
+                    _bestLapTime = _lapTimer;
+                }
+                UpdateTimerText(_bestLapTime, bestTimeLabel);
+                _lapTimer = 0;
+
+                UpdateLapText();
 				if ( _lapCount >= GameManager.Instance.totalLaps ) {
 					_shouldEnterFinishState = true;
 				}
 			}
 		}
+
+        void UpdateLapText() {
+            if (lapLabel!=null) {
+                lapLabel.text = "LAP:" + _lapCount.ToString();
+            }
+        }
 	}
 
 }

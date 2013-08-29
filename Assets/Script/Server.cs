@@ -48,7 +48,7 @@ public class Server : MonoSingleton<Server> {
 		networkView.RPC ("StartRace", RPCMode.All);
 	}
 	
-	public void Launch() {
+	public void Launch(bool registerToMasterServer) {
 		
 		NetworkConnectionError error = Network.InitializeServer(_maxPlayers, listenPort, useNat);
 		if (NetworkConnectionError.NoError!=error) {
@@ -59,8 +59,11 @@ public class Server : MonoSingleton<Server> {
 			}
 			return;
 		}
-		MasterServer.updateRate = 3;
-		MasterServer.RegisterHost(GameManager.gameName, title, "profas chat test");	
+
+        if ( registerToMasterServer ) {
+            MasterServer.updateRate = 3;
+            MasterServer.RegisterHost(GameManager.gameName, title, "profas chat test");	
+        }
 	}
 	
 	// Deprecated

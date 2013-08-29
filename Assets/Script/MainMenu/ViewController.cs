@@ -51,12 +51,13 @@ namespace MainMenu {
 		}
 		
 		void OnQuickRaceButtonPressed(GameObject button) {
-			//Debug.Log ("OnButtonHostGamePressed:" + button.ToString());
-			//splashScreen.levelToLoad = "HostSettingScene";
-			//splashScreen.StartSplash();
-			//Application.LoadLevel("HostSettingScene");
-			//UIDialog.Create (panel, "text", "this is message");
-			
+			Server.title = "Quick Race";
+			Server.maxPlayers = 1;
+			Server.Instance.Launch(false);
+		}
+
+		void OnServerInitialized() {
+			Application.LoadLevel("GameLobbyScene");
 		}
 		
 		void OnMultiplayerButtonPressed(GameObject button) {
