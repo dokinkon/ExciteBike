@@ -139,10 +139,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 112626553}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 322.383392, y: -245.427673, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: .495955735, y: -.488381058, z: 0}
+  m_LocalScale: {x: .00125000009, y: .00166666659, z: 1}
   m_Children: []
-  m_Father: {fileID: 1242743681}
+  m_Father: {fileID: 1175506344}
 --- !u!1 &272071635
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,7 +333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
+  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
@@ -390,7 +390,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
+  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
@@ -503,7 +503,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 799383679}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -943.457336, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1027778253}
@@ -564,8 +564,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
-  mTex: {fileID: 0}
+  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 2800000, guid: da323e2b403b83f48a9c5bc9e05ec0cd, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 0
@@ -610,17 +610,17 @@ MonoBehaviour:
   widgetsAreStatic: 0
   cullWhileDragging: 0
   worldToLocal:
-    e00: 1
+    e00: 239.999985
     e01: 0
     e02: 0
-    e03: 0
+    e03: -1070.92163
     e10: 0
-    e11: 1
+    e11: 239.999985
     e12: 0
-    e13: 0
+    e13: -123.861748
     e20: 0
     e21: 0
-    e22: 1
+    e22: 239.999985
     e23: 0
     e30: 0
     e31: 0
@@ -630,7 +630,7 @@ MonoBehaviour:
   mDebugInfo: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 0, w: 0}
-  mClipSoftness: {x: 40, y: 40}
+  mClipSoftness: {x: 32.6300011, y: 40}
 --- !u!4 &1027778253
 Transform:
   m_ObjectHideFlags: 0
@@ -638,7 +638,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1027778251}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 723.013062, y: 0, z: 0}
+  m_LocalPosition: {x: 844.199402, y: 123.861748, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 799383680}
@@ -656,7 +656,7 @@ MonoBehaviour:
   columns: 1
   direction: 0
   padding: {x: 0, y: 8}
-  sorted: 0
+  sorted: 1
   hideInactive: 1
   repositionNow: 0
   keepWithinPanel: 0
@@ -698,7 +698,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
+  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 3
@@ -726,6 +726,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 1175506344}
   - 114: {fileID: 1175506345}
+  - 114: {fileID: 1175506346}
+  - 65: {fileID: 1175506347}
   m_Layer: 0
   m_Name: SlicedSprite (Dark)
   m_TagString: Untagged
@@ -742,7 +744,9 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 19.0001431, z: 0}
   m_LocalScale: {x: 800, y: 600, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 112626554}
+  - {fileID: 1236781460}
   m_Father: {fileID: 1242743681}
 --- !u!114 &1175506345
 MonoBehaviour:
@@ -755,8 +759,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
-  mTex: {fileID: 0}
+  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 2800000, guid: da323e2b403b83f48a9c5bc9e05ec0cd, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 2
@@ -767,6 +771,31 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!114 &1175506346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1175506343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6be1c23e94a0ec847bf5784666c3432d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  draggableCamera: {fileID: 1910067455}
+  target: {fileID: 0}
+--- !u!65 &1175506347
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1175506343}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: .99999994, y: 1, z: 0}
+  m_Center: {x: 0, y: 0, z: -.75}
 --- !u!1 &1236781459
 GameObject:
   m_ObjectHideFlags: 0
@@ -789,10 +818,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1236781459}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -338.413361, y: 161.216644, z: 0}
-  m_LocalScale: {x: .999950051, y: .999950051, z: .999950051}
+  m_LocalPosition: {x: -.501913488, y: .280859053, z: 0}
+  m_LocalScale: {x: .00124993757, y: .00166658335, z: .999950051}
   m_Children: []
-  m_Father: {fileID: 1242743681}
+  m_Father: {fileID: 1175506344}
 --- !u!1 &1242743680
 GameObject:
   m_ObjectHideFlags: 0
@@ -824,8 +853,6 @@ Transform:
   - {fileID: 1358922034}
   - {fileID: 1128643896}
   - {fileID: 1175506344}
-  - {fileID: 112626554}
-  - {fileID: 1236781460}
   m_Father: {fileID: 1721689100}
 --- !u!114 &1242743682
 MonoBehaviour:
@@ -844,17 +871,17 @@ MonoBehaviour:
   widgetsAreStatic: 0
   cullWhileDragging: 0
   worldToLocal:
-    e00: 1
+    e00: 350
     e01: 0
     e02: 0
     e03: 0
     e10: 0
-    e11: 1
+    e11: 350
     e12: 0
     e13: 0
     e20: 0
     e21: 0
-    e22: 1
+    e22: 350
     e23: 0
     e30: 0
     e31: 0
@@ -949,7 +976,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
+  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
@@ -1052,8 +1079,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d33c6354b54fb847b16b36e1391868d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
-  mTex: {fileID: 0}
+  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 2800000, guid: da323e2b403b83f48a9c5bc9e05ec0cd, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 0
@@ -1207,7 +1234,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1786592078}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 4.87574863, y: 0, z: 0}
   m_LocalScale: {x: .00416666688, y: .00416666688, z: .00416666688}
   m_Children:
   - {fileID: 799383680}
@@ -1256,7 +1283,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1910067449}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 816.05658, y: -104.565727, z: 0}
+  m_LocalPosition: {x: 14.5395899, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1786592079}
@@ -1315,15 +1342,15 @@ Camera:
   m_BackGroundColor: {r: .5, g: .5, b: .5, a: 1}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: .137414277
-    y: .149389029
-    width: .707996428
-    height: .580920458
+    x: .0697884262
+    y: .10853076
+    width: .85531646
+    height: .659348607
   near clip plane: -2
   far clip plane: 2
   field of view: 60
   orthographic: 1
-  orthographic size: .580920458
+  orthographic size: .659348607
   m_Depth: 1
   m_CullingMask:
     serializedVersion: 2
@@ -1359,7 +1386,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rootForBounds: {fileID: 1786592079}
   scale: {x: 0, y: 1}
-  scrollWheelFactor: 0
+  scrollWheelFactor: -2
   dragEffect: 2
   smoothDragStart: 1
   momentumAmount: 35
