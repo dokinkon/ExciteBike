@@ -519,6 +519,7 @@ MonoBehaviour:
   items:
   - Bike
   - Bike_CB1300
+  - tmax
   padding: {x: 5, y: 5}
   textScale: 1
   textColor: {r: 1, g: 1, b: 1, a: 1}
