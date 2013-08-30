@@ -12,14 +12,39 @@ public class Engine : MonoBehaviour {
     public AudioSource soundRPM6000;
     public bool selfTest = true;
     private bool _risingRev = true;
-    private float _rpmFloat = 1000.0f;
+    private float _currentRPM = 0.0f;
     public float _selfTestFactor = 10.0f;
     public float pitchRange = 0.3f;
+    public float maxHorsePower = 200;
+
+    public int currentGearPosition = 0;
+    public int totalGears = 6;
+
+    public float volume = 1.0f;
+
+    private bool _isStarted = false;
+    public bool isStarted {
+        get { return _isStarted;}
+        set { 
+            if (_isStarted != value) {
+                _isStarted = value;
+                if (_isStarted)
+                    _currentRPM = 1000.0f;
+                else 
+                    _currentRPM = 0.0f;
+            }
+        }
+    }
 
     private AudioSource[] rpmSounds;
     private int[] _rpmSamples = new int[] { 1000, 2000, 3000, 4000, 5000, 6000};
 
     public int rpm;
+
+    private float _currentThrottle = 0.0f;
+    private float _currentMaxRPM;
+    public float increaseRevFactor = 500;
+    public float decreaseRevFactor = 400;
 
 	// Use this for initialization
 	void Start () {
@@ -30,32 +55,48 @@ public class Engine : MonoBehaviour {
         rpmSounds[3] = soundRPM4000;
         rpmSounds[4] = soundRPM5000;
         rpmSounds[5] = soundRPM6000;
-	
 	}
+
+    public float GetCurrentPower() {
+        if (currentGearPosition == 0) {
+            return 0.0f;
+        } else {
+            return (_currentRPM - 1000.0f) / 5000.0f * maxHorsePower;
+        }
+    }
+
+    public void SetThrottle(float t) {
+        _currentThrottle = t;
+        if (_currentThrottle > 1.0f) 
+            _currentThrottle = 1.0f;
+
+        if (_currentThrottle < 0.0f)
+            _currentThrottle = 0.0f;
+
+        _currentMaxRPM = 1000.0f + 5000.0f * _currentThrottle;
+    }
 	
 	// Update is called once per frame
 	void Update () {
 
-        if (selfTest) {
-            if (_risingRev) {
-                _rpmFloat += Time.deltaTime * _selfTestFactor;
-                if (_rpmFloat > 6000) {
-                    _risingRev = false;
-                }
-            } else {
-                _rpmFloat -= Time.deltaTime * _selfTestFactor;
-                if (_rpmFloat < 1000) {
-                    _risingRev = true;
-                }
-            }
-
-            rpm = (int)_rpmFloat;
-
+        if (_currentRPM < _currentMaxRPM) {
+            _currentRPM += Time.deltaTime * increaseRevFactor;
+        } else if ( _currentRPM > _currentMaxRPM ) {
+            _currentRPM -= Time.deltaTime * decreaseRevFactor;
         }
+
+        if (_currentRPM > 6000.0f) {
+            _currentRPM = 6000.0f;
+        } 
+
+        if (_currentRPM < 1000.0f)
+            _currentRPM = 1000.0f;
+
+        rpm = (int)_currentRPM;
 
         for (int i=0;i<6;i++) {
             float dist = rpm - _rpmSamples[i];
-            rpmSounds[i].volume = (1000.0f - Math.Abs(dist)) / 1000.0f;
+            rpmSounds[i].volume = volume * (1000.0f - Math.Abs(dist)) / 1000.0f;
 
             float pitch = 1.0f + dist / 1000.0f * pitchRange;
             if (pitch > 1.0f + pitchRange)
@@ -66,6 +107,5 @@ public class Engine : MonoBehaviour {
 
             rpmSounds[i].pitch = pitch;
         }
-	
 	}
 }

@@ -16,6 +16,7 @@ namespace GamePlay.State {
 		
 		public override void DoBeforeEntering() {
 			_viewController.pauseMenuPanel.SetActive(true);
+            _viewController.localBike.engine.volume = 0;
 			
 			Time.timeScale = 0;
 		}

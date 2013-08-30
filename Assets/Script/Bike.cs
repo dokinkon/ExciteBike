@@ -37,6 +37,7 @@ public class Bike : MonoBehaviour {
     public float boostMaxSpeed = 30;
 	public float boostDuration = 3;
 	private float _boostDelay;
+    private float _throttle = 0;
 	private NetworkPlayer _networkPlayer;
 	private Joystick _joystick;
 	private RuntimePlatform _runtimePlatform;
@@ -67,11 +68,17 @@ public class Bike : MonoBehaviour {
 	
 	public void StartEngine() {
 		_isEngineStarted = true;
+        engine.isStarted = true;
 		Debug.Log ("[Bike.StartEngine]");
 	}
+
+    public void SetThrottle(float t) {
+        _throttle = t;
+    }
 	
 	public void StopEngine() {
 		_isEngineStarted = false;
+        engine.isStarted = false;
 	}
 	
 	public void TurnLeft() {
@@ -128,6 +135,8 @@ public class Bike : MonoBehaviour {
 		
 		if ( _shouldBoost ) {
 			v.z = boostMaxSpeed;//maxSpeedZ + 5;
+            engine.SetThrottle(1);
+            engine.rpm = 4500;
 		} else {
 			if ( v.z > maxSpeedZ ) {
 				v.z = maxSpeedZ;
@@ -195,8 +204,11 @@ public class Bike : MonoBehaviour {
 		if ( _isCrashed ) {
 		} else {
 			if ( rearWheel.IsTouchingTheRoad() ) {
-				rigidbody.AddRelativeForce(Vector3.forward*horsePower);
-			}
+				rigidbody.AddRelativeForce(Vector3.forward*engine.GetCurrentPower());
+				//rigidbody.AddRelativeForce(Vector3.forward*horsePower*_throttle);
+			} else {
+                //engine.SetThrottle(0);
+            }
 			
 			FixedUpdateTilt();
 			
@@ -243,6 +255,15 @@ public class Bike : MonoBehaviour {
 		} else {
 			ResetTilt();
 		}	
+
+        if ( Input.GetKey(KeyCode.Space) ) {
+            if (_shouldBoost)
+                engine.SetThrottle(1);
+            else
+                engine.SetThrottle(1.0f);
+        } else {
+            engine.SetThrottle(0);
+        }
 	}
 	
 	void UpdateInputControlWithVirtualJoystick() {
@@ -315,8 +336,8 @@ public class Bike : MonoBehaviour {
 
     void UpdateEngineSound() {
 
-        float v = rigidbody.velocity.z;
-        engine.rpm = (int)(Math.Abs(v) / maxSpeedZ ) * 5000 + 1000;
+        //float v = rigidbody.velocity.z;
+        //engine.rpm = (int)(Math.Abs(v) / maxSpeedZ ) * 1000 + 2000;
     }
     
     void StartBoost() {

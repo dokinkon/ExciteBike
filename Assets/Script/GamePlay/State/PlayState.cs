@@ -27,6 +27,7 @@ namespace GamePlay.State {
 				_viewController.joystick.SetActive(false);
 			}
 			_viewController.localBike.StartEngine();
+            _viewController.localBike.engine.volume = 0.8f;
             _viewController.isPlaying = true;
 		}
 		
@@ -63,7 +64,8 @@ namespace GamePlay.State {
 			_viewController.gamePlayPanel.SetActive(false);
 			_viewController.joystick.SetActive(false);
 			_viewController.joystickPane.SetActive(false);
-			_viewController.localBike.StopEngine();
+			//_viewController.localBike.StopEngine();
+            _viewController.localBike.engine.currentGearPosition = 0;
             _viewController.isPlaying = false;
 		}
 	}
