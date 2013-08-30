@@ -79,18 +79,20 @@ public class Engine : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (_currentRPM < _currentMaxRPM) {
-            _currentRPM += Time.deltaTime * increaseRevFactor;
-        } else if ( _currentRPM > _currentMaxRPM ) {
-            _currentRPM -= Time.deltaTime * decreaseRevFactor;
+        if (networkView.isMine) {
+            if (_currentRPM < _currentMaxRPM) {
+                _currentRPM += Time.deltaTime * increaseRevFactor;
+            } else if ( _currentRPM > _currentMaxRPM ) {
+                _currentRPM -= Time.deltaTime * decreaseRevFactor;
+            }
+
+            if (_currentRPM > 6000.0f) {
+                _currentRPM = 6000.0f;
+            } 
+
+            if (_currentRPM < 1000.0f)
+                _currentRPM = 1000.0f;
         }
-
-        if (_currentRPM > 6000.0f) {
-            _currentRPM = 6000.0f;
-        } 
-
-        if (_currentRPM < 1000.0f)
-            _currentRPM = 1000.0f;
 
         rpm = (int)_currentRPM;
 
@@ -107,5 +109,16 @@ public class Engine : MonoBehaviour {
 
             rpmSounds[i].pitch = pitch;
         }
+	}
+
+	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info) {
+		if (stream.isWriting) {
+			float r = _currentRPM;
+			stream.Serialize(ref r);
+		} else {
+			float r = 0;
+			stream.Serialize(ref r);
+			_currentRPM = r;
+		}
 	}
 }

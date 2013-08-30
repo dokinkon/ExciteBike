@@ -15,6 +15,7 @@ GameObject:
   - 82: {fileID: 8200002}
   - 82: {fileID: 8200000}
   - 114: {fileID: 11400000}
+  - 148: {fileID: 14800000}
   m_Layer: 0
   m_Name: Engine
   m_TagString: Untagged
@@ -401,7 +402,25 @@ MonoBehaviour:
   selfTest: 0
   _selfTestFactor: 10
   pitchRange: .200000003
+  maxHorsePower: 200
+  currentGearPosition: 0
+  totalGears: 6
+  volume: 1
   rpm: 1000
+  increaseRevFactor: 500
+  decreaseRevFactor: 400
+--- !u!148 &14800000
+NetworkView:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_StateSynchronization: 1
+  m_Observed: {fileID: 11400000}
+  m_ViewID:
+    m_ID: 0
+    m_Type: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
