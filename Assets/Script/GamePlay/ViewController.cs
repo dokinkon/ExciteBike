@@ -118,7 +118,6 @@ namespace GamePlay {
             sec = sec % 60;
             
             label.text = System.String.Format("{0:00}:{1:00}:{2:00}", min, sec, msec);
-
         }
 		
 		void OnPlayerReadyStart(float deltaTime) {
@@ -143,7 +142,6 @@ namespace GamePlay {
         }
 		
 		void OnExitButtonPressed(GameObject button) {
-			//GameManager.Instance.SetPaused(false);
 			if (Network.isServer) {
 				Server.Instance.LoadLevel("GameLobbyScene");
 			} else if (Network.isClient) {
@@ -151,12 +149,11 @@ namespace GamePlay {
 				GameManager.Instance.localPlayerInfo.status = PlayerInfo.Status.Loading;
 				Application.LoadLevel("GameLobbyScene");
 			}
-			//Application.LoadLevel("GameLobbyScene");
 		}
 
         void OnDisable() {
 			Debug.Log ("[GamePlay.ViewController.OnDisable]");
-			_fsm.Stop();
+			//_fsm.Stop();
 			Client.Instance.OnGamePlayReadyStart -= OnPlayerReadyStart;
         }
 
