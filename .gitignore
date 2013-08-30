@@ -134,3 +134,5 @@ ExciteBike.userprefs
 ExciteBike.sln
 
 ExciteBike-csharp.sln
+
+*.swp
