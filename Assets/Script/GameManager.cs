@@ -187,9 +187,9 @@ public class GameManager : MonoSingleton< GameManager > {
 		
 		GameObject bikeGo = null;
 		if (Network.isClient || Network.isServer ) {
-			bikeGo = (GameObject)Network.Instantiate(Resources.Load("Bike_CB1300"), spawn.transform.position, Quaternion.identity, 0);
+			bikeGo = (GameObject)Network.Instantiate(Resources.Load(localPlayerInfo.bikeName), spawn.transform.position, Quaternion.identity, 0);
 		} else {
-			bikeGo = (GameObject)Instantiate(Resources.Load("Bike_CB1300"), spawn.transform.position, Quaternion.identity);
+			bikeGo = (GameObject)Instantiate(Resources.Load(localPlayerInfo.bikeName), spawn.transform.position, Quaternion.identity);
 		}
 		return bikeGo.GetComponent<Bike>();
 	}

@@ -157,6 +157,10 @@ namespace Lobby {
 			GameManager.Instance.OnPlayerAdded -= CreatePlayerItem;
 			GameManager.Instance.OnPlayerRemoved -= DestroyPlayerItem;
 		}
+
+        void OnSelectedBikeChanged(string bikeName) {
+            GameManager.Instance.localPlayerInfo.bikeName = bikeName;
+        }
 	}
 
 }

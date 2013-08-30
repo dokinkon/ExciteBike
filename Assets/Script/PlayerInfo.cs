@@ -33,6 +33,18 @@ public class PlayerInfo : MonoBehaviour {
 	public Texture2D profilePicture {
 		get { return _profilePicture; }
 	}
+
+    private string _bikeName = "Bike";
+    public string bikeName {
+        get { return _bikeName; }
+        set { 
+            if (_bikeName != value) {
+                _bikeName = value;
+                networkView.RPC ("SyncBikeName", RPCMode.OthersBuffered, _bikeName);
+
+            }
+        }
+    }
 	
 	public enum Status : int {
 		Unknown = 0,
@@ -195,6 +207,11 @@ public class PlayerInfo : MonoBehaviour {
 			LoadProfilePicture();
 		}
 	}
+
+    [RPC]
+    void SyncBikeName(string n) {
+        bikeName = n;
+    }
 	
 	
 	
