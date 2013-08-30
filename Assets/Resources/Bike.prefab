@@ -160,6 +160,7 @@ GameObject:
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400004}
+  - 81: {fileID: 8100000}
   m_Layer: 8
   m_Name: Bike
   m_TagString: Player
@@ -671,6 +672,13 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 2.20000005, z: 2.17000008}
   m_Center: {x: 0, y: .819999993, z: 0}
+--- !u!81 &8100000
+AudioListener:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100018}
+  m_Enabled: 1
 --- !u!82 &8200000
 AudioSource:
   m_ObjectHideFlags: 1
@@ -679,16 +687,16 @@ AudioSource:
   m_GameObject: {fileID: 100018}
   m_Enabled: 1
   serializedVersion: 3
-  m_audioClip: {fileID: 8300000, guid: d938693cf93ef411d9bf70ef529efaac, type: 3}
-  m_PlayOnAwake: 0
+  m_audioClip: {fileID: 8300000, guid: 029707dc60d1f4a4a8f0fab568dfb3c3, type: 3}
+  m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: .419999987
-  Loop: 0
+  Loop: 1
   Mute: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 1000
   Pan2D: 0
   rolloffMode: 1
   BypassEffects: 0
@@ -804,8 +812,11 @@ MonoBehaviour:
   controlByNPC: 0
   lookAtSnapGround: 1
   lookAtOffset: 17
+  enginePitchMax: .699999988
+  enginePitchMin: .5
   blobShadowPrefab: {fileID: 100000, guid: 2d396c91cd798423fb698aebd706ee5f, type: 2}
   boostParticleEmitter: {fileID: 1500000}
+  engineSound: {fileID: 0}
   boostMaxSpeed: 30
   boostDuration: 2
 --- !u!114 &11400002

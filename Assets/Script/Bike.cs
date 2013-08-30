@@ -16,9 +16,12 @@ public class Bike : MonoBehaviour {
 	public bool controlByNPC;
 	public bool lookAtSnapGround = true;
 	public float lookAtOffset = 7;
+    public float enginePitchMax = 0.7f;
+    public float enginePitchMin = 0.5f;
 	
 	public GameObject blobShadowPrefab;
     public ParticleEmitter boostParticleEmitter;
+    public Engine engine;
 	
 	private bool _isCrashed;
 	private bool _isEngineStarted;
@@ -306,8 +309,15 @@ public class Bike : MonoBehaviour {
 		}
 		
 		UpdateInputControl();
+        UpdateEngineSound();
 		_followNode.transform.position = gameObject.transform.position;
 	}
+
+    void UpdateEngineSound() {
+
+        float v = rigidbody.velocity.z;
+        engine.rpm = (int)(Math.Abs(v) / maxSpeedZ ) * 5000 + 1000;
+    }
     
     void StartBoost() {
         _shouldBoost = true;
