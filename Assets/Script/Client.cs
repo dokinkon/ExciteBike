@@ -85,7 +85,6 @@ public class Client : MonoSingleton< Client > {
 	[RPC]
 	void LoadLevelRPC(string level, int levelPrefix ) {
 		Debug.Log("[Client.LoadLevel] level:" + level + " with prefix:" + levelPrefix);
-		//lastLevelPrefix = levelPrefix;
 
 		// There is no reason to send any more data over the network on the default channel,
 		// because we are about to load the level, because all those objects will get deleted anyway

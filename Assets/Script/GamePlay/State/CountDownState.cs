@@ -47,6 +47,8 @@ namespace GamePlay.State {
 		}
 		
 		public override void DoBeforeEntering() {
+            Time.timeScale = 1;
+            Debug.Log("[GamePlay.State.CountDownState.DoBeforeEntering]");
 			_viewController.countDownPanel.SetActive(true);
 		
 		}

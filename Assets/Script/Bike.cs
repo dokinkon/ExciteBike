@@ -41,6 +41,9 @@ public class Bike : MonoBehaviour {
 	private NetworkPlayer _networkPlayer;
 	private Joystick _joystick;
 	private RuntimePlatform _runtimePlatform;
+    private int _currentTrackIndex;
+    private int _targetTrackIndex;
+    private bool _isShiftingTrack = false;
 	private GameObject _followNode;
 	public GameObject followNode {
 		get { return _followNode; }
@@ -174,29 +177,6 @@ public class Bike : MonoBehaviour {
 		}
 	}
 
-    void FixedUpdateSnapTrack() {
-        // Snap at 1, 3, 5, 7
-        Vector3 p = transform.position;
-        float[] tracks = new float[]{-3.0f, -1.0f, 1.0f, 3.0f };
-        int trackIndex = 0;
-        float minDist = 1000.0f;
-        for (int i=0;i<4;i++) {
-            float dist = Math.Abs( tracks[i] - p.x);
-            if (dist < minDist) {
-                minDist = dist;
-                trackIndex = i;
-            }
-        }
-
-        if ( p.x - tracks[trackIndex] > 0.1f ) {
-            TurnLeft();
-        } else if ( p.x - tracks[trackIndex] < -0.1f ) {
-            TurnRight();
-        } else {
-            ResetSteer();
-        }
-    }
-	
 	void FixedUpdate() {
 		if (!_isEngineStarted)
 			return;
@@ -213,18 +193,13 @@ public class Bike : MonoBehaviour {
 			FixedUpdateTilt();
 			
             if ( rearWheel.IsTouchingTheRoad() || frontWheel.IsTouchingTheRoad() ) {
-                if ( _turnLeft ) {
-                    rigidbody.AddRelativeForce ( -Vector3.right*horsePower );
-                } else if ( _turnRight ) {     
-                    rigidbody.AddRelativeForce ( Vector3.right*horsePower );
-                } else {
-                    Vector3 v = rigidbody.velocity;
-                    v.x = 0;
-                    rigidbody.velocity = v;
+                if (!_isShiftingTrack && _turnLeft) {
+                    StartShiftTrack(_currentTrackIndex + 1);
+                } else if (!_isShiftingTrack && _turnRight) {
+                    StartShiftTrack(_currentTrackIndex - 1);
                 }
-                FixedUpdateSnapTrack();
             } 
-
+            UpdateShiftTrack();
 			UpdateJump();
 		}		
 		LimitVelocity();	
@@ -293,6 +268,8 @@ public class Bike : MonoBehaviour {
 				ResetSteer();
 			}
 		}
+
+        engine.SetThrottle(1.0f);
 	}
 	
 	void UpdateInputControl() {
@@ -330,16 +307,9 @@ public class Bike : MonoBehaviour {
 		}
 		
 		UpdateInputControl();
-        UpdateEngineSound();
 		_followNode.transform.position = gameObject.transform.position;
 	}
 
-    void UpdateEngineSound() {
-
-        //float v = rigidbody.velocity.z;
-        //engine.rpm = (int)(Math.Abs(v) / maxSpeedZ ) * 1000 + 2000;
-    }
-    
     void StartBoost() {
         _shouldBoost = true;
         if (boostParticleEmitter!=null) {
@@ -407,6 +377,7 @@ public class Bike : MonoBehaviour {
 		_followNode = new GameObject("FollowNode ( " + name + " )");
 		
 		PlayerInfo playerInfo = GameManager.Instance.GetPlayerInfo(networkView.owner);
+        _currentTrackIndex = playerInfo.trackIndex;
 		
 		if ( networkView.isMine ) {
 			networkRigidbody.enabled = false;
@@ -448,4 +419,44 @@ public class Bike : MonoBehaviour {
 			playerInfo.bike = null;
 		}
 	}
+
+    private void StartShiftTrack(int targetTrackIndex) {
+        if (_isShiftingTrack)
+            return;
+
+        targetTrackIndex = Math.Min(Math.Max(0, targetTrackIndex), 3);
+        if ( targetTrackIndex == _currentTrackIndex )
+            return;
+
+        _isShiftingTrack = true;
+        _targetTrackIndex = targetTrackIndex;
+    }
+
+    private void UpdateShiftTrack() {
+        if (!_isShiftingTrack)
+            return;
+
+        float speed = 10.0f;
+
+        Vector3 direction;
+        float targetLocationX = Track.GetLocationX(_targetTrackIndex);
+        if ( rigidbody.position.x > targetLocationX ) {
+            direction = new Vector3(-1, 0, 0);
+        } else if ( rigidbody.position.x < targetLocationX ) {
+            direction = new Vector3(1, 0, 0);
+        } else {
+            direction = Vector3.zero;
+        }
+
+        float distanceAbs = Math.Abs(targetLocationX - rigidbody.position.x);
+        float stepAbs = Math.Abs(speed * Time.fixedDeltaTime);
+
+        if ( stepAbs >= distanceAbs ) {
+            rigidbody.MovePosition ( rigidbody.position + direction * distanceAbs );
+            _isShiftingTrack = false;
+            _currentTrackIndex = _targetTrackIndex;
+        } else {
+            rigidbody.MovePosition ( rigidbody.position + direction * stepAbs );
+        }
+    }
 }

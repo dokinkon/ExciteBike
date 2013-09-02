@@ -28,6 +28,7 @@ namespace GamePlay.State {
 			}
 			_viewController.localBike.StartEngine();
             _viewController.localBike.engine.volume = 0.8f;
+            _viewController.localBike.engine.currentGearPosition = 1;
             _viewController.isPlaying = true;
 		}
 		

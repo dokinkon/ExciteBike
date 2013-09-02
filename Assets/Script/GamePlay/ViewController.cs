@@ -5,28 +5,33 @@ namespace GamePlay {
 
 	public class ViewController : MonoBehaviour {
 	
+        // panels
 		public GameObject gamePlayPanel;
 		public GameObject pauseMenuPanel;
+		public GameObject waitingPanel;
+		public GameObject finishPanel;
+		public GameObject countDownPanel;
+        public GameObject debugPanel;
+
+        // buttons
 		public GameObject pauseButton;
         public GameObject restartButton;
 		public GameObject resumeButton;
 		public GameObject exitButton;
 		public GameObject joystickPane;
 		public GameObject joystick;
-		public GameObject waitingPanel;
-		public GameObject finishPanel;
 		public GameObject backToLobbyButton;
 		
+        // labels
 		public UILabel countDownLabel;
-		public GameObject countDownPanel;
-		
 		public UILabel totalTimeLabel;
 		public UILabel lapTimeLabel;
 		public UILabel bestTimeLabel;
         public UILabel speedLabel;
         public UILabel lapLabel;
-		
 		public UILabel rankLabel;
+
+        public SmoothFollow smoothFollow;
 
         private Vector3 _cameraInitPosition;
 		
@@ -84,8 +89,6 @@ namespace GamePlay {
 			
 			_localBike = GameManager.Instance.SpawnBike(GameManager.Instance.localPlayerInfo.trackIndex);
 			Client.Instance.OnGamePlayReadyStart += OnPlayerReadyStart;
-			
-			
 			_fsm.Start();
 		}
 		
@@ -102,12 +105,12 @@ namespace GamePlay {
             if (_isPlaying) {
                 _lapTimer += Time.deltaTime;
                 _totalTimer += Time.deltaTime;
-                UpdateTimerText(_lapTimer, lapTimeLabel);
-                UpdateTimerText(_totalTimer, totalTimeLabel);
+                UpdateTimerText("LAP", _lapTimer, lapTimeLabel);
+                UpdateTimerText("TOTAL", _totalTimer, totalTimeLabel);
             }
 		}
 
-        void UpdateTimerText(float t, UILabel label) {
+        void UpdateTimerText(string prefix, float t, UILabel label) {
 
             int sec = (int)t;
             int min = (int)(sec / 60);
@@ -117,10 +120,11 @@ namespace GamePlay {
             int msec = (int)((t - sec)*100);
             sec = sec % 60;
             
-            label.text = System.String.Format("{0:00}:{1:00}:{2:00}", min, sec, msec);
+            label.text = System.String.Format("{3} {0:00}:{1:00}:{2:00}", min, sec, msec, prefix);
         }
 		
 		void OnPlayerReadyStart(float deltaTime) {
+            Debug.Log("[GamePlay.ViewController.OnPlayerReadyStart]");
 			_fsm.PerformTransition(State.Transitions.CountDown);
 		}
 		
@@ -151,6 +155,17 @@ namespace GamePlay {
 			}
 		}
 
+        void OnDebugButtonPressed(GameObject button) {
+
+            if (pauseMenuPanel!=null) {
+                pauseMenuPanel.SetActive(false);
+            }
+
+            if (debugPanel!=null) {
+                debugPanel.SetActive(true);
+            }
+        }
+
         void OnDisable() {
 			Debug.Log ("[GamePlay.ViewController.OnDisable]");
 			//_fsm.Stop();
@@ -170,7 +185,7 @@ namespace GamePlay {
                 if (_lapTimer < _bestLapTime) {
                     _bestLapTime = _lapTimer;
                 }
-                UpdateTimerText(_bestLapTime, bestTimeLabel);
+                UpdateTimerText("BEST", _bestLapTime, bestTimeLabel);
                 _lapTimer = 0;
 
                 UpdateLapText();
@@ -184,6 +199,42 @@ namespace GamePlay {
             if (lapLabel!=null) {
                 lapLabel.text = "LAP:" + _lapCount.ToString();
             }
+        }
+
+        void OnFollowDistanceChanged(float v) {
+            Debug.Log("OnFollowDistanceChanged:" + v);
+            // 0:20, 1:80
+            float dist = v * 60.0f + 20.0f;
+            smoothFollow.distance = dist;
+        }
+
+        void OnFollowHeightChanged(float h) {
+            float height = h * 50.0f + 10.0f;
+            smoothFollow.height = height;
+        }
+
+        void OnFOVChanged(float v) {
+            Camera.main.fieldOfView = v * 50.0f + 10.0f;
+        }
+
+        void OnLookAtOffsetChanged(float v) {
+            if (_localBike != null) {
+                _localBike.lookAtOffset = 5.0f + v * 8.0f;
+            }
+        }
+
+        void OnDebugOKButtonPressed(GameObject button) {
+            if (debugPanel!=null) {
+                debugPanel.SetActive(false);
+            }
+
+            if (pauseMenuPanel!=null) {
+                pauseMenuPanel.SetActive(true);
+            }
+        }
+
+        void OnShowRevChanged(bool show) {
+            //bool prevValue = PlayerPrefs.GetInt();
         }
 	}
 
