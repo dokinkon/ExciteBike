@@ -24,17 +24,15 @@ namespace Lobby {
 		}
 		
 		void Awake() {
-			Debug.Log("Lobby.ViewController.Awake");
+			Debug.Log("[Lobby.ViewController.Awake]");
 			_fsm.AddState(new State.NormalState(this));
 			_fsm.AddState(new State.CountDownState());
 		}
 		
 		// Use this for initialization
 		void Start () {
-			Debug.Log("Lobby.ViewController.Start");
+			Debug.Log("[Lobby.ViewController.Start]");
 			GameManager.OnViewControllerStarted();
-			
-			
 			
 			selectTrackPanel.SetActive(false);
 			
@@ -114,6 +112,10 @@ namespace Lobby {
 				
 			}
 		}
+
+        void OnDisconnectedFromServer(NetworkDisconnection info) {
+            Application.LoadLevel("GameListScene");
+        }
 		
 		void OnSelectTrackButtonPressed(GameObject button) {
 			commonPanel.SetActive(false);
@@ -151,11 +153,19 @@ namespace Lobby {
 				}
 			}	
 		}
+
+        private static bool _isShutingDown = false;
+        void OnApplicationQuit() {
+            Debug.Log("[GameLobby.OnApplicationQuit]");
+            _isShutingDown = true;
+        }
 		
 		void OnDestroy() {
 			Debug.Log("[GameLobbyViewController.OnDestroy] remove event delegates");
-			GameManager.Instance.OnPlayerAdded -= CreatePlayerItem;
-			GameManager.Instance.OnPlayerRemoved -= DestroyPlayerItem;
+            if (!_isShutingDown) {
+                GameManager.Instance.OnPlayerAdded -= CreatePlayerItem;
+                GameManager.Instance.OnPlayerRemoved -= DestroyPlayerItem;
+            }
 		}
 
         void OnSelectedBikeChanged(string bikeName) {

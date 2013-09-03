@@ -242,6 +242,9 @@ public class GameManager : MonoSingleton< GameManager > {
 	
 	public void RemovePlayer(PlayerInfo playerInfo) {
 		_playerInfos.Remove(playerInfo);
+        if (Network.isServer) {
+            Network.RemoveRPCs( playerInfo.networkView.viewID );
+        }
 		GameObject.Destroy(	playerInfo.gameObject );
 		
 		if (OnPlayerRemoved!=null) {

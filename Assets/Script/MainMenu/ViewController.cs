@@ -73,8 +73,8 @@ namespace MainMenu {
 			}
 		}
 		
-		void OnPlayerNameCommit() {
-			GameManager.playerName = playerNameLabel.text;
+		void OnPlayerNameCommit(string text) {
+			GameManager.playerName = text;
 		}
 	}
 }

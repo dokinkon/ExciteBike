@@ -99,7 +99,7 @@ public class PlayerInfo : MonoBehaviour {
 					name = "PlayerInfo_Remote (" + _playerName +")";
 				}
 				
-				networkView.RPC ("UpdateName", RPCMode.OthersBuffered, _playerName);
+				networkView.RPC ("SyncPlayerName", RPCMode.OthersBuffered, _playerName);
 			}
 		}
 		get { return _playerName; }
@@ -145,7 +145,9 @@ public class PlayerInfo : MonoBehaviour {
 		} else {
 		}
 		
-		Debug.Log("[PlayerInfo.OnNetworkInstantiate] group:" + networkView.group);
+		Debug.Log("[PlayerInfo.OnNetworkInstantiate] group:" + networkView.group 
+                + " ip:" + networkView.owner.ipAddress + " port:" + networkView.owner.port.ToString() 
+                + " viewID:" + networkView.viewID.ToString());
 		
 		networkView.group = groudID;
 		
@@ -196,7 +198,7 @@ public class PlayerInfo : MonoBehaviour {
 	}
 	
 	[RPC]
-	void UpdateName(string n, NetworkMessageInfo info) {
+	void SyncPlayerName(string n, NetworkMessageInfo info) {
 		playerName = n;
 	}
 	

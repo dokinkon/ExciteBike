@@ -50,7 +50,7 @@ public class Server : MonoSingleton<Server> {
 	
 	public void Launch(bool registerToMasterServer) {
 		
-		NetworkConnectionError error = Network.InitializeServer(_maxPlayers, listenPort, useNat);
+		NetworkConnectionError error = Network.InitializeServer(_maxPlayers - 1, listenPort, useNat);
 		if (NetworkConnectionError.NoError!=error) {
 			// TODO
 			Debug.LogError("Launch Server Fail!:" + error.ToString());
@@ -205,34 +205,4 @@ public class Server : MonoSingleton<Server> {
 			Client.Instance.ResponseJoinGame((int)ConnectResult.Welcome, trackIndex);
 		}
 	}
-	
-	//[RPC]
-	//void RequestLobbyStatus(NetworkPlayer player) {
-		
-	//}
-	
-	//[RPC]
-	//public void RequestEnterLobby(NetworkPlayer player) {
-	//	Debug.Log("[Server.RequesrEnterLobby]:" + player.ToString());
-		
-		/*
-		if (_playerDict.ContainsKey(player)) {
-			PlayerInfo playerInfo = _playerDict[player];
-			networkView.RPC("NotifyPlayerEnterLobby", RPCMode.AllBuffered, player, playerInfo.name);	
-		} else {
-			Debug.LogError("[Server.RequestEnterLobby] no such player");
-		}
-		*/
-	//}
-	
-	
-	//[RPC]
-	//void RequestJoinGame(NetworkPlayer player, 
-	
-	//[RPC]
-	//void SetServerSetting(string title, int maxPlayers, bool passwordProtected) {
-		//_title = title;
-	//	_maxPlayers = maxPlayers;
-	//	_isPasswordProtected = passwordProtected;
-	//}
 }

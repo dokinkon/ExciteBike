@@ -79,6 +79,7 @@ public class Client : MonoSingleton< Client > {
 		} else if ( Server.ConnectResult.Full == (Server.ConnectResult)result ){
 			
 		} else if ( Server.ConnectResult.VersionMismatch == (Server.ConnectResult)result ) {
+
 		}
 	}
 	
@@ -91,7 +92,8 @@ public class Client : MonoSingleton< Client > {
 		Network.SetSendingEnabled(0, false);	
 
 		// We need to stop receiving because first the level must be loaded.
-		// Once the level is loaded, RPC's and other state update attached to objects in the level are allowed to fire
+		// Once the level is loaded, RPC's and other state update attached to objects
+        // in the level are allowed to fire
 		Network.isMessageQueueRunning = false;
 		
 		// All network views loaded from a level will get a prefix into their NetworkViewID.

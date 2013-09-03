@@ -18,10 +18,12 @@ namespace GameList {
 		
 		// Use this for initialization
 		void Start () {
+            Debug.Log("[GameList.ViewController.Start]");
 			GameManager.OnViewControllerStarted();
 			UIEventListener.Get(hostButton).onClick = OnHostButtonPressed;
 			UIEventListener.Get(backButton).onClick = OnBackButtonPressed;
 			RequestHostList();
+
 		}
 		
 		// Update is called once per frame

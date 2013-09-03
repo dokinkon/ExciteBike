@@ -507,7 +507,7 @@ EllipsoidParticleEmitter:
   m_GameObject: {fileID: 100024}
   serializedVersion: 2
   m_Enabled: 1
-  m_Emit: 1
+  m_Emit: 0
   minSize: 1
   maxSize: 1
   minEnergy: 2

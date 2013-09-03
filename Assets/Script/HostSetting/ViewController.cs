@@ -39,9 +39,17 @@ namespace HostSetting {
 		void Update () {
 		
 		}
+
+        private static bool _isShuttingDown = false;
+
+        void OnApplicationQuit() {
+            _isShuttingDown = true;
+        }
 		
 		void OnDestroy() {
-			Server.Instance.OnLaunchServerFailed -= OnLaunchServerFailed;
+            if (!_isShuttingDown) {
+                Server.Instance.OnLaunchServerFailed -= OnLaunchServerFailed;
+            }
 		}
 		
 		void OnButtonGoToLobbyPressed(GameObject button) {

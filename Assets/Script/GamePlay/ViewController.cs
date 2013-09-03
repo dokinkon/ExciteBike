@@ -166,10 +166,18 @@ namespace GamePlay {
             }
         }
 
+        private static bool _isShutingDown = false;
+        void OnApplicationQuit() {
+            Debug.Log("[GameLobby.OnApplicationQuit]");
+            _isShutingDown = true;
+        }
+
         void OnDisable() {
 			Debug.Log ("[GamePlay.ViewController.OnDisable]");
 			//_fsm.Stop();
-			Client.Instance.OnGamePlayReadyStart -= OnPlayerReadyStart;
+            if (!_isShutingDown) {
+                Client.Instance.OnGamePlayReadyStart -= OnPlayerReadyStart;
+            }
         }
 
 		
