@@ -13,6 +13,7 @@ namespace Lobby {
 		public GameObject selectTrackPanel;
 		public GameObject selectTrackOKButton;
 		public UILabel hostTitleLabel;
+        public UILabel countDownLabel;
 		public GameObject playerItemPrefab;
 		public UITable playerTable;
 		
@@ -26,7 +27,7 @@ namespace Lobby {
 		void Awake() {
 			Debug.Log("[Lobby.ViewController.Awake]");
 			_fsm.AddState(new State.NormalState(this));
-			_fsm.AddState(new State.CountDownState());
+			_fsm.AddState(new State.CountDownState(this));
 		}
 		
 		// Use this for initialization
@@ -43,12 +44,8 @@ namespace Lobby {
 			} else {
 				selectTrackButton.SetActive(false);
 			}
-			
-			if (Network.isClient ) {
-				UIEventListener.Get(readyButton).onClick = OnReadyButtonPressed;
-			} else if (Network.isServer) {
-				UIEventListener.Get (readyButton).onClick = OnStartGameButtonPressed;
-			}
+
+            UIEventListener.Get(readyButton).onClick = OnReadyButtonPressed;
 			UIEventListener.Get(backButton).onClick = OnBackButtonPressed;
 			
 			//Client.Instance.EnterLobby();
@@ -73,21 +70,23 @@ namespace Lobby {
 		
 		void OnEnable() {
 			Debug.Log("[Lobby.ViewController.OnEnable]");
+            Client.Instance.OnAllPlayersReadyInLobby += OnAllPlayersReadyInLobby;
 			
 		}
 		
 		void OnDisable() {
 			Debug.Log("[Lobby.ViewController.OnDisable]");
-			_fsm.Stop ();
+            if (!GameManager.isShutingDown) {
+                Client.Instance.OnAllPlayersReadyInLobby -= OnAllPlayersReadyInLobby;
+                _fsm.Stop ();
+            }
 		}
 
 		// Update is called once per frame
 		void Update () {
-			if (Network.isServer) {
-			}
+            _fsm.Update();
 		}
 		
-		// for client
 		void OnReadyButtonPressed(GameObject button) {
 			Debug.Log("GameLobbyViewController.OnReadyButtonPressed");
 			PlayerInfo playerInfo = GameManager.Instance.GetPlayerInfo(Network.player);
@@ -97,9 +96,9 @@ namespace Lobby {
 		}
 		
 		// for server
-		void OnStartGameButtonPressed(GameObject button) {
-			Server.Instance.LoadGamePlayLevel();
-		}
+		//void OnStartGameButtonPressed(GameObject button) {
+			//Server.Instance.LoadGamePlayLevel();
+		//}
 		
 		void OnBackButtonPressed(GameObject button) {
 			if (Network.isClient) {
@@ -170,6 +169,27 @@ namespace Lobby {
 
         void OnSelectedBikeChanged(string bikeName) {
             GameManager.Instance.localPlayerInfo.bikeName = bikeName;
+        }
+
+        public void StartCountDownAnimation() {
+            StartCoroutine(AnimateCountDownLabel());
+        }
+
+        public void StopCountDownAnimation() {
+            StopCoroutine("AnimateCountDownLabel");
+        }
+
+		IEnumerator AnimateCountDownLabel() {
+            int countDownSecond = 3;
+			while (countDownSecond > 0) {
+				countDownLabel.text = countDownSecond.ToString();
+                countDownSecond--;
+				yield return new WaitForSeconds(1);
+			}
+		}
+
+        void OnAllPlayersReadyInLobby() {
+            _fsm.PerformTransition(State.Transistions.CountDown);
         }
 	}
 

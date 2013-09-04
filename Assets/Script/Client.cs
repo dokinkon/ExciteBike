@@ -14,9 +14,10 @@ public class Client : MonoSingleton< Client > {
 		get { return _hostData; }
 	}
 	
+    public delegate void VoidDelegate();
 	public delegate void FloatDelegate(float f);
 	public event FloatDelegate OnGamePlayReadyStart;
-	
+    public event VoidDelegate OnAllPlayersReadyInLobby;
 	
 	public override void Init() {
 		
@@ -68,12 +69,13 @@ public class Client : MonoSingleton< Client > {
 			playerInfo.facebookUserId = GameManager.Instance.facebookUserInfo.id;
 		}
 	}
-	
+
 	[RPC]
 	public void ResponseJoinGame(int result, int trackIndex) {
 		Debug.Log("[Client.ResponseJoinGame]:" + result + " player:" + GameManager.playerName + " trackIndex:" + trackIndex);
 		if (Server.ConnectResult.Welcome == (Server.ConnectResult)result) {
 			Debug.Log ("[Client.Receive Welcome]");
+
 			SpawnPlayerInfo(trackIndex);		
 			GameManager.Instance.GoToLobby();
 		} else if ( Server.ConnectResult.Full == (Server.ConnectResult)result ){
@@ -131,4 +133,16 @@ public class Client : MonoSingleton< Client > {
 			OnGamePlayReadyStart( 1.0f - (float)transitTime );
 		}
 	}
+
+    [RPC]
+    void RPCAllPlayersReadyInLobby(NetworkMessageInfo info) {
+        if ( OnAllPlayersReadyInLobby != null ) {
+            OnAllPlayersReadyInLobby();
+        }
+    }
+
+    [RPC]
+    void NotifyPlayerDisconnected(NetworkPlayer player) {
+		GameManager.Instance.RemovePlayer(player);
+    }
 }

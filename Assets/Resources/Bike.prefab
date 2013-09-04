@@ -1135,7 +1135,7 @@ MonoBehaviour:
   rearWheel: {fileID: 11400008}
   controlByNPC: 0
   lookAtSnapGround: 1
-  lookAtOffset: 17
+  lookAtOffset: 7
   enginePitchMax: .699999988
   enginePitchMin: .5
   blobShadowPrefab: {fileID: 100000, guid: 2d396c91cd798423fb698aebd706ee5f, type: 2}

@@ -81,6 +81,11 @@ public class GameManager : MonoSingleton< GameManager > {
 			return _localPlayerInfo;
 		}
 	}
+
+    private static bool _isShutingDown = false;
+    public static bool isShutingDown {
+        get { return _isShutingDown; }
+    }
 	
 	private Dictionary<NetworkPlayer, Bike> _bikes;
 	private Bike _localBike;
@@ -285,5 +290,10 @@ public class GameManager : MonoSingleton< GameManager > {
         }
 
         return builder.ToString();
+    }
+
+    void OnApplicationQuit() {
+        //Debug.Log("[GameLobby.OnApplicationQuit]");
+        _isShutingDown = true;
     }
 }

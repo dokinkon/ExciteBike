@@ -79,9 +79,9 @@ public class PlayerInfo : MonoBehaviour {
 		return "";
 	}
 
-	private NetworkView _networkView;
+    private NetworkPlayer _owner;
 	public NetworkPlayer networkPlayer {
-		get { return _networkView.owner; }
+		get { return _owner; }
 	}
 	
 	private string _playerName;
@@ -139,25 +139,45 @@ public class PlayerInfo : MonoBehaviour {
 		get { return _bike; }
 	}
 
+    public string GetIPAndPort() {
+        NetworkPlayer np = networkView.viewID.owner;
+        return np.ipAddress + ":" + np.port.ToString();
+    }
+
+    void Awake() {
+        Debug.Log("[PlayerInfo.Awake] " + GetIPAndPort());
+    }
+
+    void Start() {
+        Debug.Log("[PlayerInfo.Start]" + GetIPAndPort());
+    }
+
 	void OnNetworkInstantiate(NetworkMessageInfo info) {
-		_networkView = networkView;
-		if (networkView.isMine) {
-		} else {
-		}
+        //Note: The networkView attribute inside the NetworkMessageInfo is not used inside OnNetworkInstantiate
 		
 		Debug.Log("[PlayerInfo.OnNetworkInstantiate] group:" + networkView.group 
                 + " ip:" + networkView.owner.ipAddress + " port:" + networkView.owner.port.ToString() 
-                + " viewID:" + networkView.viewID.ToString());
+                + " viewID:" + networkView.viewID.ToString() + " player:" + networkView.owner.ToString());
 		
 		networkView.group = groudID;
 		
 		GameObject.DontDestroyOnLoad(gameObject);
-		GameManager.Instance.AddPlayer(this);
+		//GameManager.Instance.AddPlayer(this);
 		if (Network.isServer) {
 			trackIndex = Server.Instance.GetTrackIndex(networkView.owner);
 			Debug.Log ("[PlayerInfo.OnNetworkInstantiate] trackIndex:"+trackIndex);
 		}
+
+        if (networkView.isMine) {
+            networkView.RPC("SetOwner", RPCMode.AllBuffered, Network.player);
+        }
 	}
+
+    [RPC]
+    void SetOwner(NetworkPlayer player) {
+        _owner = player;
+		GameManager.Instance.AddPlayer(this);
+    }
 	
 	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info) {
 		if (stream.isWriting) {

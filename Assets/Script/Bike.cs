@@ -44,6 +44,7 @@ public class Bike : MonoBehaviour {
     private int _currentTrackIndex;
     private int _targetTrackIndex;
     private bool _isShiftingTrack = false;
+    private NetworkPlayer _owner;
 	private GameObject _followNode;
 	public GameObject followNode {
 		get { return _followNode; }
@@ -376,8 +377,8 @@ public class Bike : MonoBehaviour {
 		
 		_followNode = new GameObject("FollowNode ( " + name + " )");
 		
-		PlayerInfo playerInfo = GameManager.Instance.GetPlayerInfo(networkView.owner);
-        _currentTrackIndex = playerInfo.trackIndex;
+		//PlayerInfo playerInfo = GameManager.Instance.GetPlayerInfo(networkView.owner);
+        //_currentTrackIndex = playerInfo.trackIndex;
 		
 		if ( networkView.isMine ) {
 			networkRigidbody.enabled = false;
@@ -393,6 +394,8 @@ public class Bike : MonoBehaviour {
 			Quaternion q = Quaternion.identity;
 			q.eulerAngles = new Vector3(90, 0, 0);
 			_selfIndicator.transform.localRotation = q;
+
+            networkView.RPC("SetOwner", RPCMode.All, Network.player);
 				
 		} else {
 			networkRigidbody.enabled = true;
@@ -405,11 +408,11 @@ public class Bike : MonoBehaviour {
 			userPictureBillboardGo.transform.localPosition = new Vector3(0, 6, 0);
 			userPictureBillboardGo.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 			userPictureBillboardGo.transform.localRotation = Quaternion.identity;
-			userPictureBillboardGo.renderer.material.mainTexture = playerInfo.profilePicture;
+			//userPictureBillboardGo.renderer.material.mainTexture = playerInfo.profilePicture;
             // No Shadow
 			userPictureBillboardGo.layer = 8;
 		}
-		playerInfo.bike = this;
+		//playerInfo.bike = this;
     }
 	
 	void OnDestroy() {
@@ -458,5 +461,12 @@ public class Bike : MonoBehaviour {
         } else {
             rigidbody.MovePosition ( rigidbody.position + direction * stepAbs );
         }
+    }
+
+    [RPC]
+    void SetOwner(NetworkPlayer player) {
+        _owner = player;
+		PlayerInfo playerInfo = GameManager.Instance.GetPlayerInfo(_owner);
+        playerInfo.bike = this;
     }
 }

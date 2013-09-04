@@ -89,7 +89,7 @@ public class Server : MonoSingleton<Server> {
 	
 	void ResetTrackLock() {
 		for (int i=0;i<4;i++) {
-			_trackLockedBy[i] = null;
+			_trackLockedBy[i] = "";
 		}
 	}
 	
@@ -100,8 +100,8 @@ public class Server : MonoSingleton<Server> {
 		}
 		
 		for (int i=0;i<4;i++) {
-			if (_trackLockedBy[i] == null) {
-				_trackLockedBy[i] = player.guid;
+			if (_trackLockedBy[i] == null || _trackLockedBy[i]=="") {
+				_trackLockedBy[i] = player.ToString();
 				Debug.Log ("[Server.LockTrackIndex] index:" + i + " player:" + player.ToString());
 				return;
 			}
@@ -109,21 +109,23 @@ public class Server : MonoSingleton<Server> {
 	}
 	
 	void UnlockTrackIndex(NetworkPlayer player) {
-		int index = Array.IndexOf(_trackLockedBy, player);
+		int index = Array.IndexOf(_trackLockedBy, player.ToString());
 		if (index!=-1) {
 			_trackLockedBy[index] = null;
-		}
+		} else {
+            Debug.LogError("[Server.UnlockTrackIndex] failed to unlock track index");
+        }
 	}
 	
 	public int GetTrackIndex(NetworkPlayer player) {
 		for (int i=0;i<4;i++) {
-			if (_trackLockedBy[i] == player.guid) {
+			if (_trackLockedBy[i] == player.ToString()) {
 				return i;
 			}
 		}
 		return -1;
 	}
-	
+    
 	
 	public bool PollAllPlayerSyncForStatus(PlayerInfo.Status status) {
 		if (!Network.isServer) {
@@ -177,7 +179,8 @@ public class Server : MonoSingleton<Server> {
 	void OnPlayerDisconnected(NetworkPlayer player) {
 		Debug.Log("[Server.OnPlayerDisconnected]:" + player.ToString());
 		UnlockTrackIndex(player);
-		GameManager.Instance.RemovePlayer(player);
+        networkView.RPC("NotifyPlayerDisconnected", RPCMode.All, player);
+		//GameManager.Instance.RemovePlayer(player);
 		Network.RemoveRPCs(player);
         Network.DestroyPlayerObjects(player);
 	}
@@ -191,6 +194,10 @@ public class Server : MonoSingleton<Server> {
 	
 	void OnConnectedToServer() {
         Debug.Log("[Server.OnConnectedToServer]");
+    }
+
+    public void OnAllPlayersReadyInLobby() {
+        networkView.RPC("RPCAllPlayersReadyInLobby", RPCMode.All);
     }
 	
 	[RPC]

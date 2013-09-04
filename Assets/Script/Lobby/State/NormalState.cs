@@ -21,9 +21,12 @@ namespace Lobby.State {
 		
 		// Update is called once per frame
 		public override void Update () {
-			if (Server.Instance.PollAllPlayerSyncForStatus(PlayerInfo.Status.AtLoddyReady)) {
-				_viewController.fsm.PerformTransition(Transistions.CountDown);
-			}
+            if (Network.isServer) {
+                if (Server.Instance.PollAllPlayerSyncForStatus(PlayerInfo.Status.AtLoddyReady)) {
+                    //_viewController.fsm.PerformTransition(Transistions.CountDown);
+                    Server.Instance.OnAllPlayersReadyInLobby();
+                }
+            }
 		}
 		
 		public override void DoBeforeLeaving() {
