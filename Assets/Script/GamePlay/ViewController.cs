@@ -146,6 +146,7 @@ namespace GamePlay {
         }
 		
 		void OnExitButtonPressed(GameObject button) {
+			Time.timeScale = 1;
 			if (Network.isServer) {
 				Server.Instance.LoadLevel("GameLobbyScene");
 			} else if (Network.isClient) {
