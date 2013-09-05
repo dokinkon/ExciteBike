@@ -28,6 +28,10 @@ namespace GamePlay.State {
 				_viewController.countDownLabel.text = "GO!!!";
 			} else {
 				_viewController.countDownLabel.text = _currentSec.ToString();
+                TweenScale ts = _viewController.countDownLabel.gameObject.GetComponent<TweenScale>();
+                ts.Play(true);
+                //_viewController.countDownLabel.transform.localScale = new Vector3(30, 30, 1);
+                //TweenScale.Begin(_viewController.countDownLabel.gameObject, 0.8f, new Vector3(80.2f, 80.2f, 1.2f));
 			}
 		}
 	

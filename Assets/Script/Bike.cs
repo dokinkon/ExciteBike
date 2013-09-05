@@ -138,7 +138,7 @@ public class Bike : MonoBehaviour {
 		Vector3 v = rigidbody.velocity;
 		
 		if ( _shouldBoost ) {
-			v.z = boostMaxSpeed;//maxSpeedZ + 5;
+			v.z = boostMaxSpeed;
             engine.SetThrottle(1);
             engine.rpm = 4500;
 		} else {
@@ -276,12 +276,16 @@ public class Bike : MonoBehaviour {
 	void UpdateInputControl() {
 		if (!networkView.isMine)
 			return;
-		
-		if ( _runtimePlatform == RuntimePlatform.IPhonePlayer ) {
-			UpdateInputControlWithVirtualJoystick();
-		} else {
-			UpdateInputControlWithKeyboard();
-		}
+
+        if (controlByNPC) {
+            engine.SetThrottle(1.0f);
+        } else {
+            if ( _runtimePlatform == RuntimePlatform.IPhonePlayer ) {
+                UpdateInputControlWithVirtualJoystick();
+            } else {
+                UpdateInputControlWithKeyboard();
+            }
+        }
 	}
 	
 	// Update is called once per frame
@@ -377,9 +381,6 @@ public class Bike : MonoBehaviour {
 		
 		_followNode = new GameObject("FollowNode ( " + name + " )");
 		
-		//PlayerInfo playerInfo = GameManager.Instance.GetPlayerInfo(networkView.owner);
-        //_currentTrackIndex = playerInfo.trackIndex;
-		
 		if ( networkView.isMine ) {
 			networkRigidbody.enabled = false;
 			playerController.enabled = true;
@@ -412,15 +413,16 @@ public class Bike : MonoBehaviour {
             // No Shadow
 			userPictureBillboardGo.layer = 8;
 		}
-		//playerInfo.bike = this;
     }
 	
 	void OnDestroy() {
-		NetworkPlayer p = networkView.owner;
-		PlayerInfo playerInfo = GameManager.Instance.GetPlayerInfo(p);
-		if (playerInfo!=null ) {
-			playerInfo.bike = null;
-		}
+        if (!GameManager.isShutingDown) {
+            NetworkPlayer p = networkView.owner;
+            PlayerInfo playerInfo = GameManager.Instance.GetPlayerInfo(p);
+            if (playerInfo!=null ) {
+                playerInfo.bike = null;
+            }
+        }
 	}
 
     private void StartShiftTrack(int targetTrackIndex) {

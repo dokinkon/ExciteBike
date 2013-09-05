@@ -503,7 +503,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 799383679}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1170.17957, y: 0, z: 0}
+  m_LocalPosition: {x: 14.0392675, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1027778253}
@@ -519,7 +519,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8077b76001d36d489868d20d28bddb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiCamera: {fileID: 1721689099}
+  uiCamera: {fileID: 1910067453}
   widgetContainer: {fileID: 0}
   panelContainer: {fileID: 0}
   side: 8
@@ -613,11 +613,11 @@ MonoBehaviour:
     e00: 239.999985
     e01: 0
     e02: 0
-    e03: -844.199402
+    e03: -1697.84424
     e10: 0
     e11: 239.999985
     e12: 0
-    e13: -123.861748
+    e13: -122
     e20: 0
     e21: 0
     e22: 239.999985
@@ -638,7 +638,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1027778251}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 844.199402, y: 123.861748, z: 0}
+  m_LocalPosition: {x: -100, y: 122, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 799383680}
@@ -1234,7 +1234,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1786592078}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.87574863, y: 0, z: 0}
+  m_LocalPosition: {x: 7.43252087, y: 0, z: 0}
   m_LocalScale: {x: .00416666688, y: .00416666688, z: .00416666688}
   m_Children:
   - {fileID: 799383680}

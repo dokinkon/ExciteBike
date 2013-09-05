@@ -37,12 +37,10 @@ namespace GameList {
 				Debug.Log ("[GameList.ViewController] Found Servers");
 				
 				// Delete Current GameInfoItems
-				int count = gameListRoot.transform.childCount;
-				while (count > 0) {
-					Transform t = gameListRoot.transform.GetChild(0);
-					GameObject.Destroy(t.gameObject);
-					count--;
-				}
+                // http://blog.i-evaluation.com/2013/03/21/unity3d-how-to-delete-all-children-of-an-object/
+                foreach (Transform childTransform in gameListRoot.transform) {
+                    Destroy(childTransform.gameObject);
+                }
 				
 				
 	            HostData[] hostData = MasterServer.PollHostList();

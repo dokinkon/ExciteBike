@@ -181,7 +181,7 @@ public class GameManager : MonoSingleton< GameManager > {
 		Debug.Log ("[GameManager] OnLevelWasLoaded:" + level);
 	}
 	
-	public Bike SpawnBike(int track) {
+	public Bike SpawnBike(string bikeName, int track) {
 		
 		string tagName = "init_spawn_" + track;
 		GameObject spawn = GameObject.FindWithTag(tagName);
@@ -192,9 +192,9 @@ public class GameManager : MonoSingleton< GameManager > {
 		
 		GameObject bikeGo = null;
 		if (Network.isClient || Network.isServer ) {
-			bikeGo = (GameObject)Network.Instantiate(Resources.Load(localPlayerInfo.bikeName), spawn.transform.position, Quaternion.identity, 0);
+			bikeGo = (GameObject)Network.Instantiate(Resources.Load(bikeName), spawn.transform.position, Quaternion.identity, 0);
 		} else {
-			bikeGo = (GameObject)Instantiate(Resources.Load(localPlayerInfo.bikeName), spawn.transform.position, Quaternion.identity);
+			bikeGo = (GameObject)Instantiate(Resources.Load(bikeName), spawn.transform.position, Quaternion.identity);
 		}
 		return bikeGo.GetComponent<Bike>();
 	}

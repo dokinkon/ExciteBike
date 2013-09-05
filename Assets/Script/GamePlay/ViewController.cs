@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace GamePlay {
 
@@ -39,6 +40,8 @@ namespace GamePlay {
 		public Bike localBike {
 			get { return _localBike; }
 		}
+
+        private List<Bike> _npcBikes = new List<Bike>();
 
         private bool _isPlaying = false;
         public bool isPlaying {
@@ -86,11 +89,24 @@ namespace GamePlay {
 			UIEventListener.Get(restartButton).onClick = OnRestartButtonPressed;
 			UIEventListener.Get(exitButton).onClick = OnExitButtonPressed;
 			UIEventListener.Get(backToLobbyButton).onClick = OnExitButtonPressed;
+
+            PlayerInfo playerInfo = GameManager.Instance.localPlayerInfo;
 			
-			_localBike = GameManager.Instance.SpawnBike(GameManager.Instance.localPlayerInfo.trackIndex);
+			_localBike = GameManager.Instance.SpawnBike(playerInfo.bikeName, playerInfo.trackIndex);
+            //
 			Client.Instance.OnGamePlayReadyStart += OnPlayerReadyStart;
 			_fsm.Start();
 		}
+
+        public void StartBikes() {
+            if ( Network.isServer) {
+                foreach ( Bike bike in _npcBikes ) {
+                    bike.StartEngine();
+                    bike.engine.volume = 0.8f;
+                    bike.engine.currentGearPosition = 1;
+                }
+            }
+        }
 		
 		// Update is called once per frame
 		void Update () {
@@ -147,6 +163,7 @@ namespace GamePlay {
 		
 		void OnExitButtonPressed(GameObject button) {
 			Time.timeScale = 1;
+            Network.RemoveRPCs( _localBike.networkView.viewID );
 			if (Network.isServer) {
 				Server.Instance.LoadLevel("GameLobbyScene");
 			} else if (Network.isClient) {

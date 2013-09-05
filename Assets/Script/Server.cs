@@ -107,6 +107,13 @@ public class Server : MonoSingleton<Server> {
 			}
 		}
 	}
+
+    public bool IsTrackLocked(int index) {
+        if (_trackLockedBy[index] == null || _trackLockedBy[index] == "") {
+            return false;
+        }
+        return true;
+    }
 	
 	void UnlockTrackIndex(NetworkPlayer player) {
 		int index = Array.IndexOf(_trackLockedBy, player.ToString());
