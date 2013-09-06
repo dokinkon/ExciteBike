@@ -26,8 +26,7 @@ public class Bike : MonoBehaviour {
 	private bool _isCrashed;
 	private bool _isEngineStarted;
     private BikeSteer _bikeSteer;
-	private bool _shouldTiltUp;
-	private bool _shouldTiltDown;
+    private BikePitch _pitch;
 	private GameObject _blobShadow;
 	private bool _shouldBoost;
 	private bool _shouldSlowdown;
@@ -91,18 +90,15 @@ public class Bike : MonoBehaviour {
 	}
 	
 	public void TiltUp() {
-		_shouldTiltDown = false;
-		_shouldTiltUp = true;
+        _pitch.PitchUp();
 	}
 	
 	public void TiltDown() {
-		_shouldTiltUp = false;
-		_shouldTiltDown = true;
+        _pitch.PitchDown();
 	}
 	
 	public void ResetTilt() {
-		_shouldTiltUp = false;
-		_shouldTiltDown = false;
+        _pitch.ResetPitch();
 	}
 	
 	
@@ -110,6 +106,7 @@ public class Bike : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         _bikeSteer = GetComponent<BikeSteer>();
+        _pitch = GetComponent<BikePitch>();
 		rigidbody.centerOfMass = Vector3.zero;
     	rigidbody.maxAngularVelocity = 3;
 		_runtimePlatform = Application.platform;
@@ -138,7 +135,7 @@ public class Bike : MonoBehaviour {
         
 
 		Vector3 v = rigidbody.angularVelocity;
-		if ( _shouldTiltUp ) {
+		if ( _pitch.state == BikePitchState.Up ) {
 
             //rigidbody.centerOfMass = new Vector3( 0, 0.28f, -0.79f);
 
@@ -149,7 +146,7 @@ public class Bike : MonoBehaviour {
             Debug.Log("curr:" + current + " dist:" + dist);
             v.x = dist * 0.1f;
 
-		} else if ( _shouldTiltDown ) {
+		} else if ( _pitch.state == BikePitchState.Down ) {
 			v.x = 2;
 		} 
 		rigidbody.angularVelocity = v;
