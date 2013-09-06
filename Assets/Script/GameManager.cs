@@ -196,6 +196,8 @@ public class GameManager : MonoSingleton< GameManager > {
 		} else {
 			bikeGo = (GameObject)Instantiate(Resources.Load(bikeName), spawn.transform.position, Quaternion.identity);
 		}
+        Utility.SetLayerRecursively(bikeGo, 21);
+        //bikeGo.layer = 21;
 		return bikeGo.GetComponent<Bike>();
 	}
 		

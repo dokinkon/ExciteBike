@@ -16,7 +16,6 @@ public class Bike : MonoBehaviour {
 	public float lookAtOffset = 7;
 	
 	public GameObject blobShadowPrefab;
-    public ParticleEmitter boostParticleEmitter;
     public BikeEngine engine;
 	
     BikeCrash _bikeCrash;
@@ -24,7 +23,7 @@ public class Bike : MonoBehaviour {
     private BikeSteer _bikeSteer;
     private BikePitch _pitch;
 	private GameObject _blobShadow;
-	private bool _shouldBoost;
+    private BikeBoost _boost;
 	private bool _shouldSlowdown;
 	private bool _shouldJump;
 	private int _boostLevel;
@@ -79,6 +78,7 @@ public class Bike : MonoBehaviour {
 	void Start () {
         _bikeSteer = GetComponent<BikeSteer>();
         _pitch = GetComponent<BikePitch>();
+        _boost = GetComponent<BikeBoost>();
         _bikeCrash = GetComponent<BikeCrash>();
 		rigidbody.centerOfMass = Vector3.zero;
 		_runtimePlatform = Application.platform;
@@ -88,7 +88,7 @@ public class Bike : MonoBehaviour {
 		
 		Vector3 v = rigidbody.velocity;
 		
-		if ( _shouldBoost ) {
+		if ( _boost.isBoosting ) {
 			v.z = boostMaxSpeed;
             engine.SetThrottle(1);
             engine.rpm = 4500;
@@ -97,7 +97,6 @@ public class Bike : MonoBehaviour {
 				v.z = maxSpeedZ;
 			}
 		}
-		
 		
 		if ( v.x > maxSpeedX ) 
 			v.x = maxSpeedX;
@@ -177,36 +176,12 @@ public class Bike : MonoBehaviour {
 			lookAt.position = p;
 		}
 		
-		if ( _shouldBoost ) {
-			_boostDelay += Time.deltaTime;
-			if ( _boostDelay > boostDuration ) {
-				_boostDelay = 0;
-                StopBoost();
-			}
-		}
-		
-		//UpdateInputControl();
 		_followNode.transform.position = gameObject.transform.position;
 	}
 
-    void StartBoost() {
-        _shouldBoost = true;
-        if (boostParticleEmitter!=null) {
-            boostParticleEmitter.emit = true;
-        }
-    }
-
-    void StopBoost() {
-        _shouldBoost = false;
-        if (boostParticleEmitter != null) {
-            boostParticleEmitter.emit = false;
-        }
-    }
-
 	void OnTriggerEnter(Collider other ) {
 		if (other.gameObject.tag == "accelerator" ) {
-			//this._shouldBoost = true;
-            StartBoost();
+            //StartBoost();
 		} else if ( other.gameObject.tag == "slowdown" ) {
 			this._shouldSlowdown = true;
 		} else if ( other.gameObject.tag == "jump") {
