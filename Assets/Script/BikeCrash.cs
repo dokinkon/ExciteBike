@@ -3,6 +3,7 @@ using System.Collections;
 
 public class BikeCrash : MonoBehaviour {
 
+    public AudioSource _soundEffect;
     public float rotateSpeed = 7.0f;
     public float moveSpeed = 4.0f;
     public float threshold = 0.5f;
@@ -59,6 +60,7 @@ public class BikeCrash : MonoBehaviour {
                 _isCrashed = true;
                 _engine.isStarted = false;
                 Debug.Log("OnCrashed:" + dot);
+                _soundEffect.Play();
 
             }
         }

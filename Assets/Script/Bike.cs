@@ -19,8 +19,6 @@ public class Bike : MonoBehaviour {
     public ParticleEmitter boostParticleEmitter;
     public BikeEngine engine;
 	
-    private bool _shouldCrash = false;
-	private bool _isCrashed;
     BikeCrash _bikeCrash;
 	private bool _isEngineStarted;
     private BikeSteer _bikeSteer;
@@ -131,46 +129,11 @@ public class Bike : MonoBehaviour {
 		}
 	}
 
-    IEnumerator UpdateCrashTimer(float duration) {
-        yield return new WaitForSeconds(duration);
-        //_isCrashed = false;
-        Vector3 p = rigidbody.position;
-        rigidbody.rotation = Quaternion.identity;
-        rigidbody.velocity = Vector3.zero;
-        rigidbody.angularVelocity = Vector3.zero;
-        rigidbody.MovePosition(p + Vector3.up);
-    }
-
 	void FixedUpdate() {
 		if (!_isEngineStarted)
 			return;
 
-        // Test crash
-        /*
-        if ( !_isCrashed) {
-            if (_shouldCrash) {
-                _isCrashed = true;
-                _shouldCrash = false;
-                StartCoroutine(UpdateCrashTimer(3.0f));
-            }
-            if ( rearWheel.IsTouchingTheRoad() || frontWheel.IsTouchingTheRoad() ) {
-                float x = rigidbody.rotation.eulerAngles.x;
-                while (x > 180) {
-                    x -= 360;
-                }
-                if ( x > 85 || x < -85) {
-                    _isCrashed = true;
-                    StartCoroutine(UpdateCrashTimer(3.0f));
-                }
-            }
-        }
-        */
-
 		if ( _bikeCrash.isCrashed ) {
-            //Vector3 v = rigidbody.angularVelocity;
-            //Debug.Log("is crashed");
-            //v.x = 7;
-            //rigidbody.angularVelocity = v;
 		} else {
 			if ( rearWheel.IsTouchingTheRoad() ) {
 				rigidbody.AddRelativeForce(Vector3.forward*engine.GetCurrentPower());
@@ -240,23 +203,6 @@ public class Bike : MonoBehaviour {
         }
     }
 
-    void OnCollisionEnter(Collision collision) {
-        //Debug.Log("OnCollisionEnter");
-        /*
-        if (_isCrashed)
-            return;
-
-        foreach (ContactPoint contact in collision.contacts) {
-            float dot = Vector3.Dot(transform.up, contact.normal);
-            Debug.Log("DOT:" + dot);
-            if (dot < 0.65) {
-                _shouldCrash = true;
-            }
-            Debug.DrawRay(contact.point, contact.normal, Color.white);
-        }
-        */
-    }
-	
 	void OnTriggerEnter(Collider other ) {
 		if (other.gameObject.tag == "accelerator" ) {
 			//this._shouldBoost = true;
