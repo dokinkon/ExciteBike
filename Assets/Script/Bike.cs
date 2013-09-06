@@ -20,7 +20,7 @@ public class Bike : MonoBehaviour {
 	
 	public GameObject blobShadowPrefab;
     public ParticleEmitter boostParticleEmitter;
-    public Engine engine;
+    public BikeEngine engine;
     public Animation bikeAnimation;
 	
 	private bool _isCrashed;
@@ -340,9 +340,8 @@ public class Bike : MonoBehaviour {
             }
         }
 
-        //UpdateSteerAxis();
-        _leanLeftAnimState.normalizedTime = -_steerAxis;
-        _leanRightAnimState.normalizedTime = _steerAxis;
+        _leanLeftAnimState.normalizedTime = -_bikeSteer.steerValue;
+        _leanRightAnimState.normalizedTime = _bikeSteer.steerValue;
 	}
 	
 	// Update is called once per frame

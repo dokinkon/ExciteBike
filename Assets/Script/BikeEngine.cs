@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class Engine : MonoBehaviour {
+public class BikeEngine : MonoBehaviour {
 
     public AudioSource soundRPM1000;
     public AudioSource soundRPM2000;
