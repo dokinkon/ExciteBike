@@ -388,7 +388,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100018}
-  m_LocalRotation: {x: -.0764796138, y: .544898331, z: -.0499978475, w: -.83350879}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -24.4207516, y: 5.63706875, z: -48.8758125}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -688,7 +688,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: .0500000007
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
@@ -1071,11 +1071,14 @@ Animation:
   serializedVersion: 3
   m_Animation: {fileID: 0}
   m_Animations:
+  - {fileID: 7400000, guid: a48cf622a74814edfa2378d975f64044, type: 2}
   - {fileID: 7400000, guid: 2e804982e98ab442b8a7989dab422876, type: 2}
+  - {fileID: 7400000, guid: ded62fe73051e450ba1dd0f3395d3c8e, type: 2}
+  - {fileID: 7400000, guid: e5922d6a163264e5ebb0db6607baf1e6, type: 2}
   m_WrapMode: 0
-  m_PlayAutomatically: 1
+  m_PlayAutomatically: 0
   m_AnimatePhysics: 0
-  m_CullingType: 0
+  m_CullingType: 1
   m_UserAABB:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
@@ -1090,6 +1093,7 @@ Animation:
   m_Animation: {fileID: 7400000, guid: 78c3faa16f9c0408fa47fb46f63bd3e4, type: 3}
   m_Animations:
   - {fileID: 7400000, guid: 78c3faa16f9c0408fa47fb46f63bd3e4, type: 3}
+  - {fileID: 0}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
@@ -1141,6 +1145,7 @@ MonoBehaviour:
   blobShadowPrefab: {fileID: 100000, guid: 2d396c91cd798423fb698aebd706ee5f, type: 2}
   boostParticleEmitter: {fileID: 1500000}
   engine: {fileID: 11400010}
+  bikeAnimation: {fileID: 11100000}
   boostMaxSpeed: 30
   boostDuration: 2
 --- !u!114 &11400002
@@ -1223,7 +1228,7 @@ SphereCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 5410a64fad11e8d6d00011d98d76c639, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -1235,7 +1240,7 @@ SphereCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 5410a64fad11e8d6d00011d98d76c639, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2

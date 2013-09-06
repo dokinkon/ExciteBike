@@ -22,6 +22,7 @@ public class Bike : MonoBehaviour {
 	public GameObject blobShadowPrefab;
     public ParticleEmitter boostParticleEmitter;
     public Engine engine;
+    public Animation bikeAnimation;
 	
 	private bool _isCrashed;
 	private bool _isEngineStarted;
@@ -49,8 +50,14 @@ public class Bike : MonoBehaviour {
 	public GameObject followNode {
 		get { return _followNode; }
 	}
+
+    private float _steerAxis = 0.0f;
 	
 	private GameObject _selfIndicator;
+
+    private AnimationState _viberationAnimState;
+    private AnimationState _leanLeftAnimState;
+    private AnimationState _leanRightAnimState;
 	
 	void Awake() {
 		_blobShadow = (GameObject)Instantiate (blobShadowPrefab);
@@ -86,15 +93,68 @@ public class Bike : MonoBehaviour {
 	}
 	
 	public void TurnLeft() {
+        if (_turnLeft) 
+            return;
+
 		_turnLeft = true;
 		_turnRight = false;
+        //_leanLeftAnimState.speed = 1.0f;
+        //_leanRightAnimState.speed = -1.0f;
 	}
 	
 	public void TurnRight() {
+        if (_turnRight)
+            return;
 		_turnRight = true;
 		_turnLeft = false;
+        //_leanRightAnimState.speed = 1.0f;
+        //_leanLeftAnimState.speed = -1.0f;
+
 	}
 	
+	public void ResetSteer() {
+        if (_turnLeft) {
+            //_leanLeftAnimState.speed = -1.0f;
+        } 
+
+        if (_turnRight) {
+            //_leanRightAnimState.speed = -1.0f;
+        }
+		_turnLeft = false;
+		_turnRight = false;
+	}
+
+    private void UpdateSteerAxis() {
+        float step = Time.deltaTime * 4;
+        if (_turnLeft) {
+            _steerAxis -= step;
+        } else if ( _turnRight) {
+            _steerAxis += step;
+        } else {
+
+            if (Math.Abs(_steerAxis) < step) {
+                _steerAxis = 0.0f;
+            } else {
+                if (_steerAxis > 0) {
+                    _steerAxis -= step;
+                } else {
+                    _steerAxis += step;
+                }
+            }
+        }
+        
+        if (_steerAxis > 1) {
+            _steerAxis = 1;
+        }
+
+        if (_steerAxis < -1) {
+            _steerAxis = -1;
+        }
+
+
+
+    }
+
 	public void TiltUp() {
 		_shouldTiltDown = false;
 		_shouldTiltUp = true;
@@ -110,10 +170,6 @@ public class Bike : MonoBehaviour {
 		_shouldTiltDown = false;
 	}
 	
-	public void ResetSteer() {
-		_turnLeft = false;
-		_turnRight = false;
-	}
 	
 	
 	// Use this for initialization
@@ -121,12 +177,42 @@ public class Bike : MonoBehaviour {
 		rigidbody.centerOfMass = Vector3.zero;
     	rigidbody.maxAngularVelocity = 3;
 		_runtimePlatform = Application.platform;
+        _viberationAnimState = bikeAnimation["BikeViberation"];
+        _leanLeftAnimState = bikeAnimation["BikeTiltLeft"];
+        _leanRightAnimState = bikeAnimation["BikeTiltRight"];
+        _leanLeftAnimState.layer = 10;
+        _leanRightAnimState.layer = 10;
+        //_leanLeftAnimState.blendMode = AnimationBlendMode.Additive;
+        //_leanRightAnimState.blendMode = AnimationBlendMode.Additive;
+        _leanLeftAnimState.wrapMode = WrapMode.ClampForever;
+        _leanRightAnimState.wrapMode = WrapMode.ClampForever;
+        _leanLeftAnimState.enabled = true;
+        _leanRightAnimState.enabled = true;
+        _leanLeftAnimState.weight = 1.0f;
+        _leanRightAnimState.weight = 1.0f;
+        _leanLeftAnimState.normalizedTime = 0;
+        _leanRightAnimState.normalizedTime = 0;
+        
+        _viberationAnimState.wrapMode = WrapMode.Loop;
+        bikeAnimation.Play("BikeViberation");
 	}
 	
 	void FixedUpdateTilt() {
+
+        
+
 		Vector3 v = rigidbody.angularVelocity;
 		if ( _shouldTiltUp ) {
-			v.x = -2;
+
+            //rigidbody.centerOfMass = new Vector3( 0, 0.28f, -0.79f);
+
+            float target = 300;
+            float current = rigidbody.rotation.eulerAngles.x;
+            float dist = target - current;
+
+            Debug.Log("curr:" + current + " dist:" + dist);
+            v.x = dist * 0.1f;
+
 		} else if ( _shouldTiltDown ) {
 			v.x = 2;
 		} 
@@ -178,18 +264,49 @@ public class Bike : MonoBehaviour {
 		}
 	}
 
+    IEnumerator UpdateCrashTimer(float duration) {
+        yield return new WaitForSeconds(duration);
+        _isCrashed = false;
+        Vector3 p = rigidbody.position;
+        rigidbody.rotation = Quaternion.identity;
+        rigidbody.velocity = Vector3.zero;
+        rigidbody.angularVelocity = Vector3.zero;
+        rigidbody.MovePosition(p + new Vector3(0, 1, 0));
+        bikeAnimation.Stop();
+    }
+
 	void FixedUpdate() {
 		if (!_isEngineStarted)
 			return;
+
+        // Test crash
+        if ( !_isCrashed) {
+            if ( rearWheel.IsTouchingTheRoad() || frontWheel.IsTouchingTheRoad() ) {
+                float x = rigidbody.rotation.eulerAngles.x;
+                while (x > 180) {
+                    x -= 360;
+                }
+                if ( x > 85 || x < -85) {
+                    _isCrashed = true;
+                    StartCoroutine(UpdateCrashTimer(3.0f));
+                    if (bikeAnimation != null) {
+                        //bikeAnimation.Play("BikeCrash");
+                    }
+                }
+            }
+        }
+
 		
 		if ( _isCrashed ) {
+            Vector3 v = rigidbody.angularVelocity;
+            Debug.Log("is crashed");
+            v.x = 70;
+            //rigidbody.AddRelativeTorque(new Vector3(200, 0, 0));
+            rigidbody.angularVelocity = v;
 		} else {
 			if ( rearWheel.IsTouchingTheRoad() ) {
 				rigidbody.AddRelativeForce(Vector3.forward*engine.GetCurrentPower());
-				//rigidbody.AddRelativeForce(Vector3.forward*horsePower*_throttle);
-			} else {
-                //engine.SetThrottle(0);
-            }
+			}
 			
 			FixedUpdateTilt();
 			
@@ -286,6 +403,10 @@ public class Bike : MonoBehaviour {
                 UpdateInputControlWithKeyboard();
             }
         }
+
+        UpdateSteerAxis();
+        _leanLeftAnimState.normalizedTime = -_steerAxis;
+        _leanRightAnimState.normalizedTime = _steerAxis;
 	}
 	
 	// Update is called once per frame
@@ -428,6 +549,7 @@ public class Bike : MonoBehaviour {
     private void StartShiftTrack(int targetTrackIndex) {
         if (_isShiftingTrack)
             return;
+
 
         targetTrackIndex = Math.Min(Math.Max(0, targetTrackIndex), 3);
         if ( targetTrackIndex == _currentTrackIndex )

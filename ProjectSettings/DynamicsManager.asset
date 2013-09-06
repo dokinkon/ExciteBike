@@ -8,8 +8,8 @@ PhysicsManager:
   m_BounceThreshold: 2
   m_SleepVelocity: .150000006
   m_SleepAngularVelocity: .140000001
-  m_MaxAngularVelocity: 7
-  m_MinPenetrationForPenalty: .00100000005
+  m_MaxAngularVelocity: 70
+  m_MinPenetrationForPenalty: 9.99999975e-05
   m_SolverIterationCount: 20
   m_RaycastsHitTriggers: 1
   m_LayerCollisionMatrix: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
