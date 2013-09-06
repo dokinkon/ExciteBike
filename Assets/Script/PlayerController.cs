@@ -21,11 +21,11 @@ public class PlayerController : MonoBehaviour {
 		}
 		
 		if (acc.y < -0.85 ) {
-			bike.TurnRight();
+			//bike.TurnRight();
 		} else if ( acc.y > -0.65) {
-			bike.TurnLeft();
+			//bike.TurnLeft();
 		} else {
-			bike.ResetSteer();
+			//bike.ResetSteer();
 		}
 	}
 	

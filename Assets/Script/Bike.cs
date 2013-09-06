@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System;
-//using NetworkRigidbody;
 
 public class Bike : MonoBehaviour {
 	
@@ -26,8 +25,7 @@ public class Bike : MonoBehaviour {
 	
 	private bool _isCrashed;
 	private bool _isEngineStarted;
-	private bool _turnLeft;
-	private bool _turnRight;
+    private BikeSteer _bikeSteer;
 	private bool _shouldTiltUp;
 	private bool _shouldTiltDown;
 	private GameObject _blobShadow;
@@ -92,69 +90,6 @@ public class Bike : MonoBehaviour {
         engine.isStarted = false;
 	}
 	
-	public void TurnLeft() {
-        if (_turnLeft) 
-            return;
-
-		_turnLeft = true;
-		_turnRight = false;
-        //_leanLeftAnimState.speed = 1.0f;
-        //_leanRightAnimState.speed = -1.0f;
-	}
-	
-	public void TurnRight() {
-        if (_turnRight)
-            return;
-		_turnRight = true;
-		_turnLeft = false;
-        //_leanRightAnimState.speed = 1.0f;
-        //_leanLeftAnimState.speed = -1.0f;
-
-	}
-	
-	public void ResetSteer() {
-        if (_turnLeft) {
-            //_leanLeftAnimState.speed = -1.0f;
-        } 
-
-        if (_turnRight) {
-            //_leanRightAnimState.speed = -1.0f;
-        }
-		_turnLeft = false;
-		_turnRight = false;
-	}
-
-    private void UpdateSteerAxis() {
-        float step = Time.deltaTime * 4;
-        if (_turnLeft) {
-            _steerAxis -= step;
-        } else if ( _turnRight) {
-            _steerAxis += step;
-        } else {
-
-            if (Math.Abs(_steerAxis) < step) {
-                _steerAxis = 0.0f;
-            } else {
-                if (_steerAxis > 0) {
-                    _steerAxis -= step;
-                } else {
-                    _steerAxis += step;
-                }
-            }
-        }
-        
-        if (_steerAxis > 1) {
-            _steerAxis = 1;
-        }
-
-        if (_steerAxis < -1) {
-            _steerAxis = -1;
-        }
-
-
-
-    }
-
 	public void TiltUp() {
 		_shouldTiltDown = false;
 		_shouldTiltUp = true;
@@ -174,6 +109,7 @@ public class Bike : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+        _bikeSteer = GetComponent<BikeSteer>();
 		rigidbody.centerOfMass = Vector3.zero;
     	rigidbody.maxAngularVelocity = 3;
 		_runtimePlatform = Application.platform;
@@ -311,9 +247,9 @@ public class Bike : MonoBehaviour {
 			FixedUpdateTilt();
 			
             if ( rearWheel.IsTouchingTheRoad() || frontWheel.IsTouchingTheRoad() ) {
-                if (!_isShiftingTrack && _turnLeft) {
+                if (!_isShiftingTrack && (_bikeSteer.state == BikeSteerState.Left)) {
                     StartShiftTrack(_currentTrackIndex + 1);
-                } else if (!_isShiftingTrack && _turnRight) {
+                } else if (!_isShiftingTrack && (_bikeSteer.state == BikeSteerState.Right)) {
                     StartShiftTrack(_currentTrackIndex - 1);
                 }
             } 
@@ -334,11 +270,11 @@ public class Bike : MonoBehaviour {
 	
 	void UpdateInputControlWithKeyboard() {
 		if ( Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) {
-			TurnLeft();
+			_bikeSteer.TurnLeft();
 		} else if ( Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S) ) {
-			TurnRight();
+			_bikeSteer.TurnRight();
 		} else {
-			ResetSteer();
+			_bikeSteer.ResetSteer();
 		}
 		
 		if ( Input.GetKey (KeyCode.LeftArrow) || Input.GetKey ( KeyCode.A) ) {
@@ -379,11 +315,11 @@ public class Bike : MonoBehaviour {
 			}
 			
 			if (_joystick.position.y < -0.7 ) {
-				TurnRight();
+				_bikeSteer.TurnRight();
 			} else if (_joystick.position.y > 0.7 ) {
-				TurnLeft();
+				_bikeSteer.TurnLeft();
 			} else {
-				ResetSteer();
+				_bikeSteer.ResetSteer();
 			}
 		}
 
@@ -404,7 +340,7 @@ public class Bike : MonoBehaviour {
             }
         }
 
-        UpdateSteerAxis();
+        //UpdateSteerAxis();
         _leanLeftAnimState.normalizedTime = -_steerAxis;
         _leanRightAnimState.normalizedTime = _steerAxis;
 	}
@@ -467,9 +403,9 @@ public class Bike : MonoBehaviour {
 		if ( controlByNPC ) {
 			
 			if ( other.gameObject.tag == "turnleft" ) {
-				this.TurnLeft();
+				_bikeSteer.TurnLeft();
 			} else if ( other.gameObject.tag == "turnright") {
-				this.TurnRight();
+				_bikeSteer.TurnRight();
 			} else if ( other.gameObject.tag == "tiltup" ) {
 				this.TiltUp();
 			}
@@ -480,7 +416,7 @@ public class Bike : MonoBehaviour {
 		
 		if ( controlByNPC ) {
 			if ( other.gameObject.tag == "turnleft" || other.gameObject.tag == "turnright") {
-				this.ResetSteer();
+				_bikeSteer.ResetSteer();
 			} else if ( other.gameObject.tag== "tiltup" ) {
 				this.ResetTilt();
 			}
