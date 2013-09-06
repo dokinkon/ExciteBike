@@ -6,11 +6,13 @@ public class BikeControl : MonoBehaviour {
     private BikePitch _pitch;
     private BikeSteer _steer;
     public BikeEngine _engine;
+    private BikeCrash _crashHandler;
 
 	// Use this for initialization
 	void Start () {
         _pitch = GetComponent<BikePitch>();
         _steer = GetComponent<BikeSteer>();
+        _crashHandler = GetComponent<BikeCrash>();
         //_engine = GetComponent<BikeEngine>();
 	}
 	
@@ -19,7 +21,12 @@ public class BikeControl : MonoBehaviour {
 		if (!networkView.isMine)
 			return;
 
-        UpdateInputControlWithKeyboard();
+        if (_crashHandler.isCrashed) {
+            _steer.ResetSteer();
+            _pitch.ResetPitch();
+        } else {
+            UpdateInputControlWithKeyboard();
+        }
         /*
         if (controlByNPC) {
             engine.SetThrottle(1.0f);

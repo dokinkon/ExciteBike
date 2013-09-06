@@ -4,7 +4,6 @@ using System;
 
 public class Bike : MonoBehaviour {
 	
-	//public float horsePower = 30;
 	public float maxSpeedZ = 1;
 	public float maxSpeedX = 10;
 	public float jumpSpeed = 20;
@@ -15,15 +14,14 @@ public class Bike : MonoBehaviour {
 	public bool controlByNPC;
 	public bool lookAtSnapGround = true;
 	public float lookAtOffset = 7;
-    //public float enginePitchMax = 0.7f;
-    //public float enginePitchMin = 0.5f;
 	
 	public GameObject blobShadowPrefab;
     public ParticleEmitter boostParticleEmitter;
     public BikeEngine engine;
-    //public Animation bikeAnimation;
 	
+    private bool _shouldCrash = false;
 	private bool _isCrashed;
+    BikeCrash _bikeCrash;
 	private bool _isEngineStarted;
     private BikeSteer _bikeSteer;
     private BikePitch _pitch;
@@ -35,7 +33,6 @@ public class Bike : MonoBehaviour {
     public float boostMaxSpeed = 30;
 	public float boostDuration = 3;
 	private float _boostDelay;
-    //private float _throttle = 0;
 	private NetworkPlayer _networkPlayer;
 	private Joystick _joystick;
 	private RuntimePlatform _runtimePlatform;
@@ -84,31 +81,9 @@ public class Bike : MonoBehaviour {
 	void Start () {
         _bikeSteer = GetComponent<BikeSteer>();
         _pitch = GetComponent<BikePitch>();
+        _bikeCrash = GetComponent<BikeCrash>();
 		rigidbody.centerOfMass = Vector3.zero;
-    	rigidbody.maxAngularVelocity = 3;
 		_runtimePlatform = Application.platform;
-	}
-	
-	void FixedUpdateTilt() {
-
-        
-
-		Vector3 v = rigidbody.angularVelocity;
-		if ( _pitch.state == BikePitchState.Up ) {
-
-            //rigidbody.centerOfMass = new Vector3( 0, 0.28f, -0.79f);
-
-            float target = 300;
-            float current = rigidbody.rotation.eulerAngles.x;
-            float dist = target - current;
-
-            Debug.Log("curr:" + current + " dist:" + dist);
-            v.x = dist * 0.1f;
-
-		} else if ( _pitch.state == BikePitchState.Down ) {
-			v.x = 2;
-		} 
-		rigidbody.angularVelocity = v;
 	}
 	
 	void LimitVelocity() {
@@ -158,13 +133,12 @@ public class Bike : MonoBehaviour {
 
     IEnumerator UpdateCrashTimer(float duration) {
         yield return new WaitForSeconds(duration);
-        _isCrashed = false;
+        //_isCrashed = false;
         Vector3 p = rigidbody.position;
         rigidbody.rotation = Quaternion.identity;
         rigidbody.velocity = Vector3.zero;
         rigidbody.angularVelocity = Vector3.zero;
-        rigidbody.MovePosition(p + new Vector3(0, 1, 0));
-        //bikeAnimation.Stop();
+        rigidbody.MovePosition(p + Vector3.up);
     }
 
 	void FixedUpdate() {
@@ -172,7 +146,13 @@ public class Bike : MonoBehaviour {
 			return;
 
         // Test crash
+        /*
         if ( !_isCrashed) {
+            if (_shouldCrash) {
+                _isCrashed = true;
+                _shouldCrash = false;
+                StartCoroutine(UpdateCrashTimer(3.0f));
+            }
             if ( rearWheel.IsTouchingTheRoad() || frontWheel.IsTouchingTheRoad() ) {
                 float x = rigidbody.rotation.eulerAngles.x;
                 while (x > 180) {
@@ -184,19 +164,17 @@ public class Bike : MonoBehaviour {
                 }
             }
         }
+        */
 
-		
-		if ( _isCrashed ) {
-            Vector3 v = rigidbody.angularVelocity;
-            Debug.Log("is crashed");
-            v.x = 70;
-            rigidbody.angularVelocity = v;
+		if ( _bikeCrash.isCrashed ) {
+            //Vector3 v = rigidbody.angularVelocity;
+            //Debug.Log("is crashed");
+            //v.x = 7;
+            //rigidbody.angularVelocity = v;
 		} else {
 			if ( rearWheel.IsTouchingTheRoad() ) {
 				rigidbody.AddRelativeForce(Vector3.forward*engine.GetCurrentPower());
 			}
-			
-			FixedUpdateTilt();
 			
             if ( rearWheel.IsTouchingTheRoad() || frontWheel.IsTouchingTheRoad() ) {
                 if (!_isShiftingTrack && (_bikeSteer.state == BikeSteerState.Left)) {
@@ -220,85 +198,6 @@ public class Bike : MonoBehaviour {
 		_blobShadow.transform.position = p;
 	}
 	
-    /*
-	void UpdateInputControlWithKeyboard() {
-		if ( Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) {
-			_bikeSteer.TurnLeft();
-		} else if ( Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S) ) {
-			_bikeSteer.TurnRight();
-		} else {
-			_bikeSteer.ResetSteer();
-		}
-		
-		if ( Input.GetKey (KeyCode.LeftArrow) || Input.GetKey ( KeyCode.A) ) {
-			TiltUp();
-		} else if ( Input.GetKey (KeyCode.RightArrow) || Input.GetKey ( KeyCode.D) ) {
-			TiltDown();
-		} else {
-			ResetTilt();
-		}	
-
-        if ( Input.GetKey(KeyCode.Space) ) {
-            if (_shouldBoost)
-                engine.SetThrottle(1);
-            else
-                engine.SetThrottle(1.0f);
-        } else {
-            engine.SetThrottle(0);
-        }
-	}
-    */
-	
-    /*
-	void UpdateInputControlWithVirtualJoystick() {
-		
-		if (!_joystick) {
-			_joystick = (Joystick)GameObject.FindWithTag("joystick").GetComponent("Joystick");
-			if (!_joystick) {
-				Debug.LogError("Can't grad joystick");
-			}
-		}
-		
-		if ( _joystick ) {
-			//Debug.Log ("Joystick.x:" + _joystick.position.x);
-			if (_joystick.position.x < -0.7 ) {
-				TiltUp();
-			} else if (_joystick.position.x > 0.7 ) {
-				TiltDown();
-			} else {
-				ResetTilt();
-			}
-			
-			if (_joystick.position.y < -0.7 ) {
-				_bikeSteer.TurnRight();
-			} else if (_joystick.position.y > 0.7 ) {
-				_bikeSteer.TurnLeft();
-			} else {
-				_bikeSteer.ResetSteer();
-			}
-		}
-
-        engine.SetThrottle(1.0f);
-	}
-    */
-	
-    /*
-	void UpdateInputControl() {
-		if (!networkView.isMine)
-			return;
-
-        if (controlByNPC) {
-            engine.SetThrottle(1.0f);
-        } else {
-            if ( _runtimePlatform == RuntimePlatform.IPhonePlayer ) {
-                UpdateInputControlWithVirtualJoystick();
-            } else {
-                UpdateInputControlWithKeyboard();
-            }
-        }
-
-	}
-    */
 	
 	// Update is called once per frame
 	void Update () {
@@ -339,6 +238,23 @@ public class Bike : MonoBehaviour {
         if (boostParticleEmitter != null) {
             boostParticleEmitter.emit = false;
         }
+    }
+
+    void OnCollisionEnter(Collision collision) {
+        //Debug.Log("OnCollisionEnter");
+        /*
+        if (_isCrashed)
+            return;
+
+        foreach (ContactPoint contact in collision.contacts) {
+            float dot = Vector3.Dot(transform.up, contact.normal);
+            Debug.Log("DOT:" + dot);
+            if (dot < 0.65) {
+                _shouldCrash = true;
+            }
+            Debug.DrawRay(contact.point, contact.normal, Color.white);
+        }
+        */
     }
 	
 	void OnTriggerEnter(Collider other ) {
