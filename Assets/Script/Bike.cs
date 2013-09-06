@@ -4,7 +4,7 @@ using System;
 
 public class Bike : MonoBehaviour {
 	
-	public float horsePower = 30;
+	//public float horsePower = 30;
 	public float maxSpeedZ = 1;
 	public float maxSpeedX = 10;
 	public float jumpSpeed = 20;
@@ -15,13 +15,13 @@ public class Bike : MonoBehaviour {
 	public bool controlByNPC;
 	public bool lookAtSnapGround = true;
 	public float lookAtOffset = 7;
-    public float enginePitchMax = 0.7f;
-    public float enginePitchMin = 0.5f;
+    //public float enginePitchMax = 0.7f;
+    //public float enginePitchMin = 0.5f;
 	
 	public GameObject blobShadowPrefab;
     public ParticleEmitter boostParticleEmitter;
     public BikeEngine engine;
-    public Animation bikeAnimation;
+    //public Animation bikeAnimation;
 	
 	private bool _isCrashed;
 	private bool _isEngineStarted;
@@ -35,7 +35,7 @@ public class Bike : MonoBehaviour {
     public float boostMaxSpeed = 30;
 	public float boostDuration = 3;
 	private float _boostDelay;
-    private float _throttle = 0;
+    //private float _throttle = 0;
 	private NetworkPlayer _networkPlayer;
 	private Joystick _joystick;
 	private RuntimePlatform _runtimePlatform;
@@ -50,9 +50,6 @@ public class Bike : MonoBehaviour {
 
 	private GameObject _selfIndicator;
 
-    private AnimationState _viberationAnimState;
-    private AnimationState _leanLeftAnimState;
-    private AnimationState _leanRightAnimState;
 	
 	void Awake() {
 		_blobShadow = (GameObject)Instantiate (blobShadowPrefab);
@@ -90,24 +87,6 @@ public class Bike : MonoBehaviour {
 		rigidbody.centerOfMass = Vector3.zero;
     	rigidbody.maxAngularVelocity = 3;
 		_runtimePlatform = Application.platform;
-        _viberationAnimState = bikeAnimation["BikeViberation"];
-        _leanLeftAnimState = bikeAnimation["BikeTiltLeft"];
-        _leanRightAnimState = bikeAnimation["BikeTiltRight"];
-        _leanLeftAnimState.layer = 10;
-        _leanRightAnimState.layer = 10;
-        //_leanLeftAnimState.blendMode = AnimationBlendMode.Additive;
-        //_leanRightAnimState.blendMode = AnimationBlendMode.Additive;
-        _leanLeftAnimState.wrapMode = WrapMode.ClampForever;
-        _leanRightAnimState.wrapMode = WrapMode.ClampForever;
-        _leanLeftAnimState.enabled = true;
-        _leanRightAnimState.enabled = true;
-        _leanLeftAnimState.weight = 1.0f;
-        _leanRightAnimState.weight = 1.0f;
-        _leanLeftAnimState.normalizedTime = 0;
-        _leanRightAnimState.normalizedTime = 0;
-        
-        _viberationAnimState.wrapMode = WrapMode.Loop;
-        bikeAnimation.Play("BikeViberation");
 	}
 	
 	void FixedUpdateTilt() {
@@ -185,7 +164,7 @@ public class Bike : MonoBehaviour {
         rigidbody.velocity = Vector3.zero;
         rigidbody.angularVelocity = Vector3.zero;
         rigidbody.MovePosition(p + new Vector3(0, 1, 0));
-        bikeAnimation.Stop();
+        //bikeAnimation.Stop();
     }
 
 	void FixedUpdate() {
@@ -202,9 +181,6 @@ public class Bike : MonoBehaviour {
                 if ( x > 85 || x < -85) {
                     _isCrashed = true;
                     StartCoroutine(UpdateCrashTimer(3.0f));
-                    if (bikeAnimation != null) {
-                        //bikeAnimation.Play("BikeCrash");
-                    }
                 }
             }
         }
@@ -321,8 +297,6 @@ public class Bike : MonoBehaviour {
             }
         }
 
-        _leanLeftAnimState.normalizedTime = -_bikeSteer.steerValue;
-        _leanRightAnimState.normalizedTime = _bikeSteer.steerValue;
 	}
     */
 	
