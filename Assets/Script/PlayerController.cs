@@ -13,11 +13,11 @@ public class PlayerController : MonoBehaviour {
 	void UpdateIPhonePlayer() {
 		Vector3 acc = Input.acceleration;
 		if (acc.x < -3 ) {
-			bike.TiltUp();
+			//bike.TiltUp();
 		} else if (acc.x > 3 ) {
-			bike.TiltDown();
+			//bike.TiltDown();
 		} else {
-			bike.ResetTilt();
+			//bike.ResetTilt();
 		}
 		
 		if (acc.y < -0.85 ) {

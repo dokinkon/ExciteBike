@@ -48,8 +48,6 @@ public class Bike : MonoBehaviour {
 		get { return _followNode; }
 	}
 
-    private float _steerAxis = 0.0f;
-	
 	private GameObject _selfIndicator;
 
     private AnimationState _viberationAnimState;
@@ -80,28 +78,10 @@ public class Bike : MonoBehaviour {
 		Debug.Log ("[Bike.StartEngine]");
 	}
 
-    public void SetThrottle(float t) {
-        _throttle = t;
-    }
-	
 	public void StopEngine() {
 		_isEngineStarted = false;
         engine.isStarted = false;
 	}
-	
-	public void TiltUp() {
-        _pitch.PitchUp();
-	}
-	
-	public void TiltDown() {
-        _pitch.PitchDown();
-	}
-	
-	public void ResetTilt() {
-        _pitch.ResetPitch();
-	}
-	
-	
 	
 	// Use this for initialization
 	void Start () {
@@ -234,7 +214,6 @@ public class Bike : MonoBehaviour {
             Vector3 v = rigidbody.angularVelocity;
             Debug.Log("is crashed");
             v.x = 70;
-            //rigidbody.AddRelativeTorque(new Vector3(200, 0, 0));
             rigidbody.angularVelocity = v;
 		} else {
 			if ( rearWheel.IsTouchingTheRoad() ) {
@@ -265,6 +244,7 @@ public class Bike : MonoBehaviour {
 		_blobShadow.transform.position = p;
 	}
 	
+    /*
 	void UpdateInputControlWithKeyboard() {
 		if ( Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) {
 			_bikeSteer.TurnLeft();
@@ -291,7 +271,9 @@ public class Bike : MonoBehaviour {
             engine.SetThrottle(0);
         }
 	}
+    */
 	
+    /*
 	void UpdateInputControlWithVirtualJoystick() {
 		
 		if (!_joystick) {
@@ -322,7 +304,9 @@ public class Bike : MonoBehaviour {
 
         engine.SetThrottle(1.0f);
 	}
+    */
 	
+    /*
 	void UpdateInputControl() {
 		if (!networkView.isMine)
 			return;
@@ -340,6 +324,7 @@ public class Bike : MonoBehaviour {
         _leanLeftAnimState.normalizedTime = -_bikeSteer.steerValue;
         _leanRightAnimState.normalizedTime = _bikeSteer.steerValue;
 	}
+    */
 	
 	// Update is called once per frame
 	void Update () {
@@ -364,7 +349,7 @@ public class Bike : MonoBehaviour {
 			}
 		}
 		
-		UpdateInputControl();
+		//UpdateInputControl();
 		_followNode.transform.position = gameObject.transform.position;
 	}
 
@@ -398,6 +383,7 @@ public class Bike : MonoBehaviour {
 	void OnTriggerStay ( Collider other ) {
 		if ( controlByNPC ) {
 			
+            /*
 			if ( other.gameObject.tag == "turnleft" ) {
 				_bikeSteer.TurnLeft();
 			} else if ( other.gameObject.tag == "turnright") {
@@ -405,17 +391,20 @@ public class Bike : MonoBehaviour {
 			} else if ( other.gameObject.tag == "tiltup" ) {
 				this.TiltUp();
 			}
+            */
 		}
 	}
 	
 	void OnTriggerExit(Collider other) {
 		
 		if ( controlByNPC ) {
+            /*
 			if ( other.gameObject.tag == "turnleft" || other.gameObject.tag == "turnright") {
 				_bikeSteer.ResetSteer();
 			} else if ( other.gameObject.tag== "tiltup" ) {
 				this.ResetTilt();
 			}
+            */
 		}
 		
 		
