@@ -229,14 +229,14 @@ public class Bike : MonoBehaviour {
         Debug.Log("[Bike.OnNetworkInstantiate] TimeStamp:" + info.timestamp);
 		
 		NetworkRigidbody networkRigidbody = (NetworkRigidbody)GetComponent<NetworkRigidbody>();
-		PlayerController playerController = (PlayerController)GetComponent<PlayerController>();
+		BikeControl control = GetComponent<BikeControl>();
 		_networkPlayer = info.sender;
 		
 		_followNode = new GameObject("FollowNode ( " + name + " )");
 		
 		if ( networkView.isMine ) {
 			networkRigidbody.enabled = false;
-			playerController.enabled = true;
+			control.enabled = true;
 			lookAt = GameObject.FindWithTag ("camera_look_at").transform;
 			_joystick = (Joystick)GameObject.FindWithTag ("joystick").GetComponent("Joystick");
 			_selfIndicator = (GameObject)Instantiate(Resources.Load("self-indicator"));
@@ -253,13 +253,13 @@ public class Bike : MonoBehaviour {
 				
 		} else {
 			networkRigidbody.enabled = true;
-			playerController.enabled = false;
+			control.enabled = false;
 			this.name += "Remote";
 			
 			// create UserPictureBillboard
 			GameObject userPictureBillboardGo = (GameObject)Instantiate(Resources.Load("user-picture-billboard"));
 			userPictureBillboardGo.transform.parent = _followNode.transform;
-			userPictureBillboardGo.transform.localPosition = new Vector3(0, 6, 0);
+			userPictureBillboardGo.transform.localPosition = new Vector3(0, 4, 0);
 			userPictureBillboardGo.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 			userPictureBillboardGo.transform.localRotation = Quaternion.identity;
 			//userPictureBillboardGo.renderer.material.mainTexture = playerInfo.profilePicture;
@@ -317,6 +317,15 @@ public class Bike : MonoBehaviour {
         } else {
             rigidbody.MovePosition ( rigidbody.position + direction * stepAbs );
         }
+    }
+
+    public void SetCollisionLayer(int layer) {
+        networkView.RPC("SyncConllisionLayer", RPCMode.AllBuffered, layer);
+    }
+
+    [RPC]
+    void SyncConllisionLayer(int layer) {
+        Utility.SetLayerRecursively(gameObject, layer);
     }
 
     [RPC]

@@ -28,12 +28,16 @@ public class BikeAnimation : MonoBehaviour {
         _leanRight.normalizedTime = 0;
         
         _viberation.wrapMode = WrapMode.Loop;
-        animation.Play("BikeViberation");
+        if (networkView.isMine) {
+            animation.Play("BikeViberation");
+        }
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        _leanLeft.normalizedTime = -steer.steerValue;
-        _leanRight.normalizedTime = steer.steerValue;
+        if (networkView.isMine) {
+            _leanLeft.normalizedTime = -steer.steerValue;
+            _leanRight.normalizedTime = steer.steerValue;
+        }
 	}
 }

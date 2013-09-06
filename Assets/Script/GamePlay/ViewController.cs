@@ -93,6 +93,7 @@ namespace GamePlay {
             PlayerInfo playerInfo = GameManager.Instance.localPlayerInfo;
 			
 			_localBike = GameManager.Instance.SpawnBike(playerInfo.bikeName, playerInfo.trackIndex);
+            _localBike.SetCollisionLayer(21 + playerInfo.trackIndex);
             //
 			Client.Instance.OnGamePlayReadyStart += OnPlayerReadyStart;
 			_fsm.Start();
