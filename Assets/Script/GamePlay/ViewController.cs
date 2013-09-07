@@ -32,6 +32,12 @@ namespace GamePlay {
         public UILabel lapLabel;
 		public UILabel rankLabel;
 
+        public UILabel[] racePositionLabels;
+
+        public LocationSprite[] locationSprites;
+
+        public Texture[] userProfilePictures;
+
         public SmoothFollow smoothFollow;
 
         private Vector3 _cameraInitPosition;
@@ -60,8 +66,23 @@ namespace GamePlay {
 		
 		private bool _shouldEnterFinishState = false;
 		private int _lapCount = 1;
+
+        private float _trackTotalDistance;
+        public float trackTotalDistance {
+            get { return _trackTotalDistance; }
+        }
+
+        private float _trackStartLocation = -110000.0f;
+        public float trackStartLocation {
+            get { 
+                if (_trackStartLocation < -10000.0f) {
+                    GameObject spawn = GameObject.FindGameObjectWithTag("init_spawn_0");
+                    _trackStartLocation = spawn.transform.position.z;
+                }
+                return _trackStartLocation;
+            }
+        }
 		
-	
 		// Use this for initialization
 		void Start () {
 			Debug.Log ("[GamePlayViewController.Start]");
@@ -82,7 +103,6 @@ namespace GamePlay {
 			_fsm.AddState(new State.PauseState(this));
 			_fsm.AddState(new State.FinishState(this));
 				
-				
 			GameManager.OnViewControllerStarted();
 			UIEventListener.Get(pauseButton).onClick = OnPauseButtonPressed;
 			UIEventListener.Get(resumeButton).onClick = OnResumeButtonPressed;
@@ -96,6 +116,8 @@ namespace GamePlay {
             _localBike.SetCollisionLayer(21 + playerInfo.trackIndex);
             //
 			Client.Instance.OnGamePlayReadyStart += OnPlayerReadyStart;
+            _trackTotalDistance = CalculateTrackDistance();
+            Debug.Log("TrackDistance:" + _trackTotalDistance);
 			_fsm.Start();
 		}
 
@@ -263,6 +285,29 @@ namespace GamePlay {
         void OnShowRevChanged(bool show) {
             //bool prevValue = PlayerPrefs.GetInt();
         }
-	}
 
+        private float CalculateTrackDistance() {
+            GameObject spawn = GameObject.FindGameObjectWithTag("init_spawn_0");
+            GameObject[] lapSensors = GameObject.FindGameObjectsWithTag("lap");
+            float totalDistance = -1000.0f;
+            foreach (GameObject lapSensor in lapSensors) {
+                float distance = lapSensor.transform.position.z - spawn.transform.position.z;
+                if (distance > totalDistance) {
+                    totalDistance = distance;
+                }
+            }
+            return totalDistance;
+        }
+
+        public LocationSprite GetLocationSprite(int index) {
+            if (index < 0 || index > 3)
+                return null;
+
+            return locationSprites[index];
+        }
+
+        public void SetRacePosition(PlayerInfo playerInfo, int racePosition) {
+            racePositionLabels[racePosition].text = playerInfo.playerName;
+        }
+	}
 }

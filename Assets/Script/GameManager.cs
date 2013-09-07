@@ -235,6 +235,10 @@ public class GameManager : MonoSingleton< GameManager > {
 	public PlayerInfo GetPlayerInfo(int index) {
 		return _playerInfos[index];
 	}
+
+    public PlayerInfo[] GetPlayerInfos() {
+        return _playerInfos.ToArray();
+    }
 	
 	public void RemovePlayer(NetworkPlayer player) {
 		PlayerInfo playerInfo = GetPlayerInfo(player);
