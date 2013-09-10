@@ -20,6 +20,11 @@ public class PlayerInfo : MonoBehaviour {
         PlayerPrefs.SetInt("HasAccountCreated", 1);
         GameManager.playerName = name;
     }
+
+    public static void DeleteAccount() {
+        PlayerPrefs.SetInt("HasAccountCreated", 1);
+        GameManager.playerName = "";
+    }
 	
 	private string _facebookUserId;
 	public string facebookUserId {

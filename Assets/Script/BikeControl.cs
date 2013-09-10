@@ -7,12 +7,15 @@ public class BikeControl : MonoBehaviour {
     private BikeSteer _steer;
     public BikeEngine _engine;
     private BikeCrash _crashHandler;
+    private Joystick _joystick;
+
 
 	// Use this for initialization
 	void Start () {
         _pitch = GetComponent<BikePitch>();
         _steer = GetComponent<BikeSteer>();
         _crashHandler = GetComponent<BikeCrash>();
+
         //_engine = GetComponent<BikeEngine>();
 	}
 	
@@ -25,7 +28,11 @@ public class BikeControl : MonoBehaviour {
             _steer.ResetSteer();
             _pitch.ResetPitch();
         } else {
-            UpdateInputControlWithKeyboard();
+            if ( Application.platform == RuntimePlatform.IPhonePlayer ) {
+                UpdateInputControlWithVirtualJoystick();
+            } else {
+                UpdateInputControlWithKeyboard();
+            }
         }
         /*
         if (controlByNPC) {
@@ -51,23 +58,24 @@ public class BikeControl : MonoBehaviour {
 		}
 		
 		if ( Input.GetKey (KeyCode.LeftArrow) || Input.GetKey ( KeyCode.A) ) {
-			_pitch.PitchUp();
+			_pitch.PitchUp(1);
 		} else if ( Input.GetKey (KeyCode.RightArrow) || Input.GetKey ( KeyCode.D) ) {
-			_pitch.PitchDown();
+			_pitch.PitchDown(1);
 		} else {
 			_pitch.ResetPitch();
 		}	
 
+        /*
         if ( Input.GetKey(KeyCode.Space) ) {
             _engine.SetThrottle(1);
         } else {
             _engine.SetThrottle(0);
         }
+        */
 	}
 	
 	void UpdateInputControlWithVirtualJoystick() {
 		
-        /*
 		if (!_joystick) {
 			_joystick = (Joystick)GameObject.FindWithTag("joystick").GetComponent("Joystick");
 			if (!_joystick) {
@@ -77,24 +85,27 @@ public class BikeControl : MonoBehaviour {
 		
 		if ( _joystick ) {
 			//Debug.Log ("Joystick.x:" + _joystick.position.x);
+            /*
 			if (_joystick.position.x < -0.7 ) {
-				_pitch.();
+				_pitch.PitchUp();
 			} else if (_joystick.position.x > 0.7 ) {
-				TiltDown();
+				_pitch.PitchDown();
 			} else {
-				ResetTilt();
+				_pitch.ResetPitch();
 			}
+            */
 			
+            /*
 			if (_joystick.position.y < -0.7 ) {
-				_bikeSteer.TurnRight();
+				_steer.TurnRight();
 			} else if (_joystick.position.y > 0.7 ) {
-				_bikeSteer.TurnLeft();
+				_steer.TurnLeft();
 			} else {
-				_bikeSteer.ResetSteer();
+				_steer.ResetSteer();
 			}
+            */
 		}
 
-        engine.SetThrottle(1.0f);
-        */
+        //_engine.SetThrottle(1.0f);
 	}
 }

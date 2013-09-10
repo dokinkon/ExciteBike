@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MasterServerScene.unity
+    path: Assets/Scenes/MainMenuScene.unity
   - enabled: 1
     path: Assets/Scenes/GamePlayScene.unity
   - enabled: 1
@@ -19,3 +19,5 @@ EditorBuildSettings:
     path: Assets/Scenes/Track01.unity
   - enabled: 1
     path: Assets/Scenes/Track03.unity
+  - enabled: 1
+    path: Assets/Scenes/UserProfileScene.unity

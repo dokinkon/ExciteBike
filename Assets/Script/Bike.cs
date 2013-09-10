@@ -21,7 +21,21 @@ public class Bike : MonoBehaviour {
     BikeCrash _bikeCrash;
 	private bool _isEngineStarted;
     private BikeSteer _bikeSteer;
+    public BikeSteer steer {
+        get { return _bikeSteer; }
+    }
     private BikePitch _pitch;
+    public BikePitch pitch {
+        get { return _pitch; }
+    }
+
+    public bool isFlying {
+        get {
+            return !frontWheel.IsTouchingTheRoad() && !rearWheel.IsTouchingTheRoad();
+        }
+
+    }
+
 	private GameObject _blobShadow;
     private BikeBoost _boost;
 	private bool _shouldSlowdown;

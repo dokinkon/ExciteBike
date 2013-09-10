@@ -9,6 +9,8 @@ namespace GamePlay.State {
 		private int _currentSec = 3;
 		private float _delayTimer;
 		private float _localTimer;
+
+        private IOSController _iosController;
 		
 		
 		public CountDownState(ViewController viewController) {
@@ -54,11 +56,20 @@ namespace GamePlay.State {
             Time.timeScale = 1;
             Debug.Log("[GamePlay.State.CountDownState.DoBeforeEntering]");
 			_viewController.countDownPanel.SetActive(true);
-		
+            GameObject go = GameObject.Find("IOSController");
+            if (go != null) {
+                _iosController = go.GetComponent<IOSController>();
+                if (_iosController!= null) {
+                    _iosController.StartMeasureAcceleration();
+                }
+            }
 		}
 		
 		public override void DoBeforeLeaving() {
 			_viewController.countDownPanel.SetActive(false);
+            if (_iosController!=null) {
+                _iosController.StopMeasureAcceleration();
+            }
 		}
 	}
 	

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class BikePitch : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class BikePitch : MonoBehaviour {
     public float rotateSpeed = 0.1f;
     public float maxUpAngle = -60;
     public float maxDownAngle = 60;
+    private float _strength = 0.0f;
 
     private BikeCrash _crash;
 
@@ -29,11 +31,11 @@ public class BikePitch : MonoBehaviour {
 		if ( _state == BikePitchState.Up ) {
             Quaternion targetRotation = Quaternion.AngleAxis(maxUpAngle, Vector3.right);
             float dist = Quaternion.Angle( rigidbody.rotation, targetRotation );
-            v.x = -dist * rotateSpeed;
+            v.x = -dist * rotateSpeed * _strength;
 		} else if ( _state == BikePitchState.Down ) {
             Quaternion targetRotation = Quaternion.AngleAxis(maxDownAngle, Vector3.right);
             float dist = Quaternion.Angle( rigidbody.rotation, targetRotation );
-			v.x = dist * rotateSpeed;
+			v.x = dist * rotateSpeed * _strength;
 		} 
 		rigidbody.angularVelocity = v;
     }
@@ -43,12 +45,14 @@ public class BikePitch : MonoBehaviour {
 	
 	}
 
-    public void PitchUp() {
+    public void PitchUp(float strength) {
         _state = BikePitchState.Up;
+        _strength = Math.Min(Math.Abs(strength), 1.0f);
     }
 
-    public void PitchDown() {
+    public void PitchDown(float strength) {
         _state = BikePitchState.Down;
+        _strength = Math.Min(Math.Abs(strength), 1.0f);
     }
 
     public void ResetPitch() {

@@ -20,6 +20,11 @@ namespace MainMenu {
 		}
 		
 		void Start() {
+
+            if (!PlayerInfo.hasAccoutCreated) {
+                Application.LoadLevel("UserProfileScene");
+            }
+
 			
 			GameManager.OnViewControllerStarted();
 			//playerNameLabel.text = GameManager.playerName;
@@ -65,6 +70,8 @@ namespace MainMenu {
 		}
 		
 		void OnOptionButtonPressed(GameObject button) {
+            PlayerInfo.DeleteAccount();
+            Application.LoadLevel("UserProfileScene");
 		}
 		
 		void OnLoginFacebookButtonPressed(GameObject button) {

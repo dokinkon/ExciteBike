@@ -298,7 +298,6 @@ public class GameManager : MonoSingleton< GameManager > {
     }
 
     void OnApplicationQuit() {
-        //Debug.Log("[GameLobby.OnApplicationQuit]");
         _isShutingDown = true;
     }
 }

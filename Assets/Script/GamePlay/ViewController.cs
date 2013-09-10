@@ -22,6 +22,9 @@ namespace GamePlay {
 		public GameObject joystickPane;
 		public GameObject joystick;
 		public GameObject backToLobbyButton;
+        public GameObject throttleButton;
+
+
 		
         // labels
 		public UILabel countDownLabel;
@@ -110,6 +113,9 @@ namespace GamePlay {
 			UIEventListener.Get(exitButton).onClick = OnExitButtonPressed;
 			UIEventListener.Get(backToLobbyButton).onClick = OnExitButtonPressed;
 
+            UIEventListener.Get(throttleButton).onPress = OnThrottleButtonPressed;
+            //UIEventListener.Get(throttleButton).onRelease = OnThrottleButtonReleased;
+
             PlayerInfo playerInfo = GameManager.Instance.localPlayerInfo;
 			
 			_localBike = GameManager.Instance.SpawnBike(playerInfo.bikeName, playerInfo.trackIndex);
@@ -118,6 +124,17 @@ namespace GamePlay {
 			Client.Instance.OnGamePlayReadyStart += OnPlayerReadyStart;
             _trackTotalDistance = CalculateTrackDistance();
             Debug.Log("TrackDistance:" + _trackTotalDistance);
+
+
+            if ( Application.platform == RuntimePlatform.IPhonePlayer ) {
+                GameObject go = GameObject.Find("IOSController");
+                if (go!=null) {
+                    IOSController controller = go.GetComponent<IOSController>();
+                    controller.SetBike(_localBike);
+                }
+            }
+
+
 			_fsm.Start();
 		}
 
@@ -282,8 +299,23 @@ namespace GamePlay {
             }
         }
 
-        void OnShowRevChanged(bool show) {
+        void OnThrottleButtonPressed(GameObject button, bool pressed) {
+            Debug.Log("OnThrottleButtonPressed:" + pressed.ToString());
+            if (pressed)
+                _localBike.engine.SetThrottle(1);
+            else
+                _localBike.engine.SetThrottle(0);
+        }
+
+        void OnThrottleButtonReleased(GameObject button) {
+            _localBike.engine.SetThrottle(0);
+        }
+
+        void OnMusicEnableChanged(bool enable) {
             //bool prevValue = PlayerPrefs.GetInt();
+            GameObject go = GameObject.Find("Main Camera");
+            AudioSource audioSource = go.GetComponent<AudioSource>();
+            AudioSource.enabled = enable;
         }
 
         private float CalculateTrackDistance() {
@@ -309,5 +341,6 @@ namespace GamePlay {
         public void SetRacePosition(PlayerInfo playerInfo, int racePosition) {
             racePositionLabels[racePosition].text = playerInfo.playerName;
         }
+
 	}
 }

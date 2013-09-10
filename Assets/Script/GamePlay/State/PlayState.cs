@@ -71,6 +71,7 @@ namespace GamePlay.State {
 				}
 			}
 
+            /*
 			if (rank==1) {
 				_viewController.rankLabel.text = "1st";
 			} else if (rank == 2) {
@@ -80,6 +81,7 @@ namespace GamePlay.State {
 			} else {
 				_viewController.rankLabel.text = rank.ToString() + "th";
 			}
+            */
 
 		}
 		

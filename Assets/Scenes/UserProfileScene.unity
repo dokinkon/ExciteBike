@@ -162,8 +162,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
-  mTex: {fileID: 0}
+  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 2800000, guid: da323e2b403b83f48a9c5bc9e05ec0cd, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 1
@@ -326,7 +326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
+  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
@@ -402,6 +402,50 @@ MonoBehaviour:
   mShrinkToFit: 0
   mLineWidth: 0
   mMultiline: 1
+--- !u!1001 &339672243
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400000, guid: 44d3acc26b5f94c9e998d961a60fd8af, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 44d3acc26b5f94c9e998d961a60fd8af, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 44d3acc26b5f94c9e998d961a60fd8af, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 44d3acc26b5f94c9e998d961a60fd8af, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 44d3acc26b5f94c9e998d961a60fd8af, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 44d3acc26b5f94c9e998d961a60fd8af, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 44d3acc26b5f94c9e998d961a60fd8af, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 44d3acc26b5f94c9e998d961a60fd8af, type: 2}
+      propertyPath: appIdIOS
+      value: 280459581967624
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 44d3acc26b5f94c9e998d961a60fd8af, type: 2}
+  m_RootGameObject: {fileID: 844141825}
+  m_IsPrefabParent: 0
+  m_IsExploded: 1
 --- !u!1 &401749832
 GameObject:
   m_ObjectHideFlags: 0
@@ -525,7 +569,7 @@ GameObject:
   - 114: {fileID: 618571690}
   - 114: {fileID: 618571695}
   m_Layer: 10
-  m_Name: 3.Button
+  m_Name: 3.Button (Facebook)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -538,7 +582,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 618571688}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 358.000061, y: -19.9999981, z: 0}
+  m_LocalPosition: {x: 358.000031, y: -20, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1486940428}
@@ -629,7 +673,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1431046245}
-  functionName: OnUseFacebookButtonPressed
+  functionName: OnUseFacebbokButtonPressed
   trigger: 0
   includeChildren: 0
 --- !u!1 &686001677
@@ -660,7 +704,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 686001677}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 113.000023, y: -19.9999981, z: 0}
+  m_LocalPosition: {x: 113.000015, y: -20, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 171513324}
@@ -811,6 +855,58 @@ MonoBehaviour:
   mShrinkToFit: 0
   mLineWidth: 0
   mMultiline: 1
+--- !u!1 &844141825
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100000, guid: 44d3acc26b5f94c9e998d961a60fd8af, type: 2}
+  m_PrefabInternal: {fileID: 339672243}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 844141827}
+  - 114: {fileID: 844141826}
+  m_Layer: 0
+  m_Name: FacebookSNSAgent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &844141826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400000, guid: 44d3acc26b5f94c9e998d961a60fd8af,
+    type: 2}
+  m_PrefabInternal: {fileID: 339672243}
+  m_GameObject: {fileID: 844141825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1361964474, guid: 918eb4383f0fb464e80021665f3b4507, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  appIdAndroid: 
+  appIdIOS: 280459581967624
+  needUserEmailInfo: 0
+  needUserBirthdayInfo: 0
+  needUserLocationInfo: 0
+  needUserLikesInfo: 0
+  autoFetchUserFriends: 1
+  autoFetchUserLikedPages: 1
+  autoLoadUserScores: 1
+  scorePolicy: 0
+  serverReceiveScoreURL: 
+  serverReceiveAchievementURL: 
+  debugMode: 1
+--- !u!4 &844141827
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400000, guid: 44d3acc26b5f94c9e998d961a60fd8af, type: 2}
+  m_PrefabInternal: {fileID: 339672243}
+  m_GameObject: {fileID: 844141825}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
 --- !u!1 &874416133
 GameObject:
   m_ObjectHideFlags: 0
@@ -857,6 +953,7 @@ GameObject:
   - 114: {fileID: 908121459}
   - 114: {fileID: 908121458}
   - 114: {fileID: 908121457}
+  - 114: {fileID: 908121463}
   m_Layer: 10
   m_Name: Button (BackToMainMenu)
   m_TagString: Untagged
@@ -950,6 +1047,21 @@ Transform:
   - {fileID: 1589542518}
   - {fileID: 1364772570}
   m_Father: {fileID: 977911146}
+--- !u!114 &908121463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 908121456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1431046245}
+  functionName: OnBackToMainMenuButtonPressed
+  trigger: 0
+  includeChildren: 0
 --- !u!1 &936327314
 GameObject:
   m_ObjectHideFlags: 0
@@ -1030,7 +1142,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 977911145}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -366.000031, z: 0}
+  m_LocalPosition: {x: 0, y: -366, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 908121462}
@@ -1091,7 +1203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
+  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
@@ -1250,7 +1362,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1238241630
 Transform:
   m_ObjectHideFlags: 0
@@ -1363,7 +1475,8 @@ MonoBehaviour:
   createAccountWindow: {fileID: 874416133}
   viewAccountWindow: {fileID: 1214899335}
   createAccountNameLabel: {fileID: 936327316}
-  accountNameLabel: {fileID: 0}
+  accountNameLabel: {fileID: 776438782}
+  profileTexture: {fileID: 599147124}
 --- !u!1 &1436397833
 GameObject:
   m_ObjectHideFlags: 0
@@ -1402,7 +1515,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
+  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
@@ -1459,8 +1572,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
-  mTex: {fileID: 0}
+  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mTex: {fileID: 2800000, guid: da323e2b403b83f48a9c5bc9e05ec0cd, type: 3}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 4
@@ -1645,7 +1758,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1669751646}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 249.500031, y: -19.9999981, z: 0}
+  m_LocalPosition: {x: 249.500046, y: -20, z: 0}
   m_LocalScale: {x: 28, y: 28, z: 1}
   m_Children: []
   m_Father: {fileID: 1989261718}
@@ -1660,7 +1773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 0}
+  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
