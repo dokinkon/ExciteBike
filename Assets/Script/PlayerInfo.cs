@@ -8,6 +8,18 @@ public class PlayerInfo : MonoBehaviour {
 	
 	public event StringDelegate OnNameChanged;
 	public event StatusDelegate OnStatusChanged;
+
+    public static bool hasAccoutCreated {
+        get {
+            int r = PlayerPrefs.GetInt("HasAccountCreated", 0);
+            return r == 1;
+        }
+    }
+
+    public static void CreateAccount(string name) {
+        PlayerPrefs.SetInt("HasAccountCreated", 1);
+        GameManager.playerName = name;
+    }
 	
 	private string _facebookUserId;
 	public string facebookUserId {

@@ -14,10 +14,12 @@ public class Client : MonoSingleton< Client > {
 		get { return _hostData; }
 	}
 	
+    public delegate void StringDelegate(string s);
     public delegate void VoidDelegate();
 	public delegate void FloatDelegate(float f);
 	public event FloatDelegate OnGamePlayReadyStart;
     public event VoidDelegate OnAllPlayersReadyInLobby;
+    public event StringDelegate OnReceiveChatMessage;
 	
 	public override void Init() {
 		
@@ -69,6 +71,20 @@ public class Client : MonoSingleton< Client > {
 			playerInfo.facebookUserId = GameManager.Instance.facebookUserInfo.id;
 		}
 	}
+
+    public void SendChatMessage(string message) {
+        string finalMessage = GameManager.playerName;
+        finalMessage += ":";
+        finalMessage += message;
+        networkView.RPC("RPCSendChatMessage", RPCMode.All, finalMessage);
+    }
+
+    [RPC]
+    void RPCSendChatMessage(string message) {
+        if ( OnReceiveChatMessage != null ) {
+            OnReceiveChatMessage (message);
+        }
+    }
 
 	[RPC]
 	public void ResponseJoinGame(int result, int trackIndex) {

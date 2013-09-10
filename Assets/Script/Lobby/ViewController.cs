@@ -12,8 +12,11 @@ namespace Lobby {
 		public GameObject commonPanel;
 		public GameObject selectTrackPanel;
 		public GameObject selectTrackOKButton;
+        public GameObject sendChatButton;
 		public UILabel hostTitleLabel;
         public UILabel countDownLabel;
+        public UILabel chatHistoryLabel;
+        public UILabel chatInputLabel;
 		public GameObject playerItemPrefab;
 		public UITable playerTable;
 		
@@ -47,6 +50,7 @@ namespace Lobby {
 
             UIEventListener.Get(readyButton).onClick = OnReadyButtonPressed;
 			UIEventListener.Get(backButton).onClick = OnBackButtonPressed;
+            UIEventListener.Get(sendChatButton).onClick = OnSendChatMessageButtonPressed;
 			
 			//Client.Instance.EnterLobby();
 			
@@ -65,6 +69,8 @@ namespace Lobby {
 			
 			GameManager.Instance.OnPlayerAdded += CreatePlayerItem;
 			GameManager.Instance.OnPlayerRemoved += DestroyPlayerItem;
+            Client.Instance.OnReceiveChatMessage += OnReceiveChatMessage;
+            chatHistoryLabel.text = "";
 			_fsm.Start ();
 		}
 		
@@ -95,11 +101,6 @@ namespace Lobby {
 			}
 		}
 		
-		// for server
-		//void OnStartGameButtonPressed(GameObject button) {
-			//Server.Instance.LoadGamePlayLevel();
-		//}
-		
 		void OnBackButtonPressed(GameObject button) {
 			if (Network.isClient) {
 				Network.Disconnect();
@@ -125,6 +126,11 @@ namespace Lobby {
 			commonPanel.SetActive(true);
 			selectTrackPanel.SetActive(false);
 		}
+
+        void OnSendChatMessageButtonPressed(GameObject button) {
+            Client.Instance.SendChatMessage(chatInputLabel.text);
+            chatInputLabel.text = "";
+        }
 		
 		void CreatePlayerItem(PlayerInfo playerInfo) {
 			Debug.Log ("GameLobbyViewController.CreatePlayerItem");
@@ -164,6 +170,7 @@ namespace Lobby {
             if (!_isShutingDown) {
                 GameManager.Instance.OnPlayerAdded -= CreatePlayerItem;
                 GameManager.Instance.OnPlayerRemoved -= DestroyPlayerItem;
+                Client.Instance.OnReceiveChatMessage -= OnReceiveChatMessage;
             }
 		}
 
@@ -190,6 +197,13 @@ namespace Lobby {
 
         void OnAllPlayersReadyInLobby() {
             _fsm.PerformTransition(State.Transistions.CountDown);
+        }
+
+        void OnReceiveChatMessage(string message) {
+            string chatHistory = chatHistoryLabel.text;
+            chatHistory += "\n";
+            chatHistory += message;
+            chatHistoryLabel.text = chatHistory;
         }
 	}
 
