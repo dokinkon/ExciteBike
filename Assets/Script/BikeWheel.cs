@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BikeWheel : MonoBehaviour {
 	
-	private int touchCount_;
+	private int _touchCount;
 	
 	// Use this for initialization
 	void Start () {
@@ -11,20 +11,35 @@ public class BikeWheel : MonoBehaviour {
 	}
 	
 	public bool IsTouchingTheRoad() {
-		return touchCount_ != 0;
+		return _touchCount != 0;
 	}
+
+    /*
+    void OnCollisionEnter( Collider other) {
+        if (other.gameObject.tag == "road") {
+            _touchCount++;
+        }
+    }
+
+    void OnCollisionExit( Collider other ) {
+        if (other.gameObject.tag == "road") {
+            _touchCount--;
+        }
+    }
+    */
 		
 	void OnTriggerEnter ( Collider other ) {
-		//Debug.Log("OnTriggerEnter");
-		//if ( other.gameObject.tag == "road" ) {
-			touchCount_++;
-		//}
+		Debug.Log("Wheel:OnTriggerEnter");
+		if ( other.gameObject.tag == "road" ) {
+			_touchCount++;
+		}
 	}
 	
 	void OnTriggerExit ( Collider other ) {
-		//if ( other.gameObject.tag == "road" ) {
-			touchCount_--;
-		//}
+		Debug.Log("Wheel:OnTriggerExit");
+		if ( other.gameObject.tag == "road" ) {
+			_touchCount--;
+		}
 	}
 	
 	// Update is called once per frame

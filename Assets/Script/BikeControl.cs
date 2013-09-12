@@ -31,7 +31,7 @@ public class BikeControl : MonoBehaviour {
             if ( Application.platform == RuntimePlatform.IPhonePlayer ) {
                 UpdateInputControlWithVirtualJoystick();
             } else {
-                UpdateInputControlWithKeyboard();
+                //UpdateInputControlWithKeyboard();
             }
         }
         /*

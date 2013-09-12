@@ -144,6 +144,7 @@ GameObject:
   - 82: {fileID: 8200012}
   - 114: {fileID: 11400024}
   - 82: {fileID: 8200014}
+  - 114: {fileID: 11400026}
   m_Layer: 8
   m_Name: Bike
   m_TagString: Player
@@ -1245,7 +1246,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: b05d4b65049ac44fe9f962a706f089c4, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -1442,6 +1443,8 @@ MonoBehaviour:
   pitchRange: .200000003
   maxHorsePower: 200
   _boost: {fileID: 11400024}
+  slowdown: {fileID: 11400026}
+  crash: {fileID: 11400018}
   currentGearPosition: 1
   totalGears: 6
   volume: 1
@@ -1540,6 +1543,19 @@ MonoBehaviour:
   boostParticleEmitter: {fileID: 1500002}
   soundEffect1: {fileID: 8200012}
   duration: 3
+--- !u!114 &11400026
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed83a3ce411314867af617b9a426b876, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speedLimit: 5
+  rpmLimit: 2000
 --- !u!135 &13500000
 SphereCollider:
   m_ObjectHideFlags: 1

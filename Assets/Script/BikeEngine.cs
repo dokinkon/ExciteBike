@@ -18,6 +18,7 @@ public class BikeEngine : MonoBehaviour {
     public float maxHorsePower = 200;
     public BikeBoost _boost;
     public BikeSlowDown slowdown;
+    public BikeCrash crash;
 
     public int currentGearPosition = 0;
     public int totalGears = 6;
@@ -112,7 +113,11 @@ public class BikeEngine : MonoBehaviour {
                 _currentRPM -= Time.deltaTime * factor;
             }
 
-            _currentRPM = Math.Min(Math.Max(1000.0f, _currentRPM), 6000.0f);
+            if (crash.isCrashed) {
+                _currentRPM = 1000.0f;
+            } else {
+                _currentRPM = Math.Min(Math.Max(1000.0f, _currentRPM), 6000.0f);
+            }
         }
 
         rpm = (int)_currentRPM;

@@ -36,7 +36,12 @@ public class BikePitch : MonoBehaviour {
             Quaternion targetRotation = Quaternion.AngleAxis(maxDownAngle, Vector3.right);
             float dist = Quaternion.Angle( rigidbody.rotation, targetRotation );
 			v.x = dist * rotateSpeed * _strength;
-		} 
+		} else if ( _state == BikePitchState.Balance ) {
+            //Debug.Log("Balance");
+            //Quaternion targetRotation = Quaternion.AngleAxis(0, Vector3.right);
+            //float dist = Quaternion.Angle( rigidbody.rotation, targetRotation );
+			//v.x = -dist * rotateSpeed * _strength;
+        }
 		rigidbody.angularVelocity = v;
     }
 
@@ -52,6 +57,11 @@ public class BikePitch : MonoBehaviour {
 
     public void PitchDown(float strength) {
         _state = BikePitchState.Down;
+        _strength = Math.Min(Math.Abs(strength), 1.0f);
+    }
+
+    public void Balance(float strength) {
+        _state = BikePitchState.Balance;
         _strength = Math.Min(Math.Abs(strength), 1.0f);
     }
 

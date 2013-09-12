@@ -22,10 +22,7 @@ namespace GamePlay {
 		public GameObject joystickPane;
 		public GameObject joystick;
 		public GameObject backToLobbyButton;
-        public GameObject throttleButton;
 
-
-		
         // labels
 		public UILabel countDownLabel;
 		public UILabel totalTimeLabel;
@@ -113,9 +110,6 @@ namespace GamePlay {
 			UIEventListener.Get(exitButton).onClick = OnExitButtonPressed;
 			UIEventListener.Get(backToLobbyButton).onClick = OnExitButtonPressed;
 
-            UIEventListener.Get(throttleButton).onPress = OnThrottleButtonPressed;
-            //UIEventListener.Get(throttleButton).onRelease = OnThrottleButtonReleased;
-
             PlayerInfo playerInfo = GameManager.Instance.localPlayerInfo;
 			
 			_localBike = GameManager.Instance.SpawnBike(playerInfo.bikeName, playerInfo.trackIndex);
@@ -132,8 +126,13 @@ namespace GamePlay {
                     IOSController controller = go.GetComponent<IOSController>();
                     controller.SetBike(_localBike);
                 }
+            } else {
+                GameObject keyboardControllerGo = GameObject.Find("KeyboardController");
+                if (keyboardControllerGo != null) {
+                    KeyboardController keyboardController = keyboardControllerGo.GetComponent<KeyboardController>();
+                    keyboardController.SetBike(_localBike);
+                }
             }
-
 
 			_fsm.Start();
 		}
@@ -299,17 +298,6 @@ namespace GamePlay {
             }
         }
 
-        void OnThrottleButtonPressed(GameObject button, bool pressed) {
-            Debug.Log("OnThrottleButtonPressed:" + pressed.ToString());
-            if (pressed)
-                _localBike.engine.SetThrottle(1);
-            else
-                _localBike.engine.SetThrottle(0);
-        }
-
-        void OnThrottleButtonReleased(GameObject button) {
-            _localBike.engine.SetThrottle(0);
-        }
 
         void OnMusicEnableChanged(bool enable) {
             //bool prevValue = PlayerPrefs.GetInt();

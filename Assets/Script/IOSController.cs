@@ -3,6 +3,7 @@ using System.Collections;
 
 public class IOSController : MonoBehaviour {
 
+    public GameObject throttleButton;
     public UILabel accelerationLabel;
     public UILabel debugLabel;
     public Transform accelSpriteTransform;
@@ -36,11 +37,25 @@ public class IOSController : MonoBehaviour {
     
 
 	void Start () {
-        Swipe swipe = GetComponent<Swipe>();
-        swipe.swipeDelegate += OnSwipe;
-	
+
+        if (Application.platform !=RuntimePlatform.IPhonePlayer) {
+            throttleButton.SetActive(false);
+            gameObject.SetActive(false);
+        } else {
+            Swipe swipe = GetComponent<Swipe>();
+            swipe.swipeDelegate += OnSwipe;
+            UIEventListener.Get(throttleButton).onPress = OnThrottleButtonPressed;
+        }
 	}
 	
+    void OnThrottleButtonPressed(GameObject button, bool pressed) {
+        //Debug.Log("OnThrottleButtonPressed:" + pressed.ToString());
+        if (pressed)
+            _bike.engine.SetThrottle(1);
+        else
+            _bike.engine.SetThrottle(0);
+    }
+
 	// Update is called once per frame
 	void Update () {
         Vector3 v = Input.acceleration;

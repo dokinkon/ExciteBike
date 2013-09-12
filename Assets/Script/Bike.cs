@@ -95,7 +95,7 @@ public class Bike : MonoBehaviour {
         _boost = GetComponent<BikeBoost>();
         _bikeCrash = GetComponent<BikeCrash>();
         _slowdown = GetComponent<BikeSlowDown>();
-		rigidbody.centerOfMass = Vector3.zero;
+		//rigidbody.centerOfMass = Vector3.zero;
 		_runtimePlatform = Application.platform;
 	}
 	
