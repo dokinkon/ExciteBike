@@ -21,3 +21,5 @@ EditorBuildSettings:
     path: Assets/Scenes/Track03.unity
   - enabled: 1
     path: Assets/Scenes/UserProfileScene.unity
+  - enabled: 1
+    path: Assets/Scenes/Track02.unity

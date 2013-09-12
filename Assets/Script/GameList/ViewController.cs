@@ -101,7 +101,7 @@ namespace GameList {
 		}
 		
 		void OnBackButtonPressed(GameObject button) {
-			Application.LoadLevel("MasterServerScene");
+			Application.LoadLevel("MainMenuScene");
 		}
 	}
 }

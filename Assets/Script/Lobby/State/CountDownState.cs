@@ -24,7 +24,6 @@ namespace Lobby.State {
             _countDownTimer -= Time.deltaTime;
             if (_countDownTimer < 0) {
                 _viewController.StopCountDownAnimation();
-                //StopCoroutine(AnimateCountDownLabel());
                 if (Network.isServer) {
                     Server.Instance.LoadGamePlayLevel();
                 }

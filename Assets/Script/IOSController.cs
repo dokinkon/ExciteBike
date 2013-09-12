@@ -36,6 +36,8 @@ public class IOSController : MonoBehaviour {
     
 
 	void Start () {
+        Swipe swipe = GetComponent<Swipe>();
+        swipe.swipeDelegate += OnSwipe;
 	
 	}
 	
@@ -71,7 +73,7 @@ public class IOSController : MonoBehaviour {
                 _maxY = IphoneDeltaAcc.y;
             }
 
-            debugLabel.text = System.String.Format("max:{0:F3} min:{1:F3}", _maxY, _minY);
+            //debugLabel.text = System.String.Format("max:{0:F3} min:{1:F3}", _maxY, _minY);
 
             
 
@@ -91,6 +93,7 @@ public class IOSController : MonoBehaviour {
                     IphoneDeltaAcc.z);
 
             if (_bike!=null) {
+                /*
                 if (IphoneDeltaAcc.y > .4f ) {
                     _bike.steer.TurnLeft();
                 } else if ( IphoneDeltaAcc.y < -.4f) {
@@ -98,6 +101,7 @@ public class IOSController : MonoBehaviour {
                 } else {
                     _bike.steer.ResetSteer();
                 }
+                */
 
                 /*
 
@@ -156,4 +160,16 @@ public class IOSController : MonoBehaviour {
     public void SetBike(Bike b) {
         _bike = b;
     }
+
+    void OnSwipe(int type) {
+        if (type == Swipe.Up) {
+            debugLabel.text = "Swipe.Up";
+            _bike.steer.TurnLeft();
+        } else if (type == Swipe.Down) {
+            debugLabel.text = "Swipe.Down";
+            _bike.steer.TurnRight();
+        }
+    }
+
+
 }

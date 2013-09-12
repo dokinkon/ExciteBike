@@ -603,7 +603,7 @@ EllipsoidParticleEmitter:
   m_GameObject: {fileID: 100032}
   serializedVersion: 2
   m_Enabled: 1
-  m_Emit: 1
+  m_Emit: 0
   minSize: .0500000007
   maxSize: .5
   minEnergy: .100000001
@@ -1408,7 +1408,6 @@ MonoBehaviour:
   blobShadowPrefab: {fileID: 100000, guid: 2d396c91cd798423fb698aebd706ee5f, type: 2}
   engine: {fileID: 11400010}
   boostMaxSpeed: 30
-  boostDuration: 2
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1442,6 +1441,7 @@ MonoBehaviour:
   _selfTestFactor: 500
   pitchRange: .200000003
   maxHorsePower: 200
+  _boost: {fileID: 11400024}
   currentGearPosition: 1
   totalGears: 6
   volume: 1

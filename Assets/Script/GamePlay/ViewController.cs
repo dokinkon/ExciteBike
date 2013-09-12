@@ -315,7 +315,7 @@ namespace GamePlay {
             //bool prevValue = PlayerPrefs.GetInt();
             GameObject go = GameObject.Find("Main Camera");
             AudioSource audioSource = go.GetComponent<AudioSource>();
-            AudioSource.enabled = enable;
+            audioSource.enabled = enable;
         }
 
         private float CalculateTrackDistance() {

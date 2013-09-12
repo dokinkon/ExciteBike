@@ -42,8 +42,6 @@ public class Bike : MonoBehaviour {
 	private bool _shouldJump;
 	private int _boostLevel;
     public float boostMaxSpeed = 30;
-	public float boostDuration = 3;
-	private float _boostDelay;
 	private NetworkPlayer _networkPlayer;
 	private Joystick _joystick;
 	private RuntimePlatform _runtimePlatform;
@@ -101,24 +99,8 @@ public class Bike : MonoBehaviour {
 	void LimitVelocity() {
 		
 		Vector3 v = rigidbody.velocity;
-		
-		if ( _boost.isBoosting ) {
-			v.z = boostMaxSpeed;
-            engine.SetThrottle(1);
-            engine.rpm = 4500;
-		} else {
-			if ( v.z > maxSpeedZ ) {
-				v.z = maxSpeedZ;
-			}
-		}
-		
-		if ( v.x > maxSpeedX ) 
-			v.x = maxSpeedX;
-		
-		if ( v.x < -maxSpeedX ) 
-			v.x = -maxSpeedX;
-		
-		
+        v.z = Math.Min(v.z, maxSpeedZ);
+        v.x = Math.Max(Math.Min(v.x, maxSpeedX), -maxSpeedX);
 		if ( _shouldSlowdown ) {
 			if ( v.z > 5 )
 				v.z = 5;
@@ -328,6 +310,8 @@ public class Bike : MonoBehaviour {
             rigidbody.MovePosition ( rigidbody.position + direction * distanceAbs );
             _isShiftingTrack = false;
             _currentTrackIndex = _targetTrackIndex;
+            _bikeSteer.ResetSteer();
+
         } else {
             rigidbody.MovePosition ( rigidbody.position + direction * stepAbs );
         }

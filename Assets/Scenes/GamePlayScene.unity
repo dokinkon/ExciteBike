@@ -859,7 +859,7 @@ Transform:
   m_GameObject: {fileID: 2}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00273597823, y: .00273597823, z: .00273597823}
+  m_LocalScale: {x: .00416666688, y: .00416666688, z: .00416666688}
   m_Children:
   - {fileID: 72}
   m_Father: {fileID: 0}
@@ -1274,7 +1274,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 37}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .499781102, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1749451995}
@@ -1623,7 +1623,7 @@ AudioSource:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 49}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 3f0d1a6de09904d889cc08cc3fca0827, type: 3}
   m_PlayOnAwake: 1
@@ -4174,7 +4174,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
-  mShader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 0}
+  mShader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 3}
   mTexture: {fileID: 2800000, guid: 52107f40ad9a2423c8add0f45df6cc8b, type: 3}
 --- !u!114 &458014476
 MonoBehaviour:
@@ -4765,12 +4765,12 @@ GameObject:
   - 114: {fileID: 797102474}
   - 114: {fileID: 797102473}
   m_Layer: 10
-  m_Name: Checkbox
+  m_Name: Checkbox (Music)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &797102472
 Transform:
   m_ObjectHideFlags: 0
@@ -5022,6 +5022,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 903431108}
   - 114: {fileID: 903431109}
+  - 114: {fileID: 903431110}
   m_Layer: 0
   m_Name: IOSController
   m_TagString: Untagged
@@ -5056,6 +5057,17 @@ MonoBehaviour:
   accelerationLabel: {fileID: 1930757904}
   debugLabel: {fileID: 416111352}
   accelSpriteTransform: {fileID: 337992265}
+--- !u!114 &903431110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 903431107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 077a1178876ed4298ad89ff50fdf89dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &908358382
 GameObject:
   m_ObjectHideFlags: 0
@@ -5106,7 +5118,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
-  mShader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 0}
+  mShader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 3}
   mTexture: {fileID: 2800000, guid: 4750473abf914485dbf11f0a3f22dbdb, type: 3}
 --- !u!114 &908358385
 MonoBehaviour:
@@ -5159,8 +5171,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
-  mTex: {fileID: 2800000, guid: da323e2b403b83f48a9c5bc9e05ec0cd, type: 3}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 0
@@ -5413,7 +5425,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
-  mShader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 0}
+  mShader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 3}
   mTexture: {fileID: 2800000, guid: 5e987d872b1ba48c196db8647a68e2aa, type: 3}
 --- !u!114 &1085131280
 MonoBehaviour:
@@ -5585,7 +5597,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
-  mShader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 0}
+  mShader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 3}
   mTexture: {fileID: 2800000, guid: 2f5140a2dd16249f89fd41c80c14f565, type: 3}
 --- !u!114 &1223745478
 MonoBehaviour:
@@ -6412,8 +6424,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
-  mTex: {fileID: 2800000, guid: da323e2b403b83f48a9c5bc9e05ec0cd, type: 3}
+  mMat: {fileID: 0}
+  mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mDepth: 1
@@ -6652,7 +6664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mMat: {fileID: 2100000, guid: e7ef61ebb5c25394c8706a7ea658349f, type: 2}
+  mMat: {fileID: 0}
   mTex: {fileID: 0}
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 3
@@ -6872,17 +6884,17 @@ MonoBehaviour:
   widgetsAreStatic: 0
   cullWhileDragging: 0
   worldToLocal:
-    e00: 365.5
+    e00: 239.999985
     e01: 0
     e02: 0
-    e03: -.499781102
+    e03: 0
     e10: 0
-    e11: 365.5
+    e11: 239.999985
     e12: 0
     e13: 0
     e20: 0
     e21: 0
-    e22: 365.5
+    e22: 239.999985
     e23: 0
     e30: 0
     e31: 0

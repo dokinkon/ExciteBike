@@ -166,7 +166,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 272071635}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 525, y: -350, z: 0}
+  m_LocalPosition: {x: 466.666687, y: -350, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1619935315}
@@ -503,7 +503,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 799383679}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.5396414, y: .499638736, z: 0}
+  m_LocalPosition: {x: 14.0392675, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1027778253}
@@ -610,17 +610,17 @@ MonoBehaviour:
   widgetsAreStatic: 0
   cullWhileDragging: 0
   worldToLocal:
-    e00: 365.5
+    e00: 239.999985
     e01: 0
     e02: 0
-    e03: -2631.12598
+    e03: -1697.84424
     e10: 0
-    e11: 365.5
+    e11: 239.999985
     e12: 0
-    e13: -122.499641
+    e13: -122
     e20: 0
     e21: 0
-    e22: 365.5
+    e22: 239.999985
     e23: 0
     e30: 0
     e31: 0
@@ -933,7 +933,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1291070187}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -525, y: -350, z: 0}
+  m_LocalPosition: {x: -466.666687, y: -350, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 579391487}
@@ -1018,7 +1018,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1358922033}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 525, y: 350, z: 0}
+  m_LocalPosition: {x: 466.666687, y: 350, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1296527685}
@@ -1235,7 +1235,7 @@ Transform:
   m_GameObject: {fileID: 1786592078}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 7.43252087, y: 0, z: 0}
-  m_LocalScale: {x: .00273597823, y: .00273597823, z: .00273597823}
+  m_LocalScale: {x: .00416666688, y: .00416666688, z: .00416666688}
   m_Children:
   - {fileID: 799383680}
   - {fileID: 1910067450}
@@ -1342,15 +1342,15 @@ Camera:
   m_BackGroundColor: {r: .5, g: .5, b: .5, a: 1}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: .117589712
-    y: .108679235
-    width: .760281324
-    height: .660250604
+    x: .0697884262
+    y: .10853076
+    width: .85531646
+    height: .659348607
   near clip plane: -2
   far clip plane: 2
   field of view: 60
   orthographic: 1
-  orthographic size: .660250604
+  orthographic size: .659348607
   m_Depth: 1
   m_CullingMask:
     serializedVersion: 2

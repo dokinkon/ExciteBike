@@ -16,6 +16,7 @@ public class BikeEngine : MonoBehaviour {
     public float _selfTestFactor = 10.0f;
     public float pitchRange = 0.3f;
     public float maxHorsePower = 200;
+    public BikeBoost _boost;
 
     public int currentGearPosition = 0;
     public int totalGears = 6;
@@ -28,10 +29,17 @@ public class BikeEngine : MonoBehaviour {
         set { 
             if (_isStarted != value) {
                 _isStarted = value;
-                if (_isStarted)
+                if (_isStarted) {
                     _currentRPM = 1000.0f;
-                else 
+                    for (int i=0;i<6;i++) {
+                        rpmSounds[i].enabled = true;
+                    }
+                } else {
                     _currentRPM = 0.0f;
+                    for (int i=0;i<6;i++) {
+                        rpmSounds[i].enabled = false;
+                    }
+                }
             }
         }
     }
@@ -55,6 +63,10 @@ public class BikeEngine : MonoBehaviour {
         rpmSounds[3] = soundRPM4000;
         rpmSounds[4] = soundRPM5000;
         rpmSounds[5] = soundRPM6000;
+
+        for (int i=0;i<6;i++) {
+            rpmSounds[i].enabled = false;
+        }
 	}
 
     public float GetCurrentPower() {
@@ -80,10 +92,19 @@ public class BikeEngine : MonoBehaviour {
 	void Update () {
 
         if (networkView.isMine) {
-            if (_currentRPM < _currentMaxRPM) {
-                _currentRPM += Time.deltaTime * increaseRevFactor;
-            } else if ( _currentRPM > _currentMaxRPM ) {
-                _currentRPM -= Time.deltaTime * decreaseRevFactor;
+
+            float targetRPM = _currentMaxRPM;
+            float factor = increaseRevFactor;
+
+            if (_boost.isBoosting) {
+                targetRPM = 6000;
+                factor *= 3.0f;
+            }
+
+            if (_currentRPM < targetRPM) {
+                _currentRPM += Time.deltaTime * factor;
+            } else if ( _currentRPM > targetRPM ) {
+                _currentRPM -= Time.deltaTime * factor;
             }
 
             if (_currentRPM > 6000.0f) {
