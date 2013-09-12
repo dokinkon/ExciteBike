@@ -17,6 +17,7 @@ public class BikeEngine : MonoBehaviour {
     public float pitchRange = 0.3f;
     public float maxHorsePower = 200;
     public BikeBoost _boost;
+    public BikeSlowDown slowdown;
 
     public int currentGearPosition = 0;
     public int totalGears = 6;
@@ -101,18 +102,17 @@ public class BikeEngine : MonoBehaviour {
                 factor *= 3.0f;
             }
 
+            if (slowdown.shouldSlowdown) {
+                targetRPM = Math.Min(slowdown.rpmLimit, targetRPM);
+            }
+
             if (_currentRPM < targetRPM) {
                 _currentRPM += Time.deltaTime * factor;
             } else if ( _currentRPM > targetRPM ) {
                 _currentRPM -= Time.deltaTime * factor;
             }
 
-            if (_currentRPM > 6000.0f) {
-                _currentRPM = 6000.0f;
-            } 
-
-            if (_currentRPM < 1000.0f)
-                _currentRPM = 1000.0f;
+            _currentRPM = Math.Min(Math.Max(1000.0f, _currentRPM), 6000.0f);
         }
 
         rpm = (int)_currentRPM;

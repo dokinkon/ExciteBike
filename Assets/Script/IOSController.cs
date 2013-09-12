@@ -45,7 +45,6 @@ public class IOSController : MonoBehaviour {
 	void Update () {
         Vector3 v = Input.acceleration;
         accelerationLabel.text =  "(" + v.x + ", " + v.y + ", " + v.z + ")";
-        //Debug.Log("[IOSController.Update] (" + v.x +", " + v.y + ", " + v.z + ")");
 
         if (_isMeasuring) {
             _acceleration += Input.acceleration;

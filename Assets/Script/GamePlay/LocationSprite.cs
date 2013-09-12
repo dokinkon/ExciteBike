@@ -23,7 +23,7 @@ namespace GamePlay {
 
                 location.x = (endX - beginX) * _normalizedLocation;
                 transform.localPosition = location;
-                Debug.Log("p:" + _normalizedLocation);
+                //Debug.Log("p:" + _normalizedLocation);
             }
 
             get { return _normalizedLocation; }

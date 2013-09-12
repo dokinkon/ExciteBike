@@ -10,6 +10,7 @@ public class Bike : MonoBehaviour {
 	public Transform lookAt;
 	public BikeWheel frontWheel;
 	public BikeWheel rearWheel;
+    
 	
 	public bool controlByNPC;
 	public bool lookAtSnapGround = true;
@@ -19,6 +20,7 @@ public class Bike : MonoBehaviour {
     public BikeEngine engine;
 	
     BikeCrash _bikeCrash;
+    private BikeSlowDown _slowdown;
 	private bool _isEngineStarted;
     private BikeSteer _bikeSteer;
     public BikeSteer steer {
@@ -38,7 +40,7 @@ public class Bike : MonoBehaviour {
 
 	private GameObject _blobShadow;
     private BikeBoost _boost;
-	private bool _shouldSlowdown;
+	//private bool _shouldSlowdown;
 	private bool _shouldJump;
 	private int _boostLevel;
     public float boostMaxSpeed = 30;
@@ -92,6 +94,7 @@ public class Bike : MonoBehaviour {
         _pitch = GetComponent<BikePitch>();
         _boost = GetComponent<BikeBoost>();
         _bikeCrash = GetComponent<BikeCrash>();
+        _slowdown = GetComponent<BikeSlowDown>();
 		rigidbody.centerOfMass = Vector3.zero;
 		_runtimePlatform = Application.platform;
 	}
@@ -101,16 +104,9 @@ public class Bike : MonoBehaviour {
 		Vector3 v = rigidbody.velocity;
         v.z = Math.Min(v.z, maxSpeedZ);
         v.x = Math.Max(Math.Min(v.x, maxSpeedX), -maxSpeedX);
-		if ( _shouldSlowdown ) {
-			if ( v.z > 5 )
-				v.z = 5;
-			
-			if ( v.x > 5 )
-				v.x = 5;
-			
-			if ( v.x < -5 )
-				v.x = -5;
-		}
+        if ( _slowdown.shouldSlowdown) {
+            v.z = Math.Min(Math.Max(v.z, 0), _slowdown.speedLimit);
+        }
 			
 		rigidbody.velocity = v;
 	}
@@ -131,7 +127,8 @@ public class Bike : MonoBehaviour {
 		if ( _bikeCrash.isCrashed ) {
 		} else {
 			if ( rearWheel.IsTouchingTheRoad() ) {
-				rigidbody.AddRelativeForce(Vector3.forward*engine.GetCurrentPower());
+				//rigidbody.AddRelativeForce(Vector3.forward*engine.GetCurrentPower());
+				rigidbody.AddForce(Vector3.forward*engine.GetCurrentPower());
 			}
 			
             if ( rearWheel.IsTouchingTheRoad() || frontWheel.IsTouchingTheRoad() ) {
@@ -179,7 +176,8 @@ public class Bike : MonoBehaviour {
 		if (other.gameObject.tag == "accelerator" ) {
             //StartBoost();
 		} else if ( other.gameObject.tag == "slowdown" ) {
-			this._shouldSlowdown = true;
+            //Debug.Log("[Bike.OnTriggerEnter] slowdown");
+			//this._shouldSlowdown = true;
 		} else if ( other.gameObject.tag == "jump") {
 			this._shouldJump = true;
 		} else if ( other.gameObject.tag == "Finish") {
@@ -216,7 +214,7 @@ public class Bike : MonoBehaviour {
 		
 		
 		if ( other.gameObject.tag == "slowdown" ) {
-			this._shouldSlowdown = false;
+			//this._shouldSlowdown = false;
 		}
 		
 	}
