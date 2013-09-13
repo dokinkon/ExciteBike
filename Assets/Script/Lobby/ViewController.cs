@@ -6,17 +6,24 @@ namespace Lobby {
 
 	public class ViewController : MonoBehaviour {
 		
+        public GameObject lobbyMainContainer;
+        public GameObject lobbyChatContainer;
+
+        // Buttons
 		public GameObject readyButton;
 		public GameObject backButton;
-		public GameObject selectTrackButton;
+		public GameObject selectTrackPopList;
 		public GameObject commonPanel;
 		public GameObject selectTrackPanel;
 		public GameObject selectTrackOKButton;
         public GameObject sendChatButton;
+
+        // Labels
 		public UILabel hostTitleLabel;
         public UILabel countDownLabel;
         public UILabel chatHistoryLabel;
         public UILabel chatInputLabel;
+        public UILabel latestChatLabel;
 		public GameObject playerItemPrefab;
 		public UITable playerTable;
 		
@@ -41,11 +48,10 @@ namespace Lobby {
 			selectTrackPanel.SetActive(false);
 			
 			if (!Network.isClient) {
-				selectTrackButton.SetActive(true);
-				UIEventListener.Get(selectTrackButton).onClick = OnSelectTrackButtonPressed;
+				selectTrackPopList.SetActive(true);
 				UIEventListener.Get(selectTrackOKButton).onClick = OnSelectTrackOKButtonPressed;
 			} else {
-				selectTrackButton.SetActive(false);
+				selectTrackPopList.SetActive(false);
 			}
 
             UIEventListener.Get(readyButton).onClick = OnReadyButtonPressed;
@@ -174,8 +180,8 @@ namespace Lobby {
             }
 		}
 
-        void OnSelectedBikeChanged(string bikeName) {
-            GameManager.Instance.localPlayerInfo.bikeName = bikeName;
+        void OnSelectedTrackChanged(string trackName) {
+            GameManager.Instance.trackName = trackName;
         }
 
         public void StartCountDownAnimation() {
@@ -204,6 +210,17 @@ namespace Lobby {
             chatHistory += "\n";
             chatHistory += message;
             chatHistoryLabel.text = chatHistory;
+            latestChatLabel.text = message;
+        }
+        
+        void OnChatButtonPressed(GameObject button) {
+            lobbyMainContainer.animation.Play("LobbyMainFlyout");
+            lobbyChatContainer.animation.Play("ChatViewFlyin");
+        }
+
+        void OnChatBackButtonPressed(GameObject button) {
+            lobbyChatContainer.animation.Play("ChatViewFlyout");
+            lobbyMainContainer.animation.Play("lobby-main-flyin");
         }
 	}
 

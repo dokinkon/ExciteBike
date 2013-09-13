@@ -33,7 +33,7 @@ public class BikeBoost : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other ) {
-        if (_crashHandler.isCrashed)
+        if (_crashHandler.isCrashed || _isBoosting)
             return;
 
 		if (other.gameObject.tag == "accelerator" ) {
@@ -42,17 +42,23 @@ public class BikeBoost : MonoBehaviour {
     }
 
     private void StartBoost() {
-        _isBoosting = true;
+        if (_isBoosting)
+            return;
+
         soundEffect1.Play();
         if (boostParticleEmitter!=null) {
             boostParticleEmitter.emit = true;
         }
+        _isBoosting = true;
     }
 
     private void StopBoost() {
-        _isBoosting = false;
+        if (!_isBoosting)
+            return;
+
         if (boostParticleEmitter!=null) {
             boostParticleEmitter.emit = false;
         }
+        _isBoosting = false;
     }
 }
