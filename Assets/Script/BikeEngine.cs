@@ -20,7 +20,7 @@ public class BikeEngine : MonoBehaviour {
     public BikeSlowDown slowdown;
     public BikeCrash crash;
 
-    public int currentGearPosition = 0;
+    public int gearPosition = 0;
     public int totalGears = 6;
 
     public float volume = 1.0f;
@@ -35,6 +35,7 @@ public class BikeEngine : MonoBehaviour {
                     _currentRPM = 1000.0f;
                     for (int i=0;i<6;i++) {
                         rpmSounds[i].enabled = true;
+                        rpmSounds[i].Play();
                     }
                 } else {
                     _currentRPM = 0.0f;
@@ -72,7 +73,7 @@ public class BikeEngine : MonoBehaviour {
 	}
 
     public float GetCurrentPower() {
-        if (currentGearPosition == 0) {
+        if (gearPosition == 0) {
             return 0.0f;
         } else {
             return (_currentRPM - 1000.0f) / 5000.0f * maxHorsePower;

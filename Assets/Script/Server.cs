@@ -66,9 +66,8 @@ public class Server : MonoSingleton<Server> {
         }
 	}
 	
-	// Deprecated
 	public void LoadGamePlayLevel() {
-		networkView.RPC ("LoadLevelRPC", RPCMode.All, "GamePlayScene", _lastLevelPrefix);
+		networkView.RPC ("LoadGamePlayLevelRPC", RPCMode.All, GameManager.Instance.trackName, _lastLevelPrefix);
 		++_lastLevelPrefix;
 	}
 	
@@ -82,6 +81,10 @@ public class Server : MonoSingleton<Server> {
 	public bool IsPasswordProtected() {
 		return _isPasswordProtected;
 	}
+
+    public void SetTrackName(string trackName) {
+        networkView.RPC("SyncCurrentTrackName", RPCMode.AllBuffered, trackName);
+    }
 	
 	void OnFailedToConnectToMasterServer(NetworkConnectionError info) {
         Debug.Log("Could not connect to master server: " + info);

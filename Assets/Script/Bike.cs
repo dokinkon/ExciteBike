@@ -10,6 +10,7 @@ public class Bike : MonoBehaviour {
 	public Transform lookAt;
 	public BikeWheel frontWheel;
 	public BikeWheel rearWheel;
+    public ParticleEmitter hitParticleEmitter;
     
 	
 	public bool controlByNPC;
@@ -40,17 +41,17 @@ public class Bike : MonoBehaviour {
 
 	private GameObject _blobShadow;
     private BikeBoost _boost;
-	//private bool _shouldSlowdown;
 	private bool _shouldJump;
 	private int _boostLevel;
     public float boostMaxSpeed = 30;
 	private NetworkPlayer _networkPlayer;
-	private Joystick _joystick;
-	private RuntimePlatform _runtimePlatform;
     private int _currentTrackIndex;
     private int _targetTrackIndex;
     private bool _isShiftingTrack = false;
     private NetworkPlayer _owner;
+    public NetworkPlayer owner {
+        get { return _owner; }
+    }
 	private GameObject _followNode;
 	public GameObject followNode {
 		get { return _followNode; }
@@ -96,7 +97,20 @@ public class Bike : MonoBehaviour {
         _bikeCrash = GetComponent<BikeCrash>();
         _slowdown = GetComponent<BikeSlowDown>();
 		//rigidbody.centerOfMass = Vector3.zero;
-		_runtimePlatform = Application.platform;
+
+        if (networkView.isMine) {
+            _bikeCrash.enabled = true;
+            _boost.enabled = true;
+            _bikeSteer.enabled = true;
+            _pitch.enabled = true;
+            _slowdown.enabled = true;
+        } else {
+            _bikeCrash.enabled = false;
+            _boost.enabled = false;
+            _bikeSteer.enabled = false;
+            _pitch.enabled = false;
+            _slowdown.enabled = false;
+        }
 	}
 	
 	void LimitVelocity() {
@@ -120,9 +134,22 @@ public class Bike : MonoBehaviour {
 		}
 	}
 
+    public void SetPositionTo(Vector3 p, int trackIndex) {
+        rigidbody.velocity = Vector3.zero;
+        rigidbody.angularVelocity = Vector3.zero;
+        rigidbody.rotation = Quaternion.identity;
+        engine.isStarted = false;
+
+        p.x = Track.GetLocationX(trackIndex);
+        rigidbody.MovePosition(p);
+        engine.isStarted = true;
+
+        _currentTrackIndex = trackIndex;
+    }
+
 	void FixedUpdate() {
-		if (!_isEngineStarted)
-			return;
+		//if (!_isEngineStarted)
+			//return;
 
 		if ( _bikeCrash.isCrashed ) {
 		} else {
@@ -143,6 +170,10 @@ public class Bike : MonoBehaviour {
 		}		
 		LimitVelocity();	
 	}
+
+    public void Jump() {
+        _shouldJump = true;
+    }
 	
 	void UpdateBlobShadow() {
 		if ( !_blobShadow )
@@ -172,6 +203,18 @@ public class Bike : MonoBehaviour {
 		_followNode.transform.position = gameObject.transform.position;
 	}
 
+    void OnCollisionEnter(Collision collision) {
+
+        //foreach (ContactPoint contact in collision.contacts) {
+            //Debug.DrawRay(contact.point, collision.relativeVelocity + contact.point, Color.yellow, 0.5f);
+        //}
+
+        float dot = Vector3.Dot(Vector3.up, collision.relativeVelocity.normalized);
+        if ( Math.Abs(dot) > 0.2f && collision.relativeVelocity.magnitude > 5) {
+            hitParticleEmitter.Emit();
+        }
+    }
+
 	void OnTriggerEnter(Collider other ) {
 		if (other.gameObject.tag == "accelerator" ) {
             //StartBoost();
@@ -184,7 +227,7 @@ public class Bike : MonoBehaviour {
 			StopEngine();
 		}
 	}
-	
+
 	void OnTriggerStay ( Collider other ) {
 		if ( controlByNPC ) {
 			
@@ -227,12 +270,14 @@ public class Bike : MonoBehaviour {
 		_networkPlayer = info.sender;
 		
 		_followNode = new GameObject("FollowNode ( " + name + " )");
+        AudioListener listener = GetComponent<AudioListener>();
 		
 		if ( networkView.isMine ) {
+            listener.enabled = true;
+
 			networkRigidbody.enabled = false;
 			control.enabled = true;
 			lookAt = GameObject.FindWithTag ("camera_look_at").transform;
-			_joystick = (Joystick)GameObject.FindWithTag ("joystick").GetComponent("Joystick");
 			_selfIndicator = (GameObject)Instantiate(Resources.Load("self-indicator"));
 			_selfIndicator.transform.parent = _followNode.transform;
 			_selfIndicator.transform.localPosition = new Vector3(0, 3, 0);
@@ -246,6 +291,7 @@ public class Bike : MonoBehaviour {
             networkView.RPC("SetOwner", RPCMode.All, Network.player);
 				
 		} else {
+            listener.enabled = false;
 			networkRigidbody.enabled = true;
 			control.enabled = false;
 			this.name += "Remote";
@@ -260,6 +306,14 @@ public class Bike : MonoBehaviour {
             // No Shadow
 			userPictureBillboardGo.layer = 8;
 		}
+    }
+
+    public void UseItem() {
+        Vector3 position = transform.position;
+        position.z += 2;
+        GameObject clone = (GameObject)Network.Instantiate(Resources.Load("Missile"), position, Quaternion.identity, 0 );
+        Missile missile = clone.GetComponent<Missile>();
+        missile.SetOwner(Network.player);
     }
 	
 	void OnDestroy() {
@@ -276,6 +330,7 @@ public class Bike : MonoBehaviour {
         if (_isShiftingTrack)
             return;
 
+        //steerParticleEmitter.emit = true;
 
         targetTrackIndex = Math.Min(Math.Max(0, targetTrackIndex), 3);
         if ( targetTrackIndex == _currentTrackIndex )
@@ -309,6 +364,7 @@ public class Bike : MonoBehaviour {
             _isShiftingTrack = false;
             _currentTrackIndex = _targetTrackIndex;
             _bikeSteer.ResetSteer();
+            //steerParticleEmitter.emit = false;
 
         } else {
             rigidbody.MovePosition ( rigidbody.position + direction * stepAbs );
@@ -330,4 +386,10 @@ public class Bike : MonoBehaviour {
 		PlayerInfo playerInfo = GameManager.Instance.GetPlayerInfo(_owner);
         playerInfo.bike = this;
     }
+
+    [RPC]
+    void PlaySoundEffect(int effectType) {
+
+    }
+
 }

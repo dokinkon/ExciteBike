@@ -49,5 +49,13 @@ public class KeyboardController : MonoBehaviour {
         } else {
             _bike.engine.SetThrottle(0);
         }
+
+        if (Input.GetKeyDown(KeyCode.F)) {
+            _bike.UseItem();
+        }
+
+        if (Input.GetKeyDown(KeyCode.J)) {
+            _bike.Jump();
+        }
 	}
 }

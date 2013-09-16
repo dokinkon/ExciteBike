@@ -56,6 +56,8 @@ namespace GamePlay.State {
             Time.timeScale = 1;
             Debug.Log("[GamePlay.State.CountDownState.DoBeforeEntering]");
 			_viewController.countDownPanel.SetActive(true);
+            _viewController.localBike.engine.isStarted = true;
+            _viewController.localBike.engine.gearPosition = 0;
             GameObject go = GameObject.Find("IOSController");
             if (go != null) {
                 _iosController = go.GetComponent<IOSController>();

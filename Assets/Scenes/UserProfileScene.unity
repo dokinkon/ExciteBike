@@ -582,7 +582,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 618571688}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 358.000031, y: -20, z: 0}
+  m_LocalPosition: {x: 358.000031, y: -19.9999981, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1486940428}
@@ -704,7 +704,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 686001677}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 113.000015, y: -20, z: 0}
+  m_LocalPosition: {x: 113.000015, y: -19.9999981, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 171513324}
@@ -1758,7 +1758,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1669751646}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 249.500046, y: -20, z: 0}
+  m_LocalPosition: {x: 249.500031, y: -19.9999981, z: 0}
   m_LocalScale: {x: 28, y: 28, z: 1}
   m_Children: []
   m_Father: {fileID: 1989261718}
@@ -1806,6 +1806,7 @@ GameObject:
   - 114: {fileID: 1730294941}
   - 114: {fileID: 1730294940}
   - 114: {fileID: 1730294945}
+  - 114: {fileID: 1730294946}
   m_Layer: 10
   m_Name: Button (Cancel )
   m_TagString: Untagged
@@ -1820,7 +1821,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1730294938}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -169.880859, y: -320.407928, z: 0}
+  m_LocalPosition: {x: -438.799896, y: -292.599731, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2129492506}
@@ -1914,6 +1915,24 @@ MonoBehaviour:
   functionName: OnCreateAccountCancelButtonPressed
   trigger: 0
   includeChildren: 0
+--- !u!114 &1730294946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1730294938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8077b76001d36d489868d20d28bddb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiCamera: {fileID: 1510284551}
+  widgetContainer: {fileID: 0}
+  panelContainer: {fileID: 0}
+  side: 0
+  halfPixelOffset: 1
+  runOnlyOnce: 0
+  relativeOffset: {x: .100000001, y: .100000001}
 --- !u!1 &1775565280
 GameObject:
   m_ObjectHideFlags: 0
@@ -2215,6 +2234,7 @@ GameObject:
   - 114: {fileID: 2053858536}
   - 114: {fileID: 2053858535}
   - 114: {fileID: 2053858540}
+  - 114: {fileID: 2053858541}
   m_Layer: 10
   m_Name: Button (OK )
   m_TagString: Untagged
@@ -2229,7 +2249,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2053858533}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 139.775192, y: -320.407776, z: 0}
+  m_LocalPosition: {x: 438.799896, y: -292.599731, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 189896991}
@@ -2323,6 +2343,24 @@ MonoBehaviour:
   functionName: OnCreateAccountOKButtonPressed
   trigger: 0
   includeChildren: 0
+--- !u!114 &2053858541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2053858533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8077b76001d36d489868d20d28bddb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiCamera: {fileID: 1510284551}
+  widgetContainer: {fileID: 0}
+  panelContainer: {fileID: 0}
+  side: 6
+  halfPixelOffset: 1
+  runOnlyOnce: 0
+  relativeOffset: {x: -.100000001, y: .100000001}
 --- !u!1 &2107767306
 GameObject:
   m_ObjectHideFlags: 0

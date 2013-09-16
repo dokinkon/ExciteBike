@@ -19,8 +19,6 @@ namespace GamePlay {
         public GameObject restartButton;
 		public GameObject resumeButton;
 		public GameObject exitButton;
-		public GameObject joystickPane;
-		public GameObject joystick;
 		public GameObject backToLobbyButton;
 
         // labels
@@ -139,11 +137,11 @@ namespace GamePlay {
 
         public void StartBikes() {
             if ( Network.isServer) {
-                foreach ( Bike bike in _npcBikes ) {
-                    bike.StartEngine();
-                    bike.engine.volume = 0.8f;
-                    bike.engine.currentGearPosition = 1;
-                }
+                //foreach ( Bike bike in _npcBikes ) {
+                    //bike.StartEngine();
+                    //bike.engine.volume = 0.8f;
+                    //bike.engine.GearPosition = 1;
+                //}
             }
         }
 		

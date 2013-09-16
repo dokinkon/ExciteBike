@@ -173,23 +173,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &11
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 62}
-  - 131: {fileID: 120}
-  - 114: {fileID: 143}
-  m_Layer: 0
-  m_Name: joystick
-  m_TagString: joystick
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &12
 GameObject:
   m_ObjectHideFlags: 0
@@ -719,22 +702,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &45
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 96}
-  - 131: {fileID: 121}
-  m_Layer: 0
-  m_Name: joystick-pane
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &46
 GameObject:
   m_ObjectHideFlags: 0
@@ -794,7 +761,6 @@ GameObject:
   - 20: {fileID: 104}
   - 92: {fileID: 116}
   - 124: {fileID: 118}
-  - 81: {fileID: 114}
   - 45: {fileID: 106}
   - 82: {fileID: 115}
   - 114: {fileID: 186}
@@ -961,17 +927,6 @@ Transform:
   m_LocalScale: {x: 28, y: 28, z: 1}
   m_Children: []
   m_Father: {fileID: 89}
---- !u!4 &62
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 11}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 903431108}
 --- !u!4 &63
 Transform:
   m_ObjectHideFlags: 0
@@ -1371,17 +1326,6 @@ Transform:
   m_LocalScale: {x: 28, y: 28, z: 1}
   m_Children: []
   m_Father: {fileID: 80}
---- !u!4 &96
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 45}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 1}
-  m_Children: []
-  m_Father: {fileID: 903431108}
 --- !u!4 &97
 Transform:
   m_ObjectHideFlags: 0
@@ -1610,13 +1554,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 150, y: 40, z: 0}
   m_Center: {x: 0, y: -1.90734863e-06, z: -.75}
---- !u!81 &114
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 49}
-  m_Enabled: 1
 --- !u!82 &115
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1707,44 +1644,6 @@ Behaviour:
 --- !u!127 &119
 LevelGameManager:
   m_ObjectHideFlags: 0
---- !u!131 &120
-GUITexture:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 11}
-  m_Enabled: 1
-  m_Texture: {fileID: 2800000, guid: ab5bb3eb247a4492fa9900f6ac0db050, type: 3}
-  m_Color: {r: .5, g: .5, b: .5, a: .5}
-  m_PixelInset:
-    serializedVersion: 2
-    x: 100
-    y: 100
-    width: 128
-    height: 128
-  m_LeftBorder: 0
-  m_RightBorder: 0
-  m_TopBorder: 0
-  m_BottomBorder: 0
---- !u!131 &121
-GUITexture:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 45}
-  m_Enabled: 1
-  m_Texture: {fileID: 2800000, guid: 0eb0a732ad112a541100162a44295342, type: 3}
-  m_Color: {r: .5, g: .5, b: .5, a: .117647059}
-  m_PixelInset:
-    serializedVersion: 2
-    x: 40
-    y: 40
-    width: 256
-    height: 256
-  m_LeftBorder: 0
-  m_RightBorder: 0
-  m_TopBorder: 0
-  m_BottomBorder: 0
 --- !u!157 &122
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -2164,28 +2063,6 @@ MonoBehaviour:
   mShrinkToFit: 0
   mLineWidth: 0
   mMultiline: 1
---- !u!114 &143
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 11}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd6257600485e497aa3e3d2c8623c9e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  touchPad: 0
-  touchZone:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
-  deadZone: {x: 0, y: 0}
-  normalize: 1
-  position: {x: 0, y: 0}
-  tapCount: 0
 --- !u!114 &144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2445,8 +2322,8 @@ MonoBehaviour:
   restartButton: {fileID: 4}
   resumeButton: {fileID: 5}
   exitButton: {fileID: 29}
-  joystickPane: {fileID: 45}
-  joystick: {fileID: 11}
+  joystickPane: {fileID: 0}
+  joystick: {fileID: 0}
   backToLobbyButton: {fileID: 38}
   countDownLabel: {fileID: 151}
   totalTimeLabel: {fileID: 187}
@@ -5038,9 +4915,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 62}
-  - {fileID: 96}
+  m_Children: []
   m_Father: {fileID: 0}
 --- !u!114 &903431109
 MonoBehaviour:
@@ -6348,6 +6223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 343dd0ef864da41b384d9034125ac647, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pitchStrength: .400000006
 --- !u!1 &1504206125
 GameObject:
   m_ObjectHideFlags: 0

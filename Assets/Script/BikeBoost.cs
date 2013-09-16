@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BikeBoost : MonoBehaviour {
 
-    public ParticleEmitter boostParticleEmitter;
+    public ParticleSystem boostParticleEmitter;
     public AudioSource soundEffect1;
     public float duration = 3.0f;
     private float _delayTimer;
@@ -47,7 +47,7 @@ public class BikeBoost : MonoBehaviour {
 
         soundEffect1.Play();
         if (boostParticleEmitter!=null) {
-            boostParticleEmitter.emit = true;
+            boostParticleEmitter.Play(true);
         }
         _isBoosting = true;
     }
@@ -57,7 +57,7 @@ public class BikeBoost : MonoBehaviour {
             return;
 
         if (boostParticleEmitter!=null) {
-            boostParticleEmitter.emit = false;
+            boostParticleEmitter.Stop();
         }
         _isBoosting = false;
     }

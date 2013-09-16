@@ -26,6 +26,7 @@ namespace Lobby {
         public UILabel latestChatLabel;
 		public GameObject playerItemPrefab;
 		public UITable playerTable;
+        public UILabel trackNameLabel;
 		
 		private List<GameObject> _playerItems = new List<GameObject>();
 		
@@ -76,6 +77,7 @@ namespace Lobby {
 			GameManager.Instance.OnPlayerAdded += CreatePlayerItem;
 			GameManager.Instance.OnPlayerRemoved += DestroyPlayerItem;
             Client.Instance.OnReceiveChatMessage += OnReceiveChatMessage;
+            Client.Instance.OnCurrentTrackNameChanged += OnCurrentTrackNameChanged;
             chatHistoryLabel.text = "";
 			_fsm.Start ();
 		}
@@ -165,23 +167,19 @@ namespace Lobby {
 			}	
 		}
 
-        private static bool _isShutingDown = false;
-        void OnApplicationQuit() {
-            Debug.Log("[GameLobby.OnApplicationQuit]");
-            _isShutingDown = true;
-        }
-		
 		void OnDestroy() {
-			Debug.Log("[GameLobbyViewController.OnDestroy] remove event delegates");
-            if (!_isShutingDown) {
+			//Debug.Log("[GameLobbyViewController.OnDestroy] remove event delegates");
+            if (!GameManager.isShutingDown) {
                 GameManager.Instance.OnPlayerAdded -= CreatePlayerItem;
                 GameManager.Instance.OnPlayerRemoved -= DestroyPlayerItem;
                 Client.Instance.OnReceiveChatMessage -= OnReceiveChatMessage;
+                Client.Instance.OnCurrentTrackNameChanged -= OnCurrentTrackNameChanged;
             }
 		}
 
         void OnSelectedTrackChanged(string trackName) {
             GameManager.Instance.trackName = trackName;
+            Server.Instance.SetTrackName(trackName);
         }
 
         public void StartCountDownAnimation() {
@@ -221,6 +219,10 @@ namespace Lobby {
         void OnChatBackButtonPressed(GameObject button) {
             lobbyChatContainer.animation.Play("ChatViewFlyout");
             lobbyMainContainer.animation.Play("lobby-main-flyin");
+        }
+
+        void OnCurrentTrackNameChanged (string trackName) {
+            trackNameLabel.text = trackName;
         }
 	}
 

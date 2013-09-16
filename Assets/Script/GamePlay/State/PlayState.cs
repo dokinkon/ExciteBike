@@ -20,16 +20,9 @@ namespace GamePlay.State {
 		public override void DoBeforeEntering() {
 			_viewController.gamePlayPanel.SetActive(true);
 			
-			if ( Application.platform == RuntimePlatform.IPhonePlayer ) {
-				_viewController.joystickPane.SetActive(true);
-				_viewController.joystick.SetActive(true);
-			} else {
-				_viewController.joystickPane.SetActive(false);
-				_viewController.joystick.SetActive(false);
-			}
-			_viewController.localBike.StartEngine();
-            _viewController.localBike.engine.volume = 0.8f;
-            _viewController.localBike.engine.currentGearPosition = 1;
+			//_viewController.localBike.StartEngine();
+            _viewController.localBike.engine.volume = 1.0f;
+            _viewController.localBike.engine.gearPosition = 1;
             _viewController.StartBikes();
             _viewController.isPlaying = true;
 		}
@@ -87,10 +80,7 @@ namespace GamePlay.State {
 		
 		public override void DoBeforeLeaving() {
 			_viewController.gamePlayPanel.SetActive(false);
-			_viewController.joystick.SetActive(false);
-			_viewController.joystickPane.SetActive(false);
-			//_viewController.localBike.StopEngine();
-            _viewController.localBike.engine.currentGearPosition = 0;
+            _viewController.localBike.engine.gearPosition = 0;
             _viewController.isPlaying = false;
 		}
 	}

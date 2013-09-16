@@ -5,9 +5,6 @@ using System;
 
 public class Client : MonoSingleton< Client > {
 	
-	
-
-	
 	private static HostData _hostData;
 	public static HostData hostData {
 		set { _hostData = value; }
@@ -20,6 +17,7 @@ public class Client : MonoSingleton< Client > {
 	public event FloatDelegate OnGamePlayReadyStart;
     public event VoidDelegate OnAllPlayersReadyInLobby;
     public event StringDelegate OnReceiveChatMessage;
+    public event StringDelegate OnCurrentTrackNameChanged;
 	
 	public override void Init() {
 		
@@ -100,10 +98,35 @@ public class Client : MonoSingleton< Client > {
 
 		}
 	}
+
+	[RPC]
+	void LoadGamePlayLevelRPC(string trackName, int levelPrefix ) {
+		//Debug.Log("[Client.LoadLevel] level:" + level + " with prefix:" + levelPrefix);
+
+		// There is no reason to send any more data over the network on the default channel,
+		// because we are about to load the level, because all those objects will get deleted anyway
+		Network.SetSendingEnabled(0, false);	
+
+		// We need to stop receiving because first the level must be loaded.
+		// Once the level is loaded, RPC's and other state update attached to objects
+        // in the level are allowed to fire
+		Network.isMessageQueueRunning = false;
+		
+		// All network views loaded from a level will get a prefix into their NetworkViewID.
+		// This will prevent old updates from clients leaking into a newly created scene.
+		Network.SetLevelPrefix(levelPrefix);
+		Application.LoadLevel("GamePlayScene");
+        Application.LoadLevelAdditive(trackName);
+
+		// Allow receiving data again
+		Network.isMessageQueueRunning = true;
+		// Now the level has been loaded and we can start sending out data
+		Network.SetSendingEnabled(0, true);
+	}
 	
 	[RPC]
 	void LoadLevelRPC(string level, int levelPrefix ) {
-		Debug.Log("[Client.LoadLevel] level:" + level + " with prefix:" + levelPrefix);
+		//Debug.Log("[Client.LoadLevel] level:" + level + " with prefix:" + levelPrefix);
 
 		// There is no reason to send any more data over the network on the default channel,
 		// because we are about to load the level, because all those objects will get deleted anyway
@@ -118,26 +141,11 @@ public class Client : MonoSingleton< Client > {
 		// This will prevent old updates from clients leaking into a newly created scene.
 		Network.SetLevelPrefix(levelPrefix);
 		Application.LoadLevel(level);
-		if (level == "GamePlayScene" ) {
-			// Load Track
-			Application.LoadLevelAdditive(GameManager.Instance.trackName);
-		}
-		//yield;
-		//yield;
 
 		// Allow receiving data again
 		Network.isMessageQueueRunning = true;
 		// Now the level has been loaded and we can start sending out data
 		Network.SetSendingEnabled(0, true);
-
-		// Notify our objects that the level and the network is ready
-		// var go : Transform[] = FindObjectsOfType(Transform);
-		// var go_len = go.length;
-
-		// for (var i=0;i<go_len;i++)
-		// {
-			// go[i].SendMessage("OnNetworkLoadedLevel", SendMessageOptions.DontRequireReceiver);
-		//}	
 	}
 	
 	[RPC]
@@ -161,4 +169,14 @@ public class Client : MonoSingleton< Client > {
     void NotifyPlayerDisconnected(NetworkPlayer player) {
 		GameManager.Instance.RemovePlayer(player);
     }
+
+    [RPC]
+    void SyncCurrentTrackName(string trackName) {
+        GameManager.Instance.trackName = trackName;
+        
+        if (OnCurrentTrackNameChanged!=null) {
+            OnCurrentTrackNameChanged (trackName);
+        }
+    }
 }
+

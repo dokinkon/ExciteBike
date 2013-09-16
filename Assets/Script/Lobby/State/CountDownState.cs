@@ -16,7 +16,6 @@ namespace Lobby.State {
 		public override void DoBeforeEntering() {
             Debug.Log("[Lobby.State.CountDownState.DoBeforeEntering]");
             _viewController.StartCountDownAnimation();
-            //StartCoroutine(AnimateCountDownLabel());
 		}
 		
 		// Update is called once per frame
