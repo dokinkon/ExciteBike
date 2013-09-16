@@ -49,6 +49,7 @@ public class BikeCrash : MonoBehaviour {
         if (_isCrashed)
             return;
 
+        /*
         RaycastHit hitInfo;
         int roadLayer = 9;
         if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hitInfo, 5)) {
@@ -63,6 +64,7 @@ public class BikeCrash : MonoBehaviour {
             }
 
         }
+        */
 
         /*
         foreach (ContactPoint contact in collision.contacts) {
