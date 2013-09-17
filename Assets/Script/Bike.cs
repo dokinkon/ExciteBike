@@ -16,7 +16,8 @@ public class Bike : MonoBehaviour {
 	public BikeWheel rearWheel;
     public ParticleEmitter hitParticleEmitter;
     
-	
+    public bool isLocal = false;
+	public bool isNPC = false;
 	public bool controlByNPC;
 	public bool lookAtSnapGround = true;
 	public float lookAtOffset = 7;
@@ -127,8 +128,10 @@ public class Bike : MonoBehaviour {
 	}
 
     public void SetPositionTo(Vector3 p, int trackIndex) {
-        rigidbody.velocity = Vector3.zero;
-        rigidbody.angularVelocity = Vector3.zero;
+        if (!rigidbody.isKinematic) {
+            rigidbody.velocity = Vector3.zero;
+            rigidbody.angularVelocity = Vector3.zero;
+        }
         rigidbody.rotation = Quaternion.identity;
         engine.isStarted = false;
 
@@ -165,7 +168,7 @@ public class Bike : MonoBehaviour {
     }
 	
 	void Update () {
-		if ( lookAt ) {
+		if ( isLocal && lookAt ) {
 			Vector3 p = transform.position;
 			p.z += lookAtOffset;
 			p.x = 0;
@@ -340,6 +343,10 @@ public class Bike : MonoBehaviour {
         } else {
             rigidbody.MovePosition ( rigidbody.position + direction * stepAbs );
         }
+    }
+
+    void OnRaceStarted() {
+
     }
 
     public void SetCollisionLayer(int layer) {

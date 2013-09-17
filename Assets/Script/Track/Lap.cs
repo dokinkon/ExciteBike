@@ -9,13 +9,13 @@ public class Lap : MonoBehaviour {
     public int currentSection;
 
     void Awake() {
-        Debug.Log("[Track.Lap.Awake]");
+        //Debug.Log("[Track.Lap.Awake]");
         currentSection = 0;
     }
 
 	// Use this for initialization
 	void Start () {
-        Debug.Log("[Track.Lap.Start]");
+        //Debug.Log("[Track.Lap.Start]");
         for (int i=0;i<sections.Length;++i) {
             sections[i].OnPlayerEnterSection += OnPlayerEnterSection;
         }
@@ -46,6 +46,7 @@ public class Lap : MonoBehaviour {
         currentSection = sectionIndex;
         bool moveForward = (nextSection.transform.position.z > currSection.transform.position.z);
         if (moveForward) {
+            Debug.Log("[Track.Lap.OnPlayerEnterSection] moveForward");
             // move last section block to fowardest
             int backIndex = sectionIndex-2;
             while (backIndex < 0) {
@@ -58,6 +59,7 @@ public class Lap : MonoBehaviour {
 
             moveSection.transform.position = new Vector3(0, 0, nextSection.transform.position.z + 512.0f);
         } else {
+            Debug.Log("[Track.Lap.OnPlayerEnterSection] moveBackwoard");
             Section moveSection = sections[(sectionIndex + 2) % 4];
             if ( moveSection.transform.position.z < nextSection.transform.position.z )
                 return;

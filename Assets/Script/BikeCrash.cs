@@ -40,7 +40,7 @@ public class BikeCrash : MonoBehaviour {
             return;
 
         if (collider.gameObject.tag.Contains("player-")) {
-            if (collider.transform.position.z > transform.position.z) {
+            if (collider.transform.position.z >= transform.position.z) {
                 StartCoroutine(DoCrash());
             }
         } else if (collider.gameObject.tag == "missile") {
@@ -95,13 +95,15 @@ public class BikeCrash : MonoBehaviour {
     IEnumerator DoCrash() {
         _isCrashed = true;
         _soundEffect.Play();
-        ReleaseRagdoll();
+        //ReleaseRagdoll();
         yield return new WaitForSeconds(duration);
         _isCrashed = false;
         Vector3 p = rigidbody.position;
         rigidbody.rotation = Quaternion.identity;
-        rigidbody.velocity = Vector3.zero;
-        rigidbody.angularVelocity = Vector3.zero;
+        if (!rigidbody.isKinematic) {
+            rigidbody.velocity = Vector3.zero;
+            rigidbody.angularVelocity = Vector3.zero;
+        }
         rigidbody.MovePosition(p + Vector3.up);
     }
 }

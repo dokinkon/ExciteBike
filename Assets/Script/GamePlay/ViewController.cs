@@ -110,9 +110,10 @@ namespace GamePlay {
 
             PlayerInfo playerInfo = GameManager.Instance.localPlayerInfo;
 			
-            SpawnNPCBikes(); // TEST
 			_localBike = GameManager.Instance.SpawnBike(playerInfo.bikeName, playerInfo.trackIndex);
             _localBike.name = "Bike-Local";
+            _localBike.isLocal = true;
+            SpawnNPCBikes(); // TEST
 
 			Client.Instance.OnGamePlayReadyStart += OnPlayerReadyStart;
             _trackTotalDistance = CalculateTrackDistance();
@@ -142,6 +143,9 @@ namespace GamePlay {
                 Bike bike = GameManager.Instance.SpawnBike("Bike", i);
                 bike.gameObject.AddComponent<NPCController>();
                 bike.name = "Bike-NPC-" + i;
+                bike.isNPC = true;
+                NPCController controller = bike.GetComponent<NPCController>();
+                controller.localBike = _localBike;
             }
         }
 

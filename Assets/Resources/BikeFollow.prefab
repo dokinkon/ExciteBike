@@ -168,6 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac99f1b14641a48cf88f11211f72face, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selfIndicator: {fileID: 100006}
   boostParticleEmitter: {fileID: 19800000}
 --- !u!119 &11900000
 Projector:

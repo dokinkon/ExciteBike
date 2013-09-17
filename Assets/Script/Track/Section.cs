@@ -15,6 +15,7 @@ public class Section : MonoBehaviour {
         boxCollider.center = new Vector3(0, 20, 128);
         boxCollider.size = new Vector3(16, 40, 256);
         boxCollider.isTrigger = true;
+        gameObject.layer = Layer.Item;
 	}
 	
 	// Update is called once per frame
@@ -24,9 +25,12 @@ public class Section : MonoBehaviour {
 
     void OnTriggerEnter(Collider collider) {
         Debug.Log("[Track.Section.OnTriggerEnter]");
-        if (collider.gameObject.tag == "Player") {
+        if (collider.gameObject.tag.Contains("player-")) {
             Bike bike = collider.gameObject.GetComponent<Bike>();
-            if (bike.owner==Network.player) {
+            if (bike.isNPC)
+                return;
+
+            if ((bike.owner!=null) && (bike.owner==Network.player)) {
                 if (OnPlayerEnterSection != null) {
                     OnPlayerEnterSection(index);
                 }

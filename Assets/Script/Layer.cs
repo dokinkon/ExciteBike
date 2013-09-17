@@ -11,4 +11,6 @@ public struct Layer {
     public static int BikeSensor1 = 21;
     public static int BikeSensor2 = 22;
     public static int BikeSensor3 = 23;
+
+    public static int Item = 24;
 }

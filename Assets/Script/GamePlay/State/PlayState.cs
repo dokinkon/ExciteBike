@@ -63,19 +63,6 @@ namespace GamePlay.State {
 					}
 				}
 			}
-
-            /*
-			if (rank==1) {
-				_viewController.rankLabel.text = "1st";
-			} else if (rank == 2) {
-				_viewController.rankLabel.text = "2nd";
-			} else if (rank == 3) {
-				_viewController.rankLabel.text = "3rd";
-			} else {
-				_viewController.rankLabel.text = rank.ToString() + "th";
-			}
-            */
-
 		}
 		
 		public override void DoBeforeLeaving() {

@@ -23,7 +23,7 @@ public class Trap : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider collider) {
-        if (collider.gameObject.tag == "Player") {
+        if (collider.gameObject.tag.Contains("player-")) {
             Bike bike = collider.gameObject.GetComponent<Bike>();
             if (bike.owner == Network.player) {
                 StartCoroutine(MoveBikeToRespawn(bike));
