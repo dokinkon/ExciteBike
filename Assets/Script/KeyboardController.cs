@@ -7,16 +7,9 @@ public class KeyboardController : MonoBehaviour {
 
     private Bike _bike;
 
-
-    public void SetBike(Bike b) {
-        _bike = b;
-    }
-
 	// Use this for initialization
 	void Start () {
-        if (Application.platform == RuntimePlatform.IPhonePlayer) {
-            gameObject.SetActive(false);
-        }
+        _bike = GetComponent<Bike>();
 	}
 	
 	// Update is called once per frame

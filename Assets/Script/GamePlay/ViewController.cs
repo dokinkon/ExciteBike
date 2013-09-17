@@ -108,18 +108,17 @@ namespace GamePlay {
 			UIEventListener.Get(exitButton).onClick = OnExitButtonPressed;
 			UIEventListener.Get(backToLobbyButton).onClick = OnExitButtonPressed;
 
-            PlayerInfo playerInfo = GameManager.Instance.localPlayerInfo;
-			
-			_localBike = GameManager.Instance.SpawnBike(playerInfo.bikeName, playerInfo.trackIndex);
-            _localBike.name = "Bike-Local";
-            _localBike.isLocal = true;
-            SpawnNPCBikes(); // TEST
+            SpawnLocalBike();
+            if (GameManager.playMode == PlayMode.QuickRace) {
+                SpawnNPCBikes(); 
+            }
 
 			Client.Instance.OnGamePlayReadyStart += OnPlayerReadyStart;
             _trackTotalDistance = CalculateTrackDistance();
             //Debug.Log("TrackDistance:" + _trackTotalDistance);
 
 
+            /*
             if ( Application.platform == RuntimePlatform.IPhonePlayer ) {
                 GameObject go = GameObject.Find("IOSController");
                 if (go!=null) {
@@ -133,9 +132,25 @@ namespace GamePlay {
                     keyboardController.SetBike(_localBike);
                 }
             }
+            */
 
 			_fsm.Start();
 		}
+
+        private void SpawnLocalBike() {
+            PlayerInfo playerInfo = GameManager.Instance.localPlayerInfo;
+			_localBike = GameManager.Instance.SpawnBike(playerInfo.bikeName, playerInfo.trackIndex);
+            _localBike.name = "Bike-Local";
+            _localBike.isLocal = true;
+            _localBike.gameObject.AddComponent<AudioListener>();
+            if ( Application.platform == RuntimePlatform.IPhonePlayer ) {
+                _localBike.gameObject.AddComponent<IOSController>();
+            } else {
+                _localBike.gameObject.AddComponent<KeyboardController>();
+            }
+
+
+        }
 
         private void SpawnNPCBikes() {
             Debug.Log("[GamePlayViewController.SpawnNPCBike]");

@@ -37,6 +37,7 @@ public class IOSController : MonoBehaviour {
     
 
 	void Start () {
+        _bike = GetComponent<Bike>();
 
         if (Application.platform !=RuntimePlatform.IPhonePlayer) {
             throttleButton.SetActive(false);
@@ -169,10 +170,6 @@ public class IOSController : MonoBehaviour {
         _acceleration = _acceleration.normalized;
 
         _isMeasuring = false;
-    }
-
-    public void SetBike(Bike b) {
-        _bike = b;
     }
 
     void OnSwipe(int type) {

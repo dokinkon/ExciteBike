@@ -41,7 +41,14 @@ public class GameManager : MonoSingleton< GameManager > {
 		}
 		set { PlayerPrefs.SetString("Player.Name", value); }
 	}
-	
+
+    private static int _playMode = PlayMode.QuickRace;
+    public static int playMode {
+        get { return _playMode; }
+        set { _playMode = value; }
+    }
+
+    
 	public static  int majorVersion {
 		get { return 0; }
 	}

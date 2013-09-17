@@ -29,8 +29,6 @@ public class NPCController : MonoBehaviour {
         _crash = GetComponent<BikeCrash>();
         _bike.isNPC = true;
         _bike.follow.selfIndicator.SetActive(false);
-        AudioListener listener = GetComponent<AudioListener>();
-        listener.enabled = false;
 	}
 
     void FakeUpdate() {

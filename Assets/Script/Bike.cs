@@ -252,11 +252,7 @@ public class Bike : MonoBehaviour {
         BikeBoost bikeBoost = GetComponent<BikeBoost>();
         bikeBoost.boostParticleEmitter = _follow.boostParticleEmitter;
 
-        AudioListener listener = GetComponent<AudioListener>();
-		
 		if ( networkView.isMine ) {
-            listener.enabled = true;
-
 			networkRigidbody.enabled = false;
 			control.enabled = true;
 			lookAt = GameObject.FindWithTag ("camera_look_at").transform;
@@ -265,7 +261,6 @@ public class Bike : MonoBehaviour {
             networkView.RPC("SetOwner", RPCMode.All, Network.player);
 				
 		} else {
-            listener.enabled = false;
 			networkRigidbody.enabled = true;
 			control.enabled = false;
 			this.name += "Remote";
