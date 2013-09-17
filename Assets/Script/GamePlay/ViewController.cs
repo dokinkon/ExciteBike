@@ -110,12 +110,13 @@ namespace GamePlay {
 
             PlayerInfo playerInfo = GameManager.Instance.localPlayerInfo;
 			
+            SpawnNPCBikes(); // TEST
 			_localBike = GameManager.Instance.SpawnBike(playerInfo.bikeName, playerInfo.trackIndex);
-            _localBike.SetCollisionLayer(21 + playerInfo.trackIndex);
-            //
+            _localBike.name = "Bike-Local";
+
 			Client.Instance.OnGamePlayReadyStart += OnPlayerReadyStart;
             _trackTotalDistance = CalculateTrackDistance();
-            Debug.Log("TrackDistance:" + _trackTotalDistance);
+            //Debug.Log("TrackDistance:" + _trackTotalDistance);
 
 
             if ( Application.platform == RuntimePlatform.IPhonePlayer ) {
@@ -134,6 +135,15 @@ namespace GamePlay {
 
 			_fsm.Start();
 		}
+
+        private void SpawnNPCBikes() {
+            Debug.Log("[GamePlayViewController.SpawnNPCBike]");
+            for (int i=1;i<4;i++) {
+                Bike bike = GameManager.Instance.SpawnBike("Bike", i);
+                bike.gameObject.AddComponent<NPCController>();
+                bike.name = "Bike-NPC-" + i;
+            }
+        }
 
         public void StartBikes() {
             if ( Network.isServer) {

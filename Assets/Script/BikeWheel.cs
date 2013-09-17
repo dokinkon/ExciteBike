@@ -29,14 +29,12 @@ public class BikeWheel : MonoBehaviour {
     */
 		
 	void OnTriggerEnter ( Collider other ) {
-		//Debug.Log("Wheel:OnTriggerEnter");
 		if ( other.gameObject.tag == "road" ) {
 			_touchCount++;
 		}
 	}
 	
 	void OnTriggerExit ( Collider other ) {
-		//Debug.Log("Wheel:OnTriggerExit");
 		if ( other.gameObject.tag == "road" ) {
 			_touchCount--;
 		}

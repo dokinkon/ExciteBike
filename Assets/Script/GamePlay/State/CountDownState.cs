@@ -72,6 +72,14 @@ namespace GamePlay.State {
             if (_iosController!=null) {
                 _iosController.StopMeasureAcceleration();
             }
+
+            for (int i=0;i<4;i++) {
+                string tag = "player-" + i;
+                GameObject ob = GameObject.FindGameObjectWithTag(tag);
+                if (ob!=null) {
+                    ob.SendMessage("OnRaceStarted");
+                }
+            }
 		}
 	}
 	

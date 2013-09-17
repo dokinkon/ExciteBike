@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Track : MonoBehaviour {
 
@@ -7,10 +8,23 @@ public class Track : MonoBehaviour {
     public GameObject trackSidePrefab;
     public GameObject defaultRoadPrefab;
 
+    public static int GetIndex(float x) {
+        float minDist = 1000.0f;
+        int index = 0;
+        for (int i=0;i<4;i++) {
+            float dist = Math.Abs( x - Track.GetLocationX(i) );
+            if (dist < minDist) {
+                minDist = dist;
+                index = i;
+            }
+        }
+        return index;
+    }
+
     public static float GetLocationX(int trackIndex) {
 
         if (trackIndex < 0 || trackIndex > 3) {
-            System.Random random = new System.Random( 1 );
+            System.Random random = new System.Random();
             trackIndex = random.Next(4);
         }
 

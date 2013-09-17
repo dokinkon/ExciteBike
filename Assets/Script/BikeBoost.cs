@@ -34,8 +34,10 @@ public class BikeBoost : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other ) {
-        if (_crashHandler.isCrashed || _isBoosting)
-            return;
+        if (_crashHandler!=null) {
+            if (_crashHandler.isCrashed || _isBoosting)
+                return;
+        }
 
 		if (other.gameObject.tag == "accelerator" ) {
             StartBoost();

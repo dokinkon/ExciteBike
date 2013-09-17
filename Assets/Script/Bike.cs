@@ -3,6 +3,10 @@ using System.Collections;
 using System;
 
 public class Bike : MonoBehaviour {
+
+    public GameObject riderBody;
+    public GameObject frontWheelCollider;
+    public GameObject rearWheelCollider;
 	
 	public float maxSpeedZ = 1;
 	public float maxSpeedX = 10;
@@ -35,6 +39,13 @@ public class Bike : MonoBehaviour {
         get { return _boost;}
     }
 
+    public BikeShape shape;
+
+    private BikeFollow _follow;
+    public BikeFollow follow {
+        get { return _follow;}
+    }
+
     public bool isFlying {
         get {
             return !frontWheel.IsTouchingTheRoad() && !rearWheel.IsTouchingTheRoad();
@@ -53,24 +64,7 @@ public class Bike : MonoBehaviour {
     public NetworkPlayer owner {
         get { return _owner; }
     }
-	//private GameObject _followNode;
-	//public GameObject followNode {
-		//get { return _followNode; }
-	//}
 
-	void Awake() {
-	}
-	
-	void OnEnable() {
-		Debug.Log ("[Bike.OnEnable]");
-		
-	}
-	
-	void OnDisable() {
-		//Destroy(_followNode);
-		//_followNode = null;
-	}
-	
 	public NetworkPlayer GetNetworkPlayer() {
 		return _networkPlayer;
 	}
@@ -108,6 +102,7 @@ public class Bike : MonoBehaviour {
             _pitch.enabled = false;
             _slowdown.enabled = false;
         }
+        _currentTrackIndex = Track.GetIndex(transform.position.x);
 	}
 	
 	void LimitVelocity() {
@@ -145,13 +140,10 @@ public class Bike : MonoBehaviour {
     }
 
 	void FixedUpdate() {
-		//if (!_isEngineStarted)
-			//return;
 
 		if ( _bikeCrash.isCrashed ) {
 		} else {
 			if ( rearWheel.IsTouchingTheRoad() ) {
-				//rigidbody.AddRelativeForce(Vector3.forward*engine.GetCurrentPower());
 				rigidbody.AddForce(Vector3.forward*engine.GetCurrentPower());
 			}
 			
@@ -251,11 +243,11 @@ public class Bike : MonoBehaviour {
 		_networkPlayer = info.sender;
 		
         GameObject followClone = (GameObject)Instantiate(Resources.Load("BikeFollow"));
-        BikeFollow follow = followClone.GetComponent<BikeFollow>();
+        _follow = followClone.GetComponent<BikeFollow>();
         follow.SetBikeTransform(transform);
 
         BikeBoost bikeBoost = GetComponent<BikeBoost>();
-        bikeBoost.boostParticleEmitter = follow.boostParticleEmitter;
+        bikeBoost.boostParticleEmitter = _follow.boostParticleEmitter;
 
         AudioListener listener = GetComponent<AudioListener>();
 		

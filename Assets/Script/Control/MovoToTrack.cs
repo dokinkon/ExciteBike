@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BikeSkin : MonoBehaviour {
+public class MovoToTrack : MonoBehaviour {
 
 	// Use this for initialization
+
+    public int targetIndex = -1;
+
 	void Start () {
-        renderer.material.color = Color.red;
+	
 	}
 	
 	// Update is called once per frame

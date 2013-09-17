@@ -33,6 +33,38 @@ TagManager:
   - 
   - 
   - 
+  - moveto-0
+  - moveto-1
+  - moveto-2
+  - moveto-3
+  - move-left
+  - move-right
+  - 
+  - 
+  - 
+  - 
+  - player-0
+  - player-1
+  - player-2
+  - player-3
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   Builtin Layer 0: Default
@@ -45,25 +77,25 @@ TagManager:
   Builtin Layer 7: 
   User Layer 8: No Shadow
   User Layer 9: road
-  User Layer 10: UI
-  User Layer 11: 
-  User Layer 12: 
-  User Layer 13: 
+  User Layer 10: bike0
+  User Layer 11: bike1
+  User Layer 12: bike2
+  User Layer 13: bike3
   User Layer 14: 
   User Layer 15: 
   User Layer 16: 
   User Layer 17: 
   User Layer 18: 
   User Layer 19: 
-  User Layer 20: item
-  User Layer 21: bike1
-  User Layer 22: bike2
-  User Layer 23: bike3
-  User Layer 24: bike4
+  User Layer 20: bike-sensor-0
+  User Layer 21: bike-sensor-1
+  User Layer 22: bike-sensor-2
+  User Layer 23: bike-sensor-3
+  User Layer 24: item
   User Layer 25: missile
   User Layer 26: 
   User Layer 27: 
   User Layer 28: 
   User Layer 29: 
   User Layer 30: 
-  User Layer 31: 
+  User Layer 31: UI

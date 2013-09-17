@@ -196,8 +196,15 @@ public class GameManager : MonoSingleton< GameManager > {
 		} else {
 			bikeGo = (GameObject)Instantiate(Resources.Load(bikeName), spawn.transform.position, Quaternion.identity);
 		}
-        Utility.SetLayerRecursively(bikeGo, 21 + track);
-		return bikeGo.GetComponent<Bike>();
+        //Utility.SetLayerRecursively(bikeGo, 21 + track);
+        bikeGo.layer = Layer.BikeSensor0 + track;
+        Bike bike = bikeGo.GetComponent<Bike>();
+        bike.riderBody.layer = Layer.Bike0 + track;
+        Utility.SetLayerRecursively(bike.frontWheelCollider, Layer.Bike0 + track);
+        Utility.SetLayerRecursively(bike.rearWheelCollider, Layer.Bike0 + track);
+        bike.shape.SetColor(Track.GetColor(track));
+        bike.gameObject.tag = "player-" + track.ToString();
+		return bike;
 	}
 		
 	public void AddPlayer(PlayerInfo playerInfo) {

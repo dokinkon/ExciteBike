@@ -24,8 +24,12 @@ public class BikeShape : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        skinRenderer.material.color = Color.red;
+        //skinRenderer.material.color = Color.red;
 	}
+
+    public void SetColor(Color color) {
+        skinRenderer.material.color = color;
+    }
 	
 	// Update is called once per frame
 	void Update () {

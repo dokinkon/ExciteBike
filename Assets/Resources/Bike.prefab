@@ -77,7 +77,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400004}
   - 136: {fileID: 13600000}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: BodyCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -146,9 +146,9 @@ GameObject:
   - 82: {fileID: 8200012}
   - 82: {fileID: 8200014}
   - 81: {fileID: 8100000}
-  m_Layer: 8
+  m_Layer: 20
   m_Name: Bike
-  m_TagString: Player
+  m_TagString: player-0
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1549,6 +1549,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8945b7d28097c4924ac0c2094f8ea8c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  riderBody: {fileID: 100008}
+  frontWheelCollider: {fileID: 100010}
+  rearWheelCollider: {fileID: 100006}
   maxSpeedZ: 20
   maxSpeedX: 10
   jumpSpeed: 10
@@ -1559,8 +1562,8 @@ MonoBehaviour:
   controlByNPC: 0
   lookAtSnapGround: 1
   lookAtOffset: 7
-  blobShadowPrefab: {fileID: 100000, guid: 2d396c91cd798423fb698aebd706ee5f, type: 2}
   engine: {fileID: 11400010}
+  shape: {fileID: 11400022}
   boostMaxSpeed: 30
 --- !u!114 &11400008
 MonoBehaviour:

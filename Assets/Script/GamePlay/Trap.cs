@@ -16,11 +16,17 @@ public class Trap : MonoBehaviour {
 	
 	}
 
+    IEnumerator MoveBikeToRespawn(Bike bike) {
+        bike.engine.isStarted = false;
+        yield return new WaitForSeconds(2);
+        bike.SetPositionTo(respawn.position, respawnTrackIndex);
+    }
+
     void OnTriggerEnter(Collider collider) {
         if (collider.gameObject.tag == "Player") {
             Bike bike = collider.gameObject.GetComponent<Bike>();
             if (bike.owner == Network.player) {
-                bike.SetPositionTo(respawn.position, respawnTrackIndex);
+                StartCoroutine(MoveBikeToRespawn(bike));
             }
 
         }

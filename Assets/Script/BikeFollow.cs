@@ -3,6 +3,7 @@ using System.Collections;
 
 public class BikeFollow : MonoBehaviour {
 
+    public GameObject selfIndicator;
     public ParticleSystem boostParticleEmitter;
     private Transform _bikeTransform;
     public void SetBikeTransform(Transform t) {
@@ -12,7 +13,7 @@ public class BikeFollow : MonoBehaviour {
 	void Start () {
 	
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		transform.position = _bikeTransform.position;

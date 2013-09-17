@@ -117,7 +117,7 @@ public class BikeEngine : MonoBehaviour {
             if (crash.isCrashed) {
                 _currentRPM = 1000.0f;
             } else {
-                _currentRPM = Math.Min(Math.Max(1000.0f, _currentRPM), 6000.0f);
+                _currentRPM = Math.Min(Math.Max(1000.0f, _currentRPM), 4000.0f);
             }
         }
 
@@ -148,4 +148,8 @@ public class BikeEngine : MonoBehaviour {
 			_currentRPM = r;
 		}
 	}
+
+    void OnRaceStarted() {
+        gearPosition = 1;
+    }
 }
