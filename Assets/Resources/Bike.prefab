@@ -958,7 +958,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: .100000001
-  m_AngularDrag: .100000001
+  m_AngularDrag: 10
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
@@ -1549,7 +1549,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8945b7d28097c4924ac0c2094f8ea8c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeedZ: 25
+  maxSpeedZ: 20
   maxSpeedX: 10
   jumpSpeed: 10
   lookAt: {fileID: 0}
@@ -1594,7 +1594,7 @@ MonoBehaviour:
   selfTest: 1
   _selfTestFactor: 500
   pitchRange: .200000003
-  maxHorsePower: 200
+  maxHorsePower: 100
   _boost: {fileID: 11400024}
   slowdown: {fileID: 11400026}
   crash: {fileID: 11400018}
@@ -1627,9 +1627,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 218a6d71dd5384c3ebf1bbf70082cdd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotateSpeed: .100000001
-  maxUpAngle: -60
-  maxDownAngle: 60
+  rotateSpeed: .200000003
+  maxUpAngle: -50
+  maxDownAngle: 40
 --- !u!114 &11400016
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1693,7 +1693,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d221f0f45d724c80a4a042fe9f06799, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boostParticleEmitter: {fileID: 19800000}
+  boostParticleEmitter: {fileID: 0}
   soundEffect1: {fileID: 8200012}
   duration: 3
 --- !u!114 &11400026

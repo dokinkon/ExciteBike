@@ -6,6 +6,7 @@ public class BikeBoost : MonoBehaviour {
     public ParticleSystem boostParticleEmitter;
     public AudioSource soundEffect1;
     public float duration = 3.0f;
+    private BikePitch _pitch;
     private float _delayTimer;
     private bool _isBoosting = false;
     public bool isBoosting {
@@ -17,7 +18,7 @@ public class BikeBoost : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         _crashHandler = GetComponent<BikeCrash>();
-	
+        _pitch = GetComponent<BikePitch>();
 	}
 	
 	// Update is called once per frame
@@ -49,6 +50,7 @@ public class BikeBoost : MonoBehaviour {
         if (boostParticleEmitter!=null) {
             boostParticleEmitter.Play(true);
         }
+        _pitch.PitchUp(1);
         _isBoosting = true;
     }
 
@@ -59,6 +61,7 @@ public class BikeBoost : MonoBehaviour {
         if (boostParticleEmitter!=null) {
             boostParticleEmitter.Stop();
         }
+        _pitch.ResetPitch();
         _isBoosting = false;
     }
 }

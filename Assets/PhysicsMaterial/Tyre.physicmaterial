@@ -8,9 +8,9 @@ PhysicMaterial:
   m_Name: Tyre
   dynamicFriction: .00100000005
   staticFriction: .00100000005
-  bounciness: .150000006
+  bounciness: .300000012
   frictionCombine: 2
-  bounceCombine: 3
+  bounceCombine: 2
   frictionDirection2: {x: 0, y: 0, z: 0}
   dynamicFriction2: 0
   staticFriction2: 0

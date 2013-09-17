@@ -39,7 +39,6 @@ public class Bike : MonoBehaviour {
 
     }
 
-	private GameObject _blobShadow;
     private BikeBoost _boost;
 	private bool _shouldJump;
 	private int _boostLevel;
@@ -57,11 +56,7 @@ public class Bike : MonoBehaviour {
 		get { return _followNode; }
 	}
 
-	private GameObject _selfIndicator;
-
-	
 	void Awake() {
-		_blobShadow = (GameObject)Instantiate (blobShadowPrefab);
 	}
 	
 	void OnEnable() {
@@ -175,21 +170,7 @@ public class Bike : MonoBehaviour {
         _shouldJump = true;
     }
 	
-	void UpdateBlobShadow() {
-		if ( !_blobShadow )
-			return;
-		
-		Vector3 p = transform.position;
-		p.y += 4;
-		_blobShadow.transform.position = p;
-	}
-	
-	
-	// Update is called once per frame
 	void Update () {
-		
-		UpdateBlobShadow();
-		
 		if ( lookAt ) {
 			Vector3 p = transform.position;
 			p.z += lookAtOffset;
@@ -199,8 +180,6 @@ public class Bike : MonoBehaviour {
 			}
 			lookAt.position = p;
 		}
-		
-		_followNode.transform.position = gameObject.transform.position;
 	}
 
     void OnCollisionEnter(Collision collision) {
@@ -269,7 +248,13 @@ public class Bike : MonoBehaviour {
 		BikeControl control = GetComponent<BikeControl>();
 		_networkPlayer = info.sender;
 		
-		_followNode = new GameObject("FollowNode ( " + name + " )");
+        GameObject followClone = (GameObject)Instantiate(Resources.Load("BikeFollow"));
+        BikeFollow follow = followClone.GetComponent<BikeFollow>();
+        follow.SetBikeTransform(transform);
+
+        BikeBoost bikeBoost = GetComponent<BikeBoost>();
+        bikeBoost.boostParticleEmitter = follow.boostParticleEmitter;
+
         AudioListener listener = GetComponent<AudioListener>();
 		
 		if ( networkView.isMine ) {
@@ -278,15 +263,7 @@ public class Bike : MonoBehaviour {
 			networkRigidbody.enabled = false;
 			control.enabled = true;
 			lookAt = GameObject.FindWithTag ("camera_look_at").transform;
-			_selfIndicator = (GameObject)Instantiate(Resources.Load("self-indicator"));
-			_selfIndicator.transform.parent = _followNode.transform;
-			_selfIndicator.transform.localPosition = new Vector3(0, 3, 0);
-			_selfIndicator.transform.localRotation = Quaternion.identity;
-			_selfIndicator.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
 			
-			Quaternion q = Quaternion.identity;
-			q.eulerAngles = new Vector3(90, 0, 0);
-			_selfIndicator.transform.localRotation = q;
 
             networkView.RPC("SetOwner", RPCMode.All, Network.player);
 				
@@ -297,14 +274,14 @@ public class Bike : MonoBehaviour {
 			this.name += "Remote";
 			
 			// create UserPictureBillboard
-			GameObject userPictureBillboardGo = (GameObject)Instantiate(Resources.Load("user-picture-billboard"));
-			userPictureBillboardGo.transform.parent = _followNode.transform;
-			userPictureBillboardGo.transform.localPosition = new Vector3(0, 4, 0);
-			userPictureBillboardGo.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-			userPictureBillboardGo.transform.localRotation = Quaternion.identity;
+			//GameObject userPictureBillboardGo = (GameObject)Instantiate(Resources.Load("user-picture-billboard"));
+			//userPictureBillboardGo.transform.parent = _followNode.transform;
+			//userPictureBillboardGo.transform.localPosition = new Vector3(0, 4, 0);
+			//userPictureBillboardGo.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+			//userPictureBillboardGo.transform.localRotation = Quaternion.identity;
 			//userPictureBillboardGo.renderer.material.mainTexture = playerInfo.profilePicture;
             // No Shadow
-			userPictureBillboardGo.layer = 8;
+			//userPictureBillboardGo.layer = 8;
 		}
     }
 

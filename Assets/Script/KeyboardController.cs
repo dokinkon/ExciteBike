@@ -3,7 +3,7 @@ using System.Collections;
 
 public class KeyboardController : MonoBehaviour {
 
-    public float pitchStrength = 0.4f;
+    public float pitchStrength = 1.0f;
 
     private Bike _bike;
 
@@ -40,7 +40,7 @@ public class KeyboardController : MonoBehaviour {
             if (_bike.isFlying) {
                 _bike.pitch.Balance(1);
             } else {
-                _bike.pitch.ResetPitch();
+                //_bike.pitch.ResetPitch();
             }
 		}	
 

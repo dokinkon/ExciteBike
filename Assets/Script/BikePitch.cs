@@ -10,8 +10,8 @@ public class BikePitch : MonoBehaviour {
     }
 
     public float rotateSpeed = 0.1f;
-    public float maxUpAngle = -60;
-    public float maxDownAngle = 60;
+    public float maxUpAngle = -40;
+    public float maxDownAngle = 40;
     private float _strength = 0.0f;
 
     private BikeCrash _crash;
