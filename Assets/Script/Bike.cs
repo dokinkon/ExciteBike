@@ -17,7 +17,6 @@ public class Bike : MonoBehaviour {
 	public bool lookAtSnapGround = true;
 	public float lookAtOffset = 7;
 	
-	public GameObject blobShadowPrefab;
     public BikeEngine engine;
 	
     BikeCrash _bikeCrash;
@@ -31,6 +30,10 @@ public class Bike : MonoBehaviour {
     public BikePitch pitch {
         get { return _pitch; }
     }
+    private BikeBoost _boost;
+    public BikeBoost boost {
+        get { return _boost;}
+    }
 
     public bool isFlying {
         get {
@@ -39,7 +42,6 @@ public class Bike : MonoBehaviour {
 
     }
 
-    private BikeBoost _boost;
 	private bool _shouldJump;
 	private int _boostLevel;
     public float boostMaxSpeed = 30;
@@ -51,10 +53,10 @@ public class Bike : MonoBehaviour {
     public NetworkPlayer owner {
         get { return _owner; }
     }
-	private GameObject _followNode;
-	public GameObject followNode {
-		get { return _followNode; }
-	}
+	//private GameObject _followNode;
+	//public GameObject followNode {
+		//get { return _followNode; }
+	//}
 
 	void Awake() {
 	}
@@ -65,8 +67,8 @@ public class Bike : MonoBehaviour {
 	}
 	
 	void OnDisable() {
-		Destroy(_followNode);
-		_followNode = null;
+		//Destroy(_followNode);
+		//_followNode = null;
 	}
 	
 	public NetworkPlayer GetNetworkPlayer() {

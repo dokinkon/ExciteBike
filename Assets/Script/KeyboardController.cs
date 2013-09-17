@@ -37,10 +37,8 @@ public class KeyboardController : MonoBehaviour {
 		} else if ( Input.GetKey (KeyCode.RightArrow) || Input.GetKey ( KeyCode.D) ) {
 			_bike.pitch.PitchDown(pitchStrength);
 		} else {
-            if (_bike.isFlying) {
-                _bike.pitch.Balance(1);
-            } else {
-                //_bike.pitch.ResetPitch();
+            if (!_bike.boost.isBoosting) {
+                _bike.pitch.ResetPitch();
             }
 		}	
 
