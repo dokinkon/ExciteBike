@@ -88,8 +88,8 @@ public class NPCController : MonoBehaviour {
         if (_fakeUpdate)
             return;
 
-        float distance = Math.Abs(transform.position.z - _localBike.transform.position.z);
-        if (distance > _fakeUpdateDistance) {
+        float distance = transform.position.z - _localBike.transform.position.z;
+        if (Math.Abs(distance) > _fakeUpdateDistance) {
             StartFakeUpdate();
         } else {
             _bike.engine.SetThrottle(1);
@@ -110,6 +110,13 @@ public class NPCController : MonoBehaviour {
                     _targetTrackIndex = -1;
                 }
             }
+
+            _bike.crash.enabled = (distance > -10);
+
+            // NPC max speed should between 50% ~ 150%
+            float ratio = distance * -0.1f;
+            ratio = Math.Min(Math.Max(-1, ratio), 1);
+            _bike.maxSpeedMultipier = 1.0f + ratio * 0.8f;
         }
     }
 	

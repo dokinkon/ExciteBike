@@ -3,6 +3,10 @@ using System.Collections;
 
 public class BikeCrash : MonoBehaviour {
 
+    public delegate void VoidDelegate();
+    public event VoidDelegate OnCrashBegan;
+    public event VoidDelegate OnCrashEnded;
+
     public GameObject ragdollPrefab;
     public AudioSource _soundEffect;
     public float rotateSpeed = 7.0f;
@@ -36,7 +40,7 @@ public class BikeCrash : MonoBehaviour {
 	}
 
     void OnTriggerEnter(Collider collider) {
-        if (_isCrashed)
+        if (_isCrashed || !enabled)
             return;
 
         if (collider.gameObject.tag.Contains("player-")) {
@@ -46,8 +50,6 @@ public class BikeCrash : MonoBehaviour {
         } else if (collider.gameObject.tag == "missile") {
             StartCoroutine(DoCrash());
         } 
-
-
     }
 
     void OnCollisionEnter(Collision collision) {
@@ -94,6 +96,9 @@ public class BikeCrash : MonoBehaviour {
 
     IEnumerator DoCrash() {
         _isCrashed = true;
+        if (OnCrashBegan!=null) {
+            OnCrashBegan();
+        }
         _soundEffect.Play();
         //ReleaseRagdoll();
         yield return new WaitForSeconds(duration);
@@ -105,5 +110,8 @@ public class BikeCrash : MonoBehaviour {
             rigidbody.angularVelocity = Vector3.zero;
         }
         rigidbody.MovePosition(p + Vector3.up);
+        if (OnCrashEnded!=null) {
+            OnCrashEnded();
+        }
     }
 }

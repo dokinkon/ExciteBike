@@ -5,6 +5,7 @@ public class Trap : MonoBehaviour {
 
     public Transform respawn;
     public int respawnTrackIndex = -1;
+    private int _lastRespawnTrackIndex = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -19,7 +20,15 @@ public class Trap : MonoBehaviour {
     IEnumerator MoveBikeToRespawn(Bike bike) {
         bike.engine.isStarted = false;
         yield return new WaitForSeconds(2);
-        bike.SetPositionTo(respawn.position, respawnTrackIndex);
+        int trackIndex = respawnTrackIndex;
+        if (respawnTrackIndex < 0) {
+            _lastRespawnTrackIndex += 1;
+            _lastRespawnTrackIndex = _lastRespawnTrackIndex % 4;
+            bike.SetPositionTo(respawn.position, _lastRespawnTrackIndex);
+
+        } else {
+            bike.SetPositionTo(respawn.position, respawnTrackIndex);
+        }
     }
 
     void OnTriggerEnter(Collider collider) {
@@ -28,7 +37,6 @@ public class Trap : MonoBehaviour {
             if (bike.owner == Network.player) {
                 StartCoroutine(MoveBikeToRespawn(bike));
             }
-
         }
     }
 }

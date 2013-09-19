@@ -21,10 +21,24 @@ public class Bike : MonoBehaviour {
 	public bool controlByNPC;
 	public bool lookAtSnapGround = true;
 	public float lookAtOffset = 7;
+
+    private int _lap = 0;
+    public int lap {
+        get { return _lap; }
+        set { _lap = value; }
+    }
+
+    private int _playerIndex = 0;
+    public int playerIndex {
+        get { return _playerIndex; }
+    }
 	
     public BikeEngine engine;
 	
     BikeCrash _bikeCrash;
+    public BikeCrash crash {
+        get { return _bikeCrash; }
+    }
     private BikeSlowDown _slowdown;
 	private bool _isEngineStarted;
     private BikeSteer _bikeSteer;
@@ -51,7 +65,14 @@ public class Bike : MonoBehaviour {
         get {
             return !frontWheel.IsTouchingTheRoad() && !rearWheel.IsTouchingTheRoad();
         }
+    }
 
+    // Max Speed Multipier. We can use this multipier to adjust max speed.
+    // This value is useful to adjust race postion.
+    private float _maxSpeedMultipier = 1.0f;
+    public float maxSpeedMultipier {
+        get { return _maxSpeedMultipier; }
+        set { _maxSpeedMultipier = value; }
     }
 
 	private bool _shouldJump;
@@ -83,6 +104,11 @@ public class Bike : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+
+        if (GameManager.debug) {
+            gameObject.AddComponent<BikeDebug>();
+        }
+
         _bikeSteer = GetComponent<BikeSteer>();
         _pitch = GetComponent<BikePitch>();
         _boost = GetComponent<BikeBoost>();
@@ -105,11 +131,20 @@ public class Bike : MonoBehaviour {
         }
         _currentTrackIndex = Track.GetIndex(transform.position.x);
 	}
+
+    private void AddToViewController() {
+        // Add this to ViewController
+        GameObject go = GameObject.FindGameObjectWithTag("view-controller");
+        if (go!=null) {
+            GamePlay.ViewController viewController = go.GetComponent<GamePlay.ViewController>();
+            viewController.AddBike(this);
+        }
+    }
 	
 	void LimitVelocity() {
 		
 		Vector3 v = rigidbody.velocity;
-        v.z = Math.Min(v.z, maxSpeedZ);
+        v.z = Math.Min(v.z, maxSpeedZ * _maxSpeedMultipier);
         v.x = Math.Max(Math.Min(v.x, maxSpeedX), -maxSpeedX);
         if ( _slowdown.shouldSlowdown) {
             v.z = Math.Min(Math.Max(v.z, 0), _slowdown.speedLimit);
@@ -181,63 +216,12 @@ public class Bike : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision) {
 
-        //foreach (ContactPoint contact in collision.contacts) {
-            //Debug.DrawRay(contact.point, collision.relativeVelocity + contact.point, Color.yellow, 0.5f);
-        //}
-
         float dot = Vector3.Dot(Vector3.up, collision.relativeVelocity.normalized);
         if ( Math.Abs(dot) > 0.2f && collision.relativeVelocity.magnitude > 5) {
             hitParticleEmitter.Emit();
         }
     }
 
-	void OnTriggerEnter(Collider other ) {
-		if (other.gameObject.tag == "accelerator" ) {
-            //StartBoost();
-		} else if ( other.gameObject.tag == "slowdown" ) {
-            //Debug.Log("[Bike.OnTriggerEnter] slowdown");
-			//this._shouldSlowdown = true;
-		} else if ( other.gameObject.tag == "jump") {
-			this._shouldJump = true;
-		} else if ( other.gameObject.tag == "Finish") {
-			StopEngine();
-		}
-	}
-
-	void OnTriggerStay ( Collider other ) {
-		if ( controlByNPC ) {
-			
-            /*
-			if ( other.gameObject.tag == "turnleft" ) {
-				_bikeSteer.TurnLeft();
-			} else if ( other.gameObject.tag == "turnright") {
-				_bikeSteer.TurnRight();
-			} else if ( other.gameObject.tag == "tiltup" ) {
-				this.TiltUp();
-			}
-            */
-		}
-	}
-	
-	void OnTriggerExit(Collider other) {
-		
-		if ( controlByNPC ) {
-            /*
-			if ( other.gameObject.tag == "turnleft" || other.gameObject.tag == "turnright") {
-				_bikeSteer.ResetSteer();
-			} else if ( other.gameObject.tag== "tiltup" ) {
-				this.ResetTilt();
-			}
-            */
-		}
-		
-		
-		if ( other.gameObject.tag == "slowdown" ) {
-			//this._shouldSlowdown = false;
-		}
-		
-	}
-	
 	void OnNetworkInstantiate(NetworkMessageInfo info) {
         Debug.Log("[Bike.OnNetworkInstantiate] TimeStamp:" + info.timestamp);
 		
@@ -256,14 +240,13 @@ public class Bike : MonoBehaviour {
 			networkRigidbody.enabled = false;
 			control.enabled = true;
 			lookAt = GameObject.FindWithTag ("camera_look_at").transform;
-			
-
             networkView.RPC("SetOwner", RPCMode.All, Network.player);
 				
 		} else {
 			networkRigidbody.enabled = true;
 			control.enabled = false;
 			this.name += "Remote";
+            _follow.selfIndicator.SetActive(false);
 			
 			// create UserPictureBillboard
 			//GameObject userPictureBillboardGo = (GameObject)Instantiate(Resources.Load("user-picture-billboard"));
@@ -344,25 +327,29 @@ public class Bike : MonoBehaviour {
 
     }
 
-    public void SetCollisionLayer(int layer) {
-        networkView.RPC("SyncConllisionLayer", RPCMode.AllBuffered, layer);
+    public void SetTrackIndex(int trackIndex) {
+        networkView.RPC("SyncTrackIndex", RPCMode.AllBuffered, trackIndex);
     }
 
     [RPC]
-    void SyncConllisionLayer(int layer) {
-        Utility.SetLayerRecursively(gameObject, layer);
+    void SyncTrackIndex(int trackIndex) {
+        gameObject.layer = Layer.BikeSensor0 + trackIndex;
+        riderBody.layer = Layer.Bike0 + trackIndex;
+        Utility.SetLayerRecursively(frontWheelCollider, Layer.Bike0 + trackIndex);
+        Utility.SetLayerRecursively(rearWheelCollider, Layer.Bike0 + trackIndex);
+        shape.SetColor(Track.GetColor(trackIndex));
+        gameObject.tag = "player-" + trackIndex.ToString();
+        _playerIndex = trackIndex;
+        AddToViewController();
     }
 
     [RPC]
     void SetOwner(NetworkPlayer player) {
         _owner = player;
-		PlayerInfo playerInfo = GameManager.Instance.GetPlayerInfo(_owner);
-        playerInfo.bike = this;
+        if ( !isNPC ) {
+            PlayerInfo playerInfo = GameManager.Instance.GetPlayerInfo(_owner);
+            playerInfo.bike = this;
+
+        }
     }
-
-    [RPC]
-    void PlaySoundEffect(int effectType) {
-
-    }
-
 }

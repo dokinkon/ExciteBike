@@ -40,6 +40,8 @@ public class Lap : MonoBehaviour {
             //currentSection = sectionIndex;
             //return;
         //}
+        if (currentSection == sectionIndex)
+            return;
 
         Section currSection = sections[currentSection];
         Section nextSection = sections[sectionIndex];
@@ -58,6 +60,9 @@ public class Lap : MonoBehaviour {
                 return;
 
             moveSection.transform.position = new Vector3(0, 0, nextSection.transform.position.z + 512.0f);
+            if (moveSection.lapSensor!=null) {
+                moveSection.lapSensor.lap += 1;
+            }
         } else {
             Debug.Log("[Track.Lap.OnPlayerEnterSection] moveBackwoard");
             Section moveSection = sections[(sectionIndex + 2) % 4];
@@ -65,6 +70,9 @@ public class Lap : MonoBehaviour {
                 return;
 
             moveSection.transform.position = new Vector3(0, 0, nextSection.transform.position.z - 512);
+            if (moveSection.lapSensor!=null) {
+                moveSection.lapSensor.lap -= 1;
+            }
         }
 
 

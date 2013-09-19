@@ -8,6 +8,11 @@ public class Track : MonoBehaviour {
     public GameObject trackSidePrefab;
     public GameObject defaultRoadPrefab;
 
+    private static System.Random _random = new System.Random();
+    public static int randomIndex() {
+        return _random.Next(4);
+    }
+
     public static int GetIndex(float x) {
         float minDist = 1000.0f;
         int index = 0;

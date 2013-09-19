@@ -38,5 +38,16 @@ namespace GamePlay {
         void Update () {
         
         }
+
+        public void OnCrashBegan() {
+            Debug.Log("[LocationSprite.OnCrashBegan]");
+            animation.Play("RotateLocationSprite");
+        }
+
+        public void OnCrashEnded() {
+            Debug.Log("[LocationSprite.OnCrashEnde]");
+            animation.Stop();
+            transform.localRotation = Quaternion.identity;
+        }
     }
 }

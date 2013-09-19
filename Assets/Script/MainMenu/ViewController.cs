@@ -56,6 +56,7 @@ namespace MainMenu {
 		}
 		
 		void OnQuickRaceButtonPressed(GameObject button) {
+            GameManager.playMode = PlayMode.QuickRace;
 			Server.title = "Quick Race";
 			Server.maxPlayers = 1;
 			Server.Instance.Launch(false);
@@ -66,6 +67,7 @@ namespace MainMenu {
 		}
 		
 		void OnMultiplayerButtonPressed(GameObject button) {
+            GameManager.playMode = PlayMode.Multiplayer;
 			Application.LoadLevel("GameListScene");
 		}
 		

@@ -42,6 +42,8 @@ public class GameManager : MonoSingleton< GameManager > {
 		set { PlayerPrefs.SetString("Player.Name", value); }
 	}
 
+    public static bool debug = true;
+
     private static int _playMode = PlayMode.QuickRace;
     public static int playMode {
         get { return _playMode; }
@@ -120,8 +122,9 @@ public class GameManager : MonoSingleton< GameManager > {
 			playerName = "Player_" + GameManager.RandomString(3);
 			Screen.sleepTimeout = SleepTimeout.NeverSleep;
 		}
-		
-		
+
+        MasterServer.ipAddress = "127.0.0.1";
+        MasterServer.port = 23466;
 	}
 	
 	// Use this for initialization
@@ -198,19 +201,9 @@ public class GameManager : MonoSingleton< GameManager > {
 		}
 		
 		GameObject bikeGo = null;
-		if (Network.isClient || Network.isServer ) {
-			bikeGo = (GameObject)Network.Instantiate(Resources.Load(bikeName), spawn.transform.position, Quaternion.identity, 0);
-		} else {
-			bikeGo = (GameObject)Instantiate(Resources.Load(bikeName), spawn.transform.position, Quaternion.identity);
-		}
-        //Utility.SetLayerRecursively(bikeGo, 21 + track);
-        bikeGo.layer = Layer.BikeSensor0 + track;
+        bikeGo = (GameObject)Network.Instantiate(Resources.Load(bikeName), spawn.transform.position, Quaternion.identity, 0);
         Bike bike = bikeGo.GetComponent<Bike>();
-        bike.riderBody.layer = Layer.Bike0 + track;
-        Utility.SetLayerRecursively(bike.frontWheelCollider, Layer.Bike0 + track);
-        Utility.SetLayerRecursively(bike.rearWheelCollider, Layer.Bike0 + track);
-        bike.shape.SetColor(Track.GetColor(track));
-        bike.gameObject.tag = "player-" + track.ToString();
+        bike.SetTrackIndex(track);
 		return bike;
 	}
 		

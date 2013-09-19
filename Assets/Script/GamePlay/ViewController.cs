@@ -45,7 +45,7 @@ namespace GamePlay {
 			get { return _localBike; }
 		}
 
-        private List<Bike> _npcBikes = new List<Bike>();
+        private List<Bike> _bikes = new List<Bike>();
 
         private bool _isPlaying = false;
         public bool isPlaying {
@@ -63,7 +63,7 @@ namespace GamePlay {
 		}
 		
 		private bool _shouldEnterFinishState = false;
-		private int _lapCount = 1;
+		private int _lapCount = 0;
 
         private float _trackTotalDistance;
         public float trackTotalDistance {
@@ -83,7 +83,7 @@ namespace GamePlay {
 		
 		// Use this for initialization
 		void Start () {
-			Debug.Log ("[GamePlayViewController.Start]");
+			//Debug.Log ("[GamePlayViewController.Start]");
 			
 			// Distable UI Panels.
 			waitingPanel.SetActive(false);
@@ -117,25 +117,32 @@ namespace GamePlay {
             _trackTotalDistance = CalculateTrackDistance();
             //Debug.Log("TrackDistance:" + _trackTotalDistance);
 
-
-            /*
-            if ( Application.platform == RuntimePlatform.IPhonePlayer ) {
-                GameObject go = GameObject.Find("IOSController");
-                if (go!=null) {
-                    IOSController controller = go.GetComponent<IOSController>();
-                    controller.SetBike(_localBike);
-                }
-            } else {
-                GameObject keyboardControllerGo = GameObject.Find("KeyboardController");
-                if (keyboardControllerGo != null) {
-                    KeyboardController keyboardController = keyboardControllerGo.GetComponent<KeyboardController>();
-                    keyboardController.SetBike(_localBike);
-                }
-            }
-            */
-
 			_fsm.Start();
 		}
+
+        public void AddBike(Bike bike) {
+            _bikes.Add(bike);
+            LocationSprite locationSprite = GetLocationSprite(bike.playerIndex);
+            if (locationSprite!=null) {
+                bike.crash.OnCrashBegan += locationSprite.OnCrashBegan;
+                bike.crash.OnCrashEnded += locationSprite.OnCrashEnded;
+            }
+        }
+
+        public Bike[] GetBikes() {
+            return _bikes.ToArray();
+        }
+
+        private void SpawnBikeProxy(Bike bike) {
+            GameObject proxyClone = (GameObject)Instantiate(Resources.Load("BikeProxy"));
+            BikeProxy proxy = proxyClone.GetComponent<BikeProxy>();
+
+            TransformCopy copyTransform = proxy.GetComponent<TransformCopy>();
+            copyTransform.target = bike.transform;
+
+            copyTransform = proxy.animationNode.GetComponent<TransformCopy>();
+            copyTransform.target = bike.shape.transform;
+        }
 
         private void SpawnLocalBike() {
             PlayerInfo playerInfo = GameManager.Instance.localPlayerInfo;
@@ -148,6 +155,8 @@ namespace GamePlay {
             } else {
                 _localBike.gameObject.AddComponent<KeyboardController>();
             }
+
+            //SpawnBikeProxy(_localBike);
 
 
         }
@@ -269,27 +278,30 @@ namespace GamePlay {
 			Debug.Log ("[GamePlay.ViewController.OnDestroy]");
 		}
 		
-		public void OnPlayerPassThrouthLap(GameObject bikeGo) {
-			if (bikeGo.networkView.owner == Network.player) {
-				Debug.Log("[GamePlay.ViewController.OnPlayerFinished]");
-				_lapCount++;
+        public void OnLapChanged(int lap) {
+            Debug.Log("[GamePlay.ViewController.OnLapChanged] lap:" + lap);
+            _lapCount++;
+            UpdateLapText();
 
-                if (_lapTimer < _bestLapTime) {
-                    _bestLapTime = _lapTimer;
-                }
-                UpdateTimerText("BEST", _bestLapTime, bestTimeLabel);
-                _lapTimer = 0;
+            if (_lapTimer < _bestLapTime) {
+                _bestLapTime = _lapTimer;
+            }
+            UpdateTimerText("BEST", _bestLapTime, bestTimeLabel);
+            _lapTimer = 0;
 
-                UpdateLapText();
-				if ( _lapCount > GameManager.Instance.totalLaps ) {
-					_shouldEnterFinishState = true;
-				}
-			}
-		}
+            UpdateLapText();
+            if ( _lapCount > 2 /*GameManager.Instance.totalLaps*/ ) {
+                _shouldEnterFinishState = true;
+            }
+        }
 
         void UpdateLapText() {
             if (lapLabel!=null) {
-                lapLabel.text = "LAP:" + _lapCount.ToString();
+                if (_lapCount <= 0) {
+                    lapLabel.text = "";
+                } else {
+                    lapLabel.text = "LAP:" + _lapCount.ToString();
+                }
             }
         }
 
@@ -334,6 +346,7 @@ namespace GamePlay {
         }
 
         private float CalculateTrackDistance() {
+            /*
             GameObject spawn = GameObject.FindGameObjectWithTag("init_spawn_0");
             GameObject[] lapSensors = GameObject.FindGameObjectsWithTag("lap");
             float totalDistance = -1000.0f;
@@ -344,6 +357,8 @@ namespace GamePlay {
                 }
             }
             return totalDistance;
+            */
+            return 1024;
         }
 
         public LocationSprite GetLocationSprite(int index) {
@@ -353,8 +368,12 @@ namespace GamePlay {
             return locationSprites[index];
         }
 
-        public void SetRacePosition(PlayerInfo playerInfo, int racePosition) {
-            racePositionLabels[racePosition].text = playerInfo.playerName;
+        //public void SetRacePosition(PlayerInfo playerInfo, int racePosition) {
+            //racePositionLabels[racePosition].text = playerInfo.playerName;
+        //}
+
+        public void SetRacePosition(Bike bike, int racePosition) {
+            racePositionLabels[racePosition].text = bike.name;
         }
 
 	}

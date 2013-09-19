@@ -20,7 +20,6 @@ namespace GamePlay.State {
 		public override void DoBeforeEntering() {
 			_viewController.gamePlayPanel.SetActive(true);
 			
-			//_viewController.localBike.StartEngine();
             _viewController.localBike.engine.volume = 1.0f;
             _viewController.localBike.engine.gearPosition = 1;
             _viewController.StartBikes();
@@ -30,39 +29,23 @@ namespace GamePlay.State {
 		// Update is called once per frame
 		public override void Update () {
 			// Update Current Rank
-			
-            float beginZ = _viewController.trackStartLocation;
-            float dist = _viewController.trackTotalDistance;
-
-			PlayerInfo localPlayer = GameManager.Instance.localPlayerInfo;
-			Vector3 position = localPlayer.bike.gameObject.transform.position;
-			int rank = 1;
-			int count = GameManager.Instance.playersCount;
-
-            PlayerInfo[] playerInfos = GameManager.Instance.GetPlayerInfos();
-            Array.Sort( playerInfos, delegate(PlayerInfo info1, PlayerInfo info2) {
-                return info2.bike.transform.position.z.CompareTo(info1.bike.transform.position.z);
+            Bike[] bikes = _viewController.GetBikes();
+            Array.Sort( bikes, delegate(Bike bike1, Bike bike2) {
+                return bike2.transform.position.z.CompareTo(bike1.transform.position.z);
             });
 
-            for (int rp=0;rp < playerInfos.Length; ++rp) {
-                _viewController.SetRacePosition( playerInfos[rp], rp );
+            for (int racePosition = 0; racePosition < bikes.Length; ++racePosition) {
+                _viewController.SetRacePosition(bikes[racePosition], racePosition);
             }
 
-			for (int i=0;i<count;++i) {
-				PlayerInfo playerInfo = GameManager.Instance.GetPlayerInfo(i);
-
-                LocationSprite locationSprite = _viewController.GetLocationSprite(i);
+            float beginZ = _viewController.trackStartLocation;
+            float dist = _viewController.trackTotalDistance;
+            foreach (Bike bike in bikes) {
+                LocationSprite locationSprite = _viewController.GetLocationSprite(bike.playerIndex);
                 if (locationSprite!= null) {
-                    locationSprite.normalizedLocation = (playerInfo.bike.gameObject.transform.position.z - beginZ) / dist;
+                    locationSprite.normalizedLocation = (bike.transform.position.z - beginZ) / dist;
                 }
-
-				if (playerInfo.networkPlayer != localPlayer.networkPlayer) {
-					Vector3 otherPosition = playerInfo.bike.transform.position;
-					if ( otherPosition.z > position.z ) {
-						rank++;
-					}
-				}
-			}
+            }
 		}
 		
 		public override void DoBeforeLeaving() {

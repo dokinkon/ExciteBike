@@ -8,6 +8,7 @@ public class Section : MonoBehaviour {
     public event IntDelegate OnPlayerEnterSection;
 
     public int index = 0;
+    public GamePlay.LapSensor lapSensor;
 
 	// Use this for initialization
 	void Start () {
@@ -16,6 +17,8 @@ public class Section : MonoBehaviour {
         boxCollider.size = new Vector3(16, 40, 256);
         boxCollider.isTrigger = true;
         gameObject.layer = Layer.Item;
+
+        lapSensor = gameObject.GetComponentInChildren<GamePlay.LapSensor>();
 	}
 	
 	// Update is called once per frame
@@ -24,7 +27,7 @@ public class Section : MonoBehaviour {
 	}
 
     void OnTriggerEnter(Collider collider) {
-        Debug.Log("[Track.Section.OnTriggerEnter]");
+        //Debug.Log("[Track.Section.OnTriggerEnter]");
         if (collider.gameObject.tag.Contains("player-")) {
             Bike bike = collider.gameObject.GetComponent<Bike>();
             if (bike.isNPC)
