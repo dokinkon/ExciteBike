@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 namespace GamePlay {
 
@@ -133,6 +134,13 @@ namespace GamePlay {
             return _bikes.ToArray();
         }
 
+        public Bike GetBikeWithRacePosition(int position) {
+            if (position < 0 || position >= _bikes.Count)
+                return null;
+
+            return _bikes[position];
+        }
+
         private void SpawnBikeProxy(Bike bike) {
             GameObject proxyClone = (GameObject)Instantiate(Resources.Load("BikeProxy"));
             BikeProxy proxy = proxyClone.GetComponent<BikeProxy>();
@@ -182,6 +190,14 @@ namespace GamePlay {
                 //}
             }
         }
+
+        private static int CompareBikePosition(Bike bike1, Bike bike2) {
+            return bike2.transform.position.z.CompareTo(bike1.transform.position.z);
+        }
+
+        private void SortRacePosition() {
+            _bikes.Sort(CompareBikePosition);
+        }
 		
 		// Update is called once per frame
 		void Update () {
@@ -189,6 +205,8 @@ namespace GamePlay {
 				_shouldEnterFinishState = false;
 				_fsm.PerformTransition(State.Transitions.Finish);
 			}
+
+            SortRacePosition();
 			_fsm.Update();
             float speed = _localBike.rigidbody.velocity.z;
             speedLabel.text = speed.ToString();
@@ -367,10 +385,6 @@ namespace GamePlay {
 
             return locationSprites[index];
         }
-
-        //public void SetRacePosition(PlayerInfo playerInfo, int racePosition) {
-            //racePositionLabels[racePosition].text = playerInfo.playerName;
-        //}
 
         public void SetRacePosition(Bike bike, int racePosition) {
             racePositionLabels[racePosition].text = bike.name;

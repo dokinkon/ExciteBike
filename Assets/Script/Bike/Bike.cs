@@ -61,6 +61,8 @@ public class Bike : MonoBehaviour {
         get { return _follow;}
     }
 
+    private GamePlay.ViewController _viewController;
+
     public bool isFlying {
         get {
             return !frontWheel.IsTouchingTheRoad() && !rearWheel.IsTouchingTheRoad();
@@ -130,6 +132,8 @@ public class Bike : MonoBehaviour {
             _slowdown.enabled = false;
         }
         _currentTrackIndex = Track.GetIndex(transform.position.x);
+        GameObject clone = GameObject.FindGameObjectWithTag("view-controller");
+        _viewController = clone.GetComponent<GamePlay.ViewController>();
 	}
 
     private void AddToViewController() {
@@ -261,11 +265,17 @@ public class Bike : MonoBehaviour {
     }
 
     public void UseItem() {
+
+        Bike targetBike = _viewController.GetBikeWithRacePosition(0);
+        if (targetBike==null)
+            return;
+
         Vector3 position = transform.position;
-        position.z += 2;
-        GameObject clone = (GameObject)Network.Instantiate(Resources.Load("Missile"), position, Quaternion.identity, 0 );
-        Missile missile = clone.GetComponent<Missile>();
-        missile.SetOwner(Network.player);
+        position.y += 6;
+        MissileController.Launch(position, targetBike.transform, follow.transform);
+        //GameObject clone = (GameObject)Network.Instantiate(Resources.Load("HomingMissile"), position, Quaternion.identity, 0 );
+        //Missile missile = clone.GetComponent<Missile>();
+        //missile.SetOwner(Network.player);
     }
 	
 	void OnDestroy() {
