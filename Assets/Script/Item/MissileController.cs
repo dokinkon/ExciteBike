@@ -8,7 +8,6 @@ public class MissileController : MonoBehaviour {
     public float speed = 10.0f;
     private Item.Missile _missile;
     private Vector3 _initPosition;
-    private NetworkPlayer _owner;
     private Transform _target;
 
     private AutonomousVehicle _vehicle;
@@ -30,13 +29,13 @@ public class MissileController : MonoBehaviour {
 
         if (networkView.isMine) {
             _vehicle.CanMove = false;
+            StartCoroutine(DelayMovingMissile());
         } else {
             _vehicle.enabled = false;
             _lookAtOverride.enabled = false;
             _steerForPoint.enabled = false;
         }
 
-        StartCoroutine(DelayMovingMissile());
 	}
 
     IEnumerator DelayMovingMissile () {
@@ -58,6 +57,8 @@ public class MissileController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+        if (!networkView.isMine)
+            return;
 
         if (_target != null) {
             _steerForPoint.TargetPoint = _target.position;
@@ -75,8 +76,14 @@ public class MissileController : MonoBehaviour {
     private void Explosion() {
         _missile.Hide();
         explosionEffect.Play();
-        Destroy(gameObject, 1.0f);
+        if (networkView.isMine) {
+            StartCoroutine(DelayDestroy());
+        }
+    }
 
+    private IEnumerator DelayDestroy() {
+        yield return new WaitForSeconds(1);
+        Network.Destroy(gameObject);
     }
 
     void OnTriggerEnter(Collider collider) {
@@ -87,17 +94,8 @@ public class MissileController : MonoBehaviour {
     }
 
     void OnNetworkInstantiate(NetworkMessageInfo info) {
-    }
-
-    public void SetOwner(NetworkPlayer player) {
-        networkView.RPC("SyncOwner", RPCMode.All, player);
-        _owner = player;
-    }
-
-
-    [RPC]
-    void SyncOwner(NetworkPlayer player) {
-        _owner = player;
+        if (networkView.isMine) {
+        }
     }
 
     public static void Launch(Vector3 position, Transform target, Transform hook) {
