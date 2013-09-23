@@ -166,6 +166,19 @@ public class Bike : MonoBehaviour {
 		}
 	}
 
+    private void GenerateItem() {
+        if (!isLocal)
+            return;
+
+        _viewController.ShowItemButton(1);
+    }
+
+    void OnTriggerEnter(Collider collider) {
+        if (collider.tag == "item-box") {
+            GenerateItem();
+        }
+    }
+
     public void SetPositionTo(Vector3 p, int trackIndex) {
         if (!rigidbody.isKinematic) {
             rigidbody.velocity = Vector3.zero;

@@ -76,6 +76,7 @@ public class MissileController : MonoBehaviour {
     private void Explosion() {
         _missile.Hide();
         explosionEffect.Play();
+        audio.Play();
         if (networkView.isMine) {
             StartCoroutine(DelayDestroy());
         }

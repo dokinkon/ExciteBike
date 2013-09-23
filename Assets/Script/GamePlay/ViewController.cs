@@ -21,6 +21,7 @@ namespace GamePlay {
 		public GameObject resumeButton;
 		public GameObject exitButton;
 		public GameObject backToLobbyButton;
+        public GameObject itemButton;
 
         // labels
 		public UILabel countDownLabel;
@@ -108,6 +109,8 @@ namespace GamePlay {
 			UIEventListener.Get(restartButton).onClick = OnRestartButtonPressed;
 			UIEventListener.Get(exitButton).onClick = OnExitButtonPressed;
 			UIEventListener.Get(backToLobbyButton).onClick = OnExitButtonPressed;
+            UIEventListener.Get(itemButton).onClick = OnItemButtonPressed;
+            itemButton.SetActive(false);
 
             SpawnLocalBike();
             if (GameManager.playMode == PlayMode.QuickRace) {
@@ -163,10 +166,6 @@ namespace GamePlay {
             } else {
                 _localBike.gameObject.AddComponent<KeyboardController>();
             }
-
-            //SpawnBikeProxy(_localBike);
-
-
         }
 
         private void SpawnNPCBikes() {
@@ -189,6 +188,15 @@ namespace GamePlay {
                     //bike.engine.GearPosition = 1;
                 //}
             }
+        }
+
+        public void ShowItemButton(int itemType) {
+            itemButton.SetActive(true);
+        }
+
+        private void OnItemButtonPressed(GameObject button) {
+            _localBike.UseItem();
+            itemButton.SetActive(false);
         }
 
         private static int CompareBikePosition(Bike bike1, Bike bike2) {
