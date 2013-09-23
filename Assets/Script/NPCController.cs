@@ -141,6 +141,11 @@ public class NPCController : MonoBehaviour {
         _hasDeferredMove = false;
     }
 
+    IEnumerator DelayUseItem() {
+        yield return new WaitForSeconds(_random.Next(10));
+        _bike.UseItem();
+    }
+
     void OnTriggerEnter(Collider collider) {
         if (collider.gameObject.tag=="moveto-1") {
             _freeMove = false;
@@ -148,6 +153,8 @@ public class NPCController : MonoBehaviour {
                 StopCoroutine("DeferredMoveTo");
             }
             StartCoroutine(DeferredMoveTo(1, 200, _random.Next(500)));
+        } else if (collider.gameObject.tag == "item-box") {
+            StartCoroutine(DelayUseItem());
         }
     }
 

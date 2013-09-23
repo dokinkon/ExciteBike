@@ -116,8 +116,6 @@ public class MissileController : MonoBehaviour {
         }
 
         if (clone != null) {
-            //Debug.Log("Set Target");
-            //_target = target;
             MissileController controller = clone.GetComponent<MissileController>();
             controller._target = target;
 

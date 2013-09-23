@@ -278,7 +278,15 @@ public class Bike : MonoBehaviour {
     }
 
     public void UseItem() {
+        Vector3 velocity = rigidbody.velocity;
+        velocity.y = 10;
+        velocity.z += 20;
+        velocity.x = 0;
+        Vector3 position = transform.position;
+        position.y += 3;
+        Item.BombController.Use(position, velocity);
 
+        /*
         Bike targetBike = _viewController.GetBikeWithRacePosition(0);
         if (targetBike==null)
             return;
@@ -289,6 +297,7 @@ public class Bike : MonoBehaviour {
         //GameObject clone = (GameObject)Network.Instantiate(Resources.Load("HomingMissile"), position, Quaternion.identity, 0 );
         //Missile missile = clone.GetComponent<Missile>();
         //missile.SetOwner(Network.player);
+        */
     }
 	
 	void OnDestroy() {
