@@ -34,5 +34,6 @@ public class ItemFactory {
 
     public void InitializeCreators() {
         RegisterCreator(ItemType.HomingMissileX1, ItemMissile.Create);
+        RegisterCreator(ItemType.Spike, ItemSpike.Create);
     }
 }

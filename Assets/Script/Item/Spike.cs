@@ -66,17 +66,5 @@ namespace Item {
                 Destruct();
             }
         }
-
-        public static void Use(Vector3 position) {
-            position.x = Track.GetLocationX(Track.GetIndex(position.x));
-
-            GameObject clone;
-            if (Network.isClient || Network.isServer) {
-                clone = (GameObject)Network.Instantiate(Resources.Load("Spike"), position, Quaternion.identity, 0);
-            } else {
-                clone = (GameObject)Instantiate(Resources.Load("Spike"), position, Quaternion.identity);
-            }
-        }
     }
-
 }

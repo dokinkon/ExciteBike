@@ -173,7 +173,7 @@ public class Bike : MonoBehaviour {
             return;
 
         _viewController.ShowItemButton(1);
-        _currentItem = ItemFactory.Instance.Create(ItemType.HomingMissileX1);
+        _currentItem = ItemFactory.Instance.Create(ItemType.Spike);
     }
 
     void OnTriggerEnter(Collider collider) {
@@ -292,14 +292,6 @@ public class Bike : MonoBehaviour {
         }
 
         /*
-        Vector3 position = transform.position;
-        position.y += 0.5f;
-        position.z -= 2.0f;
-        Item.Spike.Use(position);
-        */
-
-
-        /*
         Vector3 velocity = rigidbody.velocity;
         velocity.y = 10;
         velocity.z += 20;
@@ -309,18 +301,6 @@ public class Bike : MonoBehaviour {
         Item.BombController.Use(position, velocity);
         */
 
-        /*
-        Bike targetBike = _viewController.GetBikeWithRacePosition(0);
-        if (targetBike==null)
-            return;
-
-        Vector3 position = transform.position;
-        position.y += 6;
-        MissileController.Launch(position, targetBike.transform, follow.transform);
-        //GameObject clone = (GameObject)Network.Instantiate(Resources.Load("HomingMissile"), position, Quaternion.identity, 0 );
-        //Missile missile = clone.GetComponent<Missile>();
-        //missile.SetOwner(Network.player);
-        */
     }
 	
 	void OnDestroy() {

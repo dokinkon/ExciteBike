@@ -15,4 +15,5 @@ public struct ItemType {
     public static int BerrierX1 = 106;
     public static int BerrierX3 = 107;
     public static int Shield = 108;
+    public static int Spike = 109;
 }
