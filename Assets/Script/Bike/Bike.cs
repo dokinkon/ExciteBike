@@ -173,7 +173,7 @@ public class Bike : MonoBehaviour {
             return;
 
         _viewController.ShowItemButton(1);
-        _currentItem = ItemFactory.Instance.Create(ItemType.Spike);
+        _currentItem = ItemFactory.Instance.Create(ItemType.BombX1);
     }
 
     void OnTriggerEnter(Collider collider) {

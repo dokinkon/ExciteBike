@@ -34,18 +34,6 @@ namespace Item {
                 StartCoroutine(Explosion());
             }
         }
-
-        public static void Use(Vector3 position, Vector3 initVelocity) {
-            GameObject clone;
-            if (Network.isServer || Network.isClient) {
-                clone = (GameObject)Network.Instantiate(Resources.Load("Bomb"), position, Quaternion.identity, 0);
-            } else {
-                clone = (GameObject)Instantiate(Resources.Load("Bomb"), position, Quaternion.identity);
-            }
-
-            BombController controller = clone.GetComponent<BombController>();
-            controller.initVelocity = initVelocity;
-        }
     }
 }
 
