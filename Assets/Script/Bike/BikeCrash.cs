@@ -43,13 +43,15 @@ public class BikeCrash : MonoBehaviour {
         if (_isCrashed || !enabled)
             return;
 
-        if (collider.gameObject.tag.Contains("player-")) {
+        if (collider.tag.Contains("player-")) {
             if (collider.transform.position.z >= transform.position.z) {
                 StartCoroutine(DoCrash());
             }
-        } else if (collider.gameObject.tag == "missile") {
+        } else if (collider.tag == "missile") {
             StartCoroutine(DoCrash());
-        } 
+        } else if (collider.tag == "spike") {
+            StartCoroutine(DoCrash());
+        }
     }
 
     void OnCollisionEnter(Collision collision) {

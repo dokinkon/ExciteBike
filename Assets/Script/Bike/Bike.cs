@@ -278,6 +278,14 @@ public class Bike : MonoBehaviour {
     }
 
     public void UseItem() {
+
+        Vector3 position = transform.position;
+        position.y += 0.5f;
+        position.z -= 2.0f;
+        Item.Spike.Use(position);
+
+
+        /*
         Vector3 velocity = rigidbody.velocity;
         velocity.y = 10;
         velocity.z += 20;
@@ -285,6 +293,7 @@ public class Bike : MonoBehaviour {
         Vector3 position = transform.position;
         position.y += 3;
         Item.BombController.Use(position, velocity);
+        */
 
         /*
         Bike targetBike = _viewController.GetBikeWithRacePosition(0);
