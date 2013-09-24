@@ -22,6 +22,8 @@ public class Bike : MonoBehaviour {
 	public bool lookAtSnapGround = true;
 	public float lookAtOffset = 7;
 
+    private AbstractItem _currentItem = null;
+
     private int _lap = 0;
     public int lap {
         get { return _lap; }
@@ -171,6 +173,7 @@ public class Bike : MonoBehaviour {
             return;
 
         _viewController.ShowItemButton(1);
+        _currentItem = ItemFactory.Instance.Create(ItemType.HomingMissileX1);
     }
 
     void OnTriggerEnter(Collider collider) {
@@ -277,12 +280,23 @@ public class Bike : MonoBehaviour {
 		}
     }
 
+    public Bike GetAttackTarget() {
+        return _viewController.GetBikeWithRacePosition(0);
+    }
+
     public void UseItem() {
 
+        if (_currentItem!=null) {
+            _currentItem.Use(this);
+            _currentItem = null;
+        }
+
+        /*
         Vector3 position = transform.position;
         position.y += 0.5f;
         position.z -= 2.0f;
         Item.Spike.Use(position);
+        */
 
 
         /*

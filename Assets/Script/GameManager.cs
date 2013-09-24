@@ -131,6 +131,8 @@ public class GameManager : MonoSingleton< GameManager > {
 	void Start () {
 		_bikes = new Dictionary<NetworkPlayer, Bike>();
 		_isPaused = false;
+
+        ItemFactory.Instance.InitializeCreators();
 	}
 	
 	// Update is called once per frame
