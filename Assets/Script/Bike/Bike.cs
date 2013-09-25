@@ -135,9 +135,9 @@ public class Bike : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        if (GameManager.debug) {
-            gameObject.AddComponent<BikeDebug>();
-        }
+        //if (GameManager.debug) {
+            //gameObject.AddComponent<BikeDebug>();
+        //}
 
         _bikeSteer = GetComponent<BikeSteer>();
         _pitch = GetComponent<BikePitch>();

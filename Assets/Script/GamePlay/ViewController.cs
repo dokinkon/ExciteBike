@@ -183,6 +183,7 @@ namespace GamePlay {
             _localBike.name = "Bike-Local";
             _localBike.isLocal = true;
             _localBike.gameObject.AddComponent<AudioListener>();
+            _localBike.gameObject.AddComponent<BikeDebug>();
             if ( Application.platform == RuntimePlatform.IPhonePlayer ) {
                 _localBike.gameObject.AddComponent<IOSController>();
             } else {
@@ -303,6 +304,10 @@ namespace GamePlay {
             } else {
                 if (!item.singleUse) {
                     itemButton.label.text = item.name + "X" + item.count;
+                }
+
+                if (item.count <= 0) {
+                    itemButton.gameObject.SetActive(false);
                 }
             }
         }

@@ -43,16 +43,20 @@ public class BikeCrash : MonoBehaviour {
         if (_isCrashed || !enabled)
             return;
 
+        if (!networkView.isMine)
+            return;
+
         if (collider.tag.Contains("player-")) {
             if (collider.transform.position.z >= transform.position.z) {
-                StartCoroutine(DoCrash());
+                StartCrash();
             }
         } else if (collider.tag == "missile") {
-            StartCoroutine(DoCrash());
+            StartCrash();
         } else if (collider.tag == "spike") {
-            StartCoroutine(DoCrash());
+            StartCrash();
         }
     }
+
 
     void OnCollisionEnter(Collision collision) {
         //Debug.Log("OnCollisionEnter");
@@ -96,14 +100,22 @@ public class BikeCrash : MonoBehaviour {
         }
     }
 
-    IEnumerator DoCrash() {
+    public void StartCrash() {
+        if (_isCrashed)
+            return;
+
+        StartCoroutine(CrashCoroutine());
+    }
+
+    IEnumerator CrashCoroutine() {
         _isCrashed = true;
-        if (OnCrashBegan!=null) {
-            OnCrashBegan();
-        }
-        _soundEffect.Play();
+        networkView.RPC("RPCCrashStarted", RPCMode.All);
+
+
         //ReleaseRagdoll();
         yield return new WaitForSeconds(duration);
+        networkView.RPC("RPCCrashFinished", RPCMode.All);
+
         _isCrashed = false;
         Vector3 p = rigidbody.position;
         rigidbody.rotation = Quaternion.identity;
@@ -112,8 +124,31 @@ public class BikeCrash : MonoBehaviour {
             rigidbody.angularVelocity = Vector3.zero;
         }
         rigidbody.MovePosition(p + Vector3.up);
+    }
+
+
+    [RPC]
+    void RPCCrashStarted() {
+        _soundEffect.Play();
+        if (OnCrashBegan!=null) {
+            OnCrashBegan();
+        }
+    }
+
+    [RPC]
+    void RPCCrashFinished() {
         if (OnCrashEnded!=null) {
             OnCrashEnded();
         }
     }
+
+
+
+
+
+
+
+
+
+
 }

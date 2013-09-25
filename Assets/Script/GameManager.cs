@@ -122,8 +122,8 @@ public class GameManager : MonoSingleton< GameManager > {
 			Screen.sleepTimeout = SleepTimeout.NeverSleep;
 		}
 
-        MasterServer.ipAddress = "127.0.0.1";
-        MasterServer.port = 23466;
+        //MasterServer.ipAddress = "127.0.0.1";
+        //MasterServer.port = 23466;
 	}
 	
 	// Use this for initialization

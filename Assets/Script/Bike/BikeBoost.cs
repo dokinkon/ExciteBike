@@ -34,23 +34,19 @@ public class BikeBoost : MonoBehaviour {
         _crashHandler = GetComponent<BikeCrash>();
         _pitch = GetComponent<BikePitch>();
         _trailRenderer = GetComponent<TrailRenderer>();
+        _trailRenderer.enabled = false;
         _rampVelocity = new Vector3(0, 1, 2);
         _rampVelocity = _rampVelocity.normalized * 25.0f;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (!_isBoosting)
-            return;
-
-        _delayTimer += Time.deltaTime;
-        if (_delayTimer > duration ) {
-            _delayTimer = 0;
-            StopBoost();
-        }
 	}
 
 	void OnTriggerEnter(Collider collider ) {
+        if (!networkView.isMine)
+            return;
+
         if (_crashHandler!=null) {
             if (_crashHandler.isCrashed || _isBoosting)
                 return;
@@ -71,30 +67,46 @@ public class BikeBoost : MonoBehaviour {
         _shouldOverwriteVelocity = false;
     }
 
+    IEnumerator BoostCoroutine() {
+        _pitch.PitchUp(1);
+        _isBoosting = true;
+        networkView.RPC("RPCBoostStarted", RPCMode.All);
+
+        yield return new WaitForSeconds(duration);
+
+        networkView.RPC("RPCBoostFinished", RPCMode.All);
+        _pitch.ResetPitch();
+        _isBoosting = false;
+
+    }
+
     public void StartBoost() {
+        if (!networkView.isMine) {
+            Debug.LogError("[BikeBoost] networkView is not mine, but invoke StartBoost");
+            return;
+        }
+
         if (_isBoosting)
             return;
 
         StartCoroutine(VelocityOverwrite());
+        StartCoroutine(BoostCoroutine());
+    }
 
+    [RPC]
+    void RPCBoostStarted() {
         soundEffect1.Play();
         if (boostParticleEmitter!=null) {
             boostParticleEmitter.Play(true);
         }
-        _pitch.PitchUp(1);
-        _trailRenderer.time = 1;
-        _isBoosting = true;
+        _trailRenderer.enabled = true;
     }
 
-    private void StopBoost() {
-        if (!_isBoosting)
-            return;
-
+    [RPC]
+    void RPCBoostFinished() {
         if (boostParticleEmitter!=null) {
             boostParticleEmitter.Stop();
         }
-        _pitch.ResetPitch();
-        _trailRenderer.time = 0;
-        _isBoosting = false;
+        _trailRenderer.enabled = false;
     }
 }
