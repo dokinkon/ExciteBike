@@ -24,8 +24,12 @@ namespace Item {
             explosionEffect.Play();
             audio.Play();
             yield return new WaitForSeconds(1);
-            if (networkView.isMine) {
-                Network.Destroy(gameObject);
+            if (Network.isServer || Network.isClient) {
+                if (networkView.isMine) {
+                    Network.Destroy(gameObject);
+                }
+            } else {
+                Destroy(gameObject);
             }
         }
 

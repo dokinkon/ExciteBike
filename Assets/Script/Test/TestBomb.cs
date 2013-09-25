@@ -10,7 +10,7 @@ public class TestBomb : MonoBehaviour {
 	
     void OnGUI() {
         if (GUI.Button(new Rect(40, 40, 100, 40), "Test")) {
-            Item.BombController.Use(new Vector3(0, 2, 0), Vector3.zero);
+            //Item.BombController.Use(new Vector3(0, 2, 0), Vector3.zero);
         }
     }
 	// Update is called once per frame
