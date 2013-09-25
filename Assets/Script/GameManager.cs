@@ -2,7 +2,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 public class GameManager : MonoSingleton< GameManager > {
 	
@@ -35,7 +34,7 @@ public class GameManager : MonoSingleton< GameManager > {
 		get {
 			string n = PlayerPrefs.GetString("Player.Name");
 			if ( n == "" ) {
-				n = "Player_" + GameManager.RandomString(3);
+				n = "Player_" + Utility.RandomString(3);
 			}
 			return PlayerPrefs.GetString("Player.Name");
 		}
@@ -119,7 +118,7 @@ public class GameManager : MonoSingleton< GameManager > {
 	void Awake() {
 		Debug.Log ("[GameManager.Awake]");
 		if ( Application.platform == RuntimePlatform.IPhonePlayer ) {
-			playerName = "Player_" + GameManager.RandomString(3);
+			playerName = "Player_" + Utility.RandomString(3);
 			Screen.sleepTimeout = SleepTimeout.NeverSleep;
 		}
 
@@ -193,22 +192,6 @@ public class GameManager : MonoSingleton< GameManager > {
 		Debug.Log ("[GameManager] OnLevelWasLoaded:" + level);
 	}
 	
-	public Bike SpawnBike(string bikeName, int track) {
-		
-		string tagName = "init_spawn_" + track;
-		GameObject spawn = GameObject.FindWithTag(tagName);
-		if (spawn == null ) {
-			Debug.LogError("[GameManager] can not find:" + tagName);
-			return null;
-		}
-		
-		GameObject bikeGo = null;
-        bikeGo = (GameObject)Network.Instantiate(Resources.Load(bikeName), spawn.transform.position, Quaternion.identity, 0);
-        Bike bike = bikeGo.GetComponent<Bike>();
-        bike.SetTrackIndex(track);
-		return bike;
-	}
-		
 	public void AddPlayer(PlayerInfo playerInfo) {
 		if (!ContainsPlayer(playerInfo.networkPlayer)) {
 			Debug.Log("[GameManager.AddPlayer] " + playerInfo.networkPlayer.ToString());
@@ -293,19 +276,6 @@ public class GameManager : MonoSingleton< GameManager > {
 		}
 	}
 	
-	private static System.Random random = new System.Random((int)DateTime.Now.Ticks);//thanks to McAden
-	public static string RandomString(int size) {
-        StringBuilder builder = new StringBuilder();
-        char ch;
-        for (int i = 0; i < size; i++)
-        {
-            ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));                 
-            builder.Append(ch);
-        }
-
-        return builder.ToString();
-    }
-
     void OnApplicationQuit() {
         _isShutingDown = true;
     }

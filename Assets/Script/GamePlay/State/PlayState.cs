@@ -22,7 +22,7 @@ namespace GamePlay.State {
 			
             _viewController.localBike.engine.volume = 1.0f;
             _viewController.localBike.engine.gearPosition = 1;
-            _viewController.StartBikes();
+            //_viewController.StartBikes();
             _viewController.isPlaying = true;
 		}
 		

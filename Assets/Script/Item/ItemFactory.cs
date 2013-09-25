@@ -33,8 +33,16 @@ public class ItemFactory {
     }
 
     public void InitializeCreators() {
-        RegisterCreator(ItemType.HomingMissileX1, ItemMissile.Create);
-        RegisterCreator(ItemType.Spike, ItemSpike.Create);
-        RegisterCreator(ItemType.BombX1, ItemBomb.Create);
+        RegisterCreator(ItemType.HomingMissileX1, ItemMissile.CreateX1);
+        RegisterCreator(ItemType.HomingMissileX3, ItemMissile.CreateX3);
+
+        RegisterCreator(ItemType.SpikeX1, ItemSpike.CreateX1);
+        RegisterCreator(ItemType.SpikeX3, ItemSpike.CreateX3);
+
+        RegisterCreator(ItemType.BombX1, ItemBomb.CreateX1);
+        RegisterCreator(ItemType.BombX3, ItemBomb.CreateX3);
+
+        RegisterCreator(ItemType.BoostX1, ItemBoost.CreateX1);
+        RegisterCreator(ItemType.BoostX3, ItemBoost.CreateX3);
     }
 }

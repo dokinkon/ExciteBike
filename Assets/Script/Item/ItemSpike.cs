@@ -3,12 +3,17 @@ using System.Collections;
 
 public class ItemSpike : AbstractItem {
 
-    public ItemSpike() {
-        _typeId = ItemType.Spike; 
+    public ItemSpike(bool singleUse, int count) {
+        _typeId = ItemType.SpikeX1; 
         _name = "Spike";
+        _singleUse = singleUse;
+        _count = count;
     }
 
     public override void Use(Bike bike) {
+        if (_count <= 0)
+            return;
+
         Vector3 position = bike.transform.position;
         position.x = Track.GetLocationX(Track.GetIndex(position.x));
         position.y += 0.5f;
@@ -20,10 +25,14 @@ public class ItemSpike : AbstractItem {
         } else {
             clone = (GameObject)GameObject.Instantiate(Resources.Load("Spike"), position, Quaternion.identity);
         }
+        _count--;
     }
 
-    public static AbstractItem Create() {
-        return new ItemSpike();
+    public static AbstractItem CreateX1() {
+        return new ItemSpike(true, 1);
     }
 
+    public static AbstractItem CreateX3() {
+        return new ItemSpike(false, 3);
+    }
 }

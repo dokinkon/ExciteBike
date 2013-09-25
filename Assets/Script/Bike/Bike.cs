@@ -4,6 +4,13 @@ using System;
 
 public class Bike : MonoBehaviour {
 
+    public delegate void VoidDelegate();
+    public delegate void BikeDelegate(Bike bike);
+    public event BikeDelegate OnStarted;
+    public event BikeDelegate OnItemGot;
+    public event BikeDelegate OnItemUsed;
+    public event BikeDelegate OnRacePositionChanged;
+
     public GameObject riderBody;
     public GameObject frontWheelCollider;
     public GameObject rearWheelCollider;
@@ -18,11 +25,27 @@ public class Bike : MonoBehaviour {
     
     public bool isLocal = false;
 	public bool isNPC = false;
-	public bool controlByNPC;
 	public bool lookAtSnapGround = true;
 	public float lookAtOffset = 7;
 
     private AbstractItem _currentItem = null;
+    public AbstractItem currentItem {
+        get { return _currentItem; }
+    }
+
+    private int _racePosition = 0;
+    public int racePosition {
+        get { return _racePosition; }
+        set {
+            if (_racePosition == value )
+                return;
+
+            _racePosition = value;
+            if (OnRacePositionChanged != null) {
+                OnRacePositionChanged(this);
+            }
+        }
+    }
 
     private int _lap = 0;
     public int lap {
@@ -43,14 +66,17 @@ public class Bike : MonoBehaviour {
     }
     private BikeSlowDown _slowdown;
 	private bool _isEngineStarted;
+
     private BikeSteer _bikeSteer;
     public BikeSteer steer {
         get { return _bikeSteer; }
     }
+
     private BikePitch _pitch;
     public BikePitch pitch {
         get { return _pitch; }
     }
+
     private BikeBoost _boost;
     public BikeBoost boost {
         get { return _boost;}
@@ -136,6 +162,10 @@ public class Bike : MonoBehaviour {
         _currentTrackIndex = Track.GetIndex(transform.position.x);
         GameObject clone = GameObject.FindGameObjectWithTag("view-controller");
         _viewController = clone.GetComponent<GamePlay.ViewController>();
+
+        if (OnStarted!=null) {
+            OnStarted(this);
+        }
 	}
 
     private void AddToViewController() {
@@ -152,6 +182,12 @@ public class Bike : MonoBehaviour {
 		Vector3 v = rigidbody.velocity;
         v.z = Math.Min(v.z, maxSpeedZ * _maxSpeedMultipier);
         v.x = Math.Max(Math.Min(v.x, maxSpeedX), -maxSpeedX);
+
+        if (_boost.shouldOverwriteVelocity) {
+            v.y = _boost.velocity.y;
+            v.z = _boost.velocity.z;
+        }
+
         if ( _slowdown.shouldSlowdown) {
             v.z = Math.Min(Math.Max(v.z, 0), _slowdown.speedLimit);
         }
@@ -168,12 +204,18 @@ public class Bike : MonoBehaviour {
 		}
 	}
 
-    private void GenerateItem() {
+    void GenerateItem() {
         if (!isLocal)
             return;
 
-        _viewController.ShowItemButton(1);
-        _currentItem = ItemFactory.Instance.Create(ItemType.BombX1);
+        if (_currentItem!=null)
+            return;
+
+        int itemTypeId = Utility.random.Next(8);
+        _currentItem = ItemFactory.Instance.Create(itemTypeId);
+        if (OnItemGot!=null) {
+            OnItemGot(this);
+        }
     }
 
     void OnTriggerEnter(Collider collider) {
@@ -204,7 +246,7 @@ public class Bike : MonoBehaviour {
 			if ( rearWheel.IsTouchingTheRoad() ) {
 				rigidbody.AddForce(Vector3.forward*engine.GetCurrentPower());
 			}
-			
+
             if ( rearWheel.IsTouchingTheRoad() || frontWheel.IsTouchingTheRoad() ) {
                 if (!_isShiftingTrack && (_bikeSteer.state == BikeSteerState.Left)) {
                     StartShiftTrack(_currentTrackIndex + 1);
@@ -288,19 +330,14 @@ public class Bike : MonoBehaviour {
 
         if (_currentItem!=null) {
             _currentItem.Use(this);
-            _currentItem = null;
+            
+            if (OnItemUsed!=null) {
+                OnItemUsed(this);
+            }
+
+            if (_currentItem.count <= 0 || _currentItem.singleUse)
+                _currentItem = null;
         }
-
-        /*
-        Vector3 velocity = rigidbody.velocity;
-        velocity.y = 10;
-        velocity.z += 20;
-        velocity.x = 0;
-        Vector3 position = transform.position;
-        position.y += 3;
-        Item.BombController.Use(position, velocity);
-        */
-
     }
 	
 	void OnDestroy() {

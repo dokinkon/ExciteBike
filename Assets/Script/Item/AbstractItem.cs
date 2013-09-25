@@ -13,6 +13,16 @@ public class AbstractItem {
         get { return _name; }
     }
 
+    protected bool _singleUse = true;
+    public bool singleUse {
+        get { return _singleUse; }
+    }
+
+    protected int _count = 0;
+    public int count {
+        get { return _count; }
+    }
+
     public virtual void Use(Bike bike) {
 
     }

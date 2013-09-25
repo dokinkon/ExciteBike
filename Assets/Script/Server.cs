@@ -36,7 +36,7 @@ public class Server : MonoSingleton<Server> {
 	
 	// Use this for initialization
 	void Start () {
-		title = "Server_" + GameManager.RandomString(3);
+		title = "Server_" + Utility.RandomString(3);
 	}
 	
 	// Update is called once per frame

@@ -21,7 +21,7 @@ namespace GamePlay {
 		public GameObject resumeButton;
 		public GameObject exitButton;
 		public GameObject backToLobbyButton;
-        public GameObject itemButton;
+        public ItemButton itemButton;
 
         // labels
 		public UILabel countDownLabel;
@@ -109,8 +109,8 @@ namespace GamePlay {
 			UIEventListener.Get(restartButton).onClick = OnRestartButtonPressed;
 			UIEventListener.Get(exitButton).onClick = OnExitButtonPressed;
 			UIEventListener.Get(backToLobbyButton).onClick = OnExitButtonPressed;
-            UIEventListener.Get(itemButton).onClick = OnItemButtonPressed;
-            itemButton.SetActive(false);
+            //UIEventListener.Get(itemButton).onClick = OnItemButtonPressed;
+            itemButton.gameObject.SetActive(false);
 
             SpawnLocalBike();
             if (GameManager.playMode == PlayMode.QuickRace) {
@@ -124,13 +124,11 @@ namespace GamePlay {
 			_fsm.Start();
 		}
 
+        void OnBikeStarted(Bike bike) {
+        }
+
         public void AddBike(Bike bike) {
             _bikes.Add(bike);
-            LocationSprite locationSprite = GetLocationSprite(bike.playerIndex);
-            if (locationSprite!=null) {
-                bike.crash.OnCrashBegan += locationSprite.OnCrashBegan;
-                bike.crash.OnCrashEnded += locationSprite.OnCrashEnded;
-            }
         }
 
         public Bike[] GetBikes() {
@@ -155,9 +153,33 @@ namespace GamePlay {
             copyTransform.target = bike.shape.transform;
         }
 
+        Bike SpawnBike(string bikeName, int playerIndex) {
+            
+            string tagName = "init_spawn_" + playerIndex;
+            GameObject spawn = GameObject.FindWithTag(tagName);
+            if (spawn == null ) {
+                Debug.LogError("[GamePlay.ViewController] can not find:" + tagName);
+                return null;
+            }
+            
+            GameObject clone = null;
+            clone = (GameObject)Network.Instantiate(Resources.Load(bikeName), spawn.transform.position, Quaternion.identity, 0);
+            Bike bike = clone.GetComponent<Bike>();
+            bike.SetTrackIndex(playerIndex);
+
+            BikeCrash crash = clone.GetComponent<BikeCrash>();
+            LocationSprite locationSprite = GetLocationSprite(playerIndex);
+            if (locationSprite!=null) {
+                crash.OnCrashBegan += locationSprite.OnCrashBegan;
+                crash.OnCrashEnded += locationSprite.OnCrashEnded;
+            }
+
+            return bike;
+        }
+
         private void SpawnLocalBike() {
             PlayerInfo playerInfo = GameManager.Instance.localPlayerInfo;
-			_localBike = GameManager.Instance.SpawnBike(playerInfo.bikeName, playerInfo.trackIndex);
+			_localBike = SpawnBike(playerInfo.bikeName, playerInfo.trackIndex);
             _localBike.name = "Bike-Local";
             _localBike.isLocal = true;
             _localBike.gameObject.AddComponent<AudioListener>();
@@ -166,12 +188,15 @@ namespace GamePlay {
             } else {
                 _localBike.gameObject.AddComponent<KeyboardController>();
             }
+
+            _localBike.OnItemGot += OnItemGot;
+            _localBike.OnItemUsed += OnItemUsed;
         }
 
         private void SpawnNPCBikes() {
             Debug.Log("[GamePlayViewController.SpawnNPCBike]");
             for (int i=1;i<4;i++) {
-                Bike bike = GameManager.Instance.SpawnBike("Bike", i);
+                Bike bike = SpawnBike("Bike", i);
                 bike.gameObject.AddComponent<NPCController>();
                 bike.name = "Bike-NPC-" + i;
                 bike.isNPC = true;
@@ -180,23 +205,8 @@ namespace GamePlay {
             }
         }
 
-        public void StartBikes() {
-            if ( Network.isServer) {
-                //foreach ( Bike bike in _npcBikes ) {
-                    //bike.StartEngine();
-                    //bike.engine.volume = 0.8f;
-                    //bike.engine.GearPosition = 1;
-                //}
-            }
-        }
-
-        public void ShowItemButton(int itemType) {
-            itemButton.SetActive(true);
-        }
-
         private void OnItemButtonPressed(GameObject button) {
             _localBike.UseItem();
-            itemButton.SetActive(false);
         }
 
         private static int CompareBikePosition(Bike bike1, Bike bike2) {
@@ -205,6 +215,9 @@ namespace GamePlay {
 
         private void SortRacePosition() {
             _bikes.Sort(CompareBikePosition);
+            for (int i=0;i<_bikes.Count;++i) {
+                _bikes[i].racePosition = i;
+            }
         }
 		
 		// Update is called once per frame
@@ -273,6 +286,26 @@ namespace GamePlay {
 				Application.LoadLevel("GameLobbyScene");
 			}
 		}
+
+        void OnItemGot(Bike bike) {
+            AbstractItem item = bike.currentItem;
+            itemButton.gameObject.SetActive(true);
+            itemButton.label.text = item.name;
+            if (!item.singleUse) {
+                itemButton.label.text += "X" + item.count;
+            }
+        }
+
+        void OnItemUsed(Bike bike) {
+            AbstractItem item = bike.currentItem;
+            if (item==null) {
+                itemButton.gameObject.SetActive(false);
+            } else {
+                if (!item.singleUse) {
+                    itemButton.label.text = item.name + "X" + item.count;
+                }
+            }
+        }
 
         void OnDebugButtonPressed(GameObject button) {
 
