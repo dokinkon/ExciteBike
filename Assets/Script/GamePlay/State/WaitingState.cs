@@ -21,7 +21,8 @@ namespace GamePlay.State {
 		public override void DoBeforeEntering () {
 			_viewController.waitingPanel.SetActive(true);
 			_viewController.gamePlayPanel.SetActive(false);
-			GameManager.Instance.localPlayerInfo.status = PlayerInfo.Status.PlayingReady;
+            _viewController.LetterBoxIn();
+			//GameManager.Instance.localPlayerInfo.status = PlayerInfo.Status.PlayingReady;
 		}
 				
 		// Update is called once per frame

@@ -68,6 +68,7 @@ namespace GamePlay.State {
 		}
 		
 		public override void DoBeforeLeaving() {
+            _viewController.LetterBoxOut();
 			_viewController.countDownPanel.SetActive(false);
             if (_iosController!=null) {
                 _iosController.StopMeasureAcceleration();

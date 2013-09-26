@@ -11,7 +11,7 @@ public class ItemBoost : AbstractItem {
     }
 
     public override void Use(Bike bike) {
-        bike.boost.StartBoost();
+        bike.boost.StartBoost(BikeBoost.TypeItem);
         _count--;
     }
 

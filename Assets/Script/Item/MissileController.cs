@@ -9,6 +9,7 @@ public class MissileController : MonoBehaviour {
     private Item.Missile _missile;
     private Vector3 _initPosition;
     private Transform _target;
+    private bool _isExplosion = false;
 
     private AutonomousVehicle _vehicle;
 
@@ -73,24 +74,40 @@ public class MissileController : MonoBehaviour {
         }
 	}
 
-    private void Explosion() {
-        _missile.Hide();
-        explosionEffect.Play();
-        audio.Play();
-        if (networkView.isMine) {
-            StartCoroutine(DelayDestroy());
+    IEnumerator ExplosionCoroutine() {
+        networkView.RPC("RPCExplosionStarted", RPCMode.All);
+        yield return new WaitForSeconds(1);
+        if (Network.isServer || Network.isClient) {
+            if (networkView.isMine) {
+                Network.Destroy(gameObject);
+            }
+        } else {
+            Destroy(gameObject);
         }
     }
 
-    private IEnumerator DelayDestroy() {
-        yield return new WaitForSeconds(1);
-        Network.Destroy(gameObject);
+    [RPC]
+    void RPCExplosionStarted() {
+        _missile.Hide();
+        explosionEffect.Play();
+        audio.Play();
+    }
+
+    void StartExplosion() {
+        if (!networkView.isMine)
+            return;
+
+        if (_isExplosion)
+            return;
+
+        _isExplosion = true;
+        StartCoroutine(ExplosionCoroutine());
     }
 
     void OnTriggerEnter(Collider collider) {
-        Debug.Log("[Missile.OnTriggerEnter] tag:" + collider.tag);
+        //Debug.Log("[Missile.OnTriggerEnter] tag:" + collider.tag);
         if ( collider.tag.Contains("player") || collider.tag == "road") {
-            Explosion();
+            StartExplosion();
         }
     }
 

@@ -16,6 +16,7 @@ public class ItemBox : MonoBehaviour {
 	}
 
     IEnumerator HideAWhile(float seconds) {
+        audio.Play();
         renderer.enabled = false;
         _isHiding = true;
         yield return new WaitForSeconds(seconds);

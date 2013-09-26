@@ -14,6 +14,8 @@ public class Bike : MonoBehaviour {
     public GameObject riderBody;
     public GameObject frontWheelCollider;
     public GameObject rearWheelCollider;
+
+    public AudioSource itemBoxSound;
 	
 	public float maxSpeedZ = 1;
 	public float maxSpeedX = 10;
@@ -27,6 +29,8 @@ public class Bike : MonoBehaviour {
 	public bool isNPC = false;
 	public bool lookAtSnapGround = true;
 	public float lookAtOffset = 7;
+
+    private int _jumpAvailbles = 2;
 
     private AbstractItem _currentItem = null;
     public AbstractItem currentItem {
@@ -105,7 +109,8 @@ public class Bike : MonoBehaviour {
         set { _maxSpeedMultipier = value; }
     }
 
-	private bool _shouldJump;
+	private bool _shouldJump = false;
+    private bool _jumpedInAir = false;
 	private int _boostLevel;
     public float boostMaxSpeed = 30;
 	private NetworkPlayer _networkPlayer;
@@ -144,7 +149,6 @@ public class Bike : MonoBehaviour {
         _boost = GetComponent<BikeBoost>();
         _bikeCrash = GetComponent<BikeCrash>();
         _slowdown = GetComponent<BikeSlowDown>();
-		//rigidbody.centerOfMass = Vector3.zero;
 
         if (networkView.isMine) {
             _bikeCrash.enabled = true;
@@ -196,6 +200,19 @@ public class Bike : MonoBehaviour {
 	}
 	
 	void UpdateJump() {
+        if (!_shouldJump)
+            return;
+
+        if (isFlying) {
+            if ( _jumpedInAir ) {
+                _shouldJump = false;
+            } else {
+                _jumpedInAir = true;
+            }
+        } else {
+            _jumpedInAir = false;
+        }
+
 		if (_shouldJump) {
 			Vector3 v = rigidbody.velocity;
 			v.y = jumpSpeed;
@@ -207,6 +224,8 @@ public class Bike : MonoBehaviour {
     void GenerateItem() {
         if (!isLocal)
             return;
+
+        itemBoxSound.Play();
 
         if (_currentItem!=null)
             return;
@@ -262,6 +281,20 @@ public class Bike : MonoBehaviour {
 
     public void Jump() {
         _shouldJump = true;
+        /*
+        if (isFlying()) {
+            if (_jumpedInAir) {
+                _shouldJump = false;
+                return;
+            } else {
+                _shouldJump = true;
+                _jumpedInAir = true;
+            }
+        } else {
+            _shouldJump = true;
+            _jumpedInAir = false;
+        }
+        */
     }
 	
 	void Update () {

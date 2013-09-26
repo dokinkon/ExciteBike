@@ -146,6 +146,7 @@ GameObject:
   - 82: {fileID: 8200012}
   - 82: {fileID: 8200014}
   - 96: {fileID: 9600000}
+  - 82: {fileID: 8200016}
   m_Layer: 20
   m_Name: Bike
   m_TagString: player-0
@@ -957,7 +958,7 @@ Rigidbody:
   m_GameObject: {fileID: 100014}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: .100000001
+  m_Drag: .5
   m_AngularDrag: 10
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -1440,6 +1441,64 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+--- !u!82 &8200016
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100014}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_audioClip: {fileID: 8300000, guid: b5a3d29801dbe41419e6080a938dfb85, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
 --- !u!96 &9600000
 TrailRenderer:
   m_ObjectHideFlags: 1
@@ -1452,22 +1511,22 @@ TrailRenderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 6748ccd92834d4e2894bcff5ae76db84, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_Time: 1
-  m_StartWidth: .5
-  m_EndWidth: .5
+  m_Time: .5
+  m_StartWidth: .200000003
+  m_EndWidth: .200000003
   m_Colors:
     m_Color[0]:
       serializedVersion: 2
-      rgba: 4294967295
+      rgba: 4278255360
     m_Color[1]:
       serializedVersion: 2
-      rgba: 4294967295
+      rgba: 4294902015
     m_Color[2]:
       serializedVersion: 2
       rgba: 4294967295
@@ -1584,6 +1643,7 @@ MonoBehaviour:
   riderBody: {fileID: 100008}
   frontWheelCollider: {fileID: 100010}
   rearWheelCollider: {fileID: 100006}
+  itemBoxSound: {fileID: 8200016}
   maxSpeedZ: 20
   maxSpeedX: 10
   jumpSpeed: 10
@@ -1621,14 +1681,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdf04f52548bf42e9a7f650410cdd8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundRPM1000: {fileID: 8200010}
-  soundRPM2000: {fileID: 8200008}
-  soundRPM3000: {fileID: 8200006}
-  soundRPM4000: {fileID: 8200004}
-  soundRPM5000: {fileID: 8200002}
-  soundRPM6000: {fileID: 8200000}
-  selfTest: 1
-  _selfTestFactor: 500
   pitchRange: .200000003
   maxHorsePower: 100
   _boost: {fileID: 11400024}
@@ -1637,6 +1689,13 @@ MonoBehaviour:
   gearPosition: 0
   totalGears: 6
   volume: 1
+  rpmSounds:
+  - {fileID: 8200010}
+  - {fileID: 8200008}
+  - {fileID: 8200006}
+  - {fileID: 8200004}
+  - {fileID: 8200002}
+  - {fileID: 8200000}
   rpm: 1000
   increaseRevFactor: 2000
   decreaseRevFactor: 1000

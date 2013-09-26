@@ -40,12 +40,12 @@ namespace GamePlay {
         }
 
         public void OnCrashBegan() {
-            Debug.Log("[LocationSprite.OnCrashBegan]");
+            //Debug.Log("[LocationSprite.OnCrashBegan]");
             animation.Play("RotateLocationSprite");
         }
 
         public void OnCrashEnded() {
-            Debug.Log("[LocationSprite.OnCrashEnde]");
+            //Debug.Log("[LocationSprite.OnCrashEnde]");
             animation.Stop();
             transform.localRotation = Quaternion.identity;
         }

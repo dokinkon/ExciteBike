@@ -36,6 +36,9 @@ public class BikeAnimation : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (networkView.isMine) {
+            if (_leanLeft == null) {
+
+            }
             _leanLeft.normalizedTime = -steer.steerValue;
             _leanRight.normalizedTime = steer.steerValue;
         }

@@ -40,25 +40,25 @@ namespace GamePlay {
 		//}
 
         void OnTriggerExit(Collider collider) {
-            Debug.Log("[LapSensor.OnTriggerExit] 1 tag:" + collider.tag);
+            //Debug.Log("[LapSensor.OnTriggerExit] 1 tag:" + collider.tag);
             if (!collider.tag.Contains("player-"))
                 return;
 
-            Debug.Log("[LapSensor.OnTriggerExit] 2");
+            //Debug.Log("[LapSensor.OnTriggerExit] 2");
             Bike bike = collider.GetComponent<Bike>();
             if (!bike.isLocal) 
                 return;
 
-            Debug.Log("[LapSensor.OnTriggerExit] 3");
+            //Debug.Log("[LapSensor.OnTriggerExit] 3");
             if (bike.transform.position.z > transform.position.z) {
                     
-                Debug.Log("[LapSensor.OnTriggerExit] 4");
+                //Debug.Log("[LapSensor.OnTriggerExit] 4");
                 if (_lap > bike.lap) {
                     bike.lap = _lap;
                     _viewController.OnLapChanged(bike.lap);
                 }
             } else {
-                Debug.Log("[LapSensor.OnTriggerExit] 5");
+                //Debug.Log("[LapSensor.OnTriggerExit] 5");
                 bike.lap = _lap - 1;
                 _viewController.OnLapChanged(bike.lap);
             }

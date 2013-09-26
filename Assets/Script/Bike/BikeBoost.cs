@@ -3,6 +3,15 @@ using System.Collections;
 
 public class BikeBoost : MonoBehaviour {
 
+    public static int TypeNormal = 0;
+    public static int TypeItem   = 1;
+    public static int TypeRamp   = 2;
+
+
+    public delegate void VoidDelegate();
+    public event VoidDelegate OnBoostBegan;
+    public event VoidDelegate OnBoostEnded;
+
     public ParticleSystem boostParticleEmitter;
     public AudioSource soundEffect1;
     public float duration = 3.0f;
@@ -25,7 +34,8 @@ public class BikeBoost : MonoBehaviour {
         get { return _velocity; }
     }
 
-    private Vector3 _rampVelocity;
+    private static Vector3 _rampVelocity = new Vector3(0, 1, 2).normalized * 30;
+    private static Vector3 _normalVelocity = new Vector3(0, 0, 1) * 30;
 
     BikeCrash _crashHandler;
 
@@ -35,29 +45,41 @@ public class BikeBoost : MonoBehaviour {
         _pitch = GetComponent<BikePitch>();
         _trailRenderer = GetComponent<TrailRenderer>();
         _trailRenderer.enabled = false;
-        _rampVelocity = new Vector3(0, 1, 2);
-        _rampVelocity = _rampVelocity.normalized * 25.0f;
+        //_rampVelocity = new Vector3(0, 1, 2);
+        //_rampVelocity = _rampVelocity.normalized * 28.0f;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	}
 
+    void OnCrashBegan() {
+
+    }
+
+    void StopBoost() {
+        if (!_isBoosting)
+            return;
+
+        networkView.RPC("RPCBoostFinished", RPCMode.All);
+        _pitch.ResetPitch();
+        _isBoosting = false;
+    }
+
 	void OnTriggerEnter(Collider collider ) {
+
         if (!networkView.isMine)
             return;
 
         if (_crashHandler!=null) {
-            if (_crashHandler.isCrashed || _isBoosting)
+            if (_crashHandler.isCrashed)
                 return;
         }
 
 		if (collider.tag == "accelerator" ) {
-            StartBoost();
-            _velocity = new Vector3(0, 0, 25);
+            StartBoost(TypeNormal);
         } else if (collider.tag == "ramp") {
-            StartBoost();
-            _velocity = _rampVelocity;
+            StartBoost(TypeRamp);
         }
     }
 
@@ -74,20 +96,24 @@ public class BikeBoost : MonoBehaviour {
 
         yield return new WaitForSeconds(duration);
 
-        networkView.RPC("RPCBoostFinished", RPCMode.All);
-        _pitch.ResetPitch();
-        _isBoosting = false;
-
+        StopBoost();
     }
 
-    public void StartBoost() {
+    public void StartBoost(int type) {
         if (!networkView.isMine) {
             Debug.LogError("[BikeBoost] networkView is not mine, but invoke StartBoost");
             return;
         }
 
-        if (_isBoosting)
-            return;
+        if (type == TypeNormal || type == TypeItem) {
+            _velocity = _normalVelocity;
+        } else if (type == TypeRamp ) {
+            _velocity = _rampVelocity;
+        }
+
+        //if (_isBoosting) {
+            //StopBoost();
+        //}
 
         StartCoroutine(VelocityOverwrite());
         StartCoroutine(BoostCoroutine());

@@ -31,6 +31,8 @@ namespace GamePlay {
         public UILabel speedLabel;
         public UILabel lapLabel;
 		public UILabel rankLabel;
+    
+        public LetterBox letterBox;
 
         public UILabel[] racePositionLabels;
 
@@ -122,6 +124,7 @@ namespace GamePlay {
             //Debug.Log("TrackDistance:" + _trackTotalDistance);
 
 			_fsm.Start();
+			GameManager.Instance.localPlayerInfo.status = PlayerInfo.Status.PlayingReady;
 		}
 
         void OnBikeStarted(Bike bike) {
@@ -192,6 +195,10 @@ namespace GamePlay {
 
             _localBike.OnItemGot += OnItemGot;
             _localBike.OnItemUsed += OnItemUsed;
+
+            BikeCrash crash = _localBike.GetComponent<BikeCrash>();
+            crash.OnCrashBegan += OnCrashBegan;
+            crash.OnCrashEnded += OnCrashEnded;
         }
 
         private void SpawnNPCBikes() {
@@ -204,6 +211,22 @@ namespace GamePlay {
                 NPCController controller = bike.GetComponent<NPCController>();
                 controller.localBike = _localBike;
             }
+        }
+
+        public void LetterBoxIn() {
+            letterBox.animation.Play("LetterBoxIn");
+        }
+
+        public void LetterBoxOut() {
+            letterBox.animation.Play("LetterBoxOut");
+        }
+
+        void OnCrashBegan() {
+            LetterBoxIn();
+        }
+
+        void OnCrashEnded() {
+            LetterBoxOut();
         }
 
         private void OnItemButtonPressed(GameObject button) {
@@ -323,23 +346,16 @@ namespace GamePlay {
             }
         }
 
-        private static bool _isShutingDown = false;
-        void OnApplicationQuit() {
-            Debug.Log("[GameLobby.OnApplicationQuit]");
-            _isShutingDown = true;
-        }
-
         void OnDisable() {
-			Debug.Log ("[GamePlay.ViewController.OnDisable]");
-			//_fsm.Stop();
-            if (!_isShutingDown) {
+			//Debug.Log ("[GamePlay.ViewController.OnDisable]");
+            if (!GameManager.isShutingDown) {
                 Client.Instance.OnGamePlayReadyStart -= OnPlayerReadyStart;
             }
         }
 
 		
 		void OnDestroy() {
-			Debug.Log ("[GamePlay.ViewController.OnDestroy]");
+			//Debug.Log ("[GamePlay.ViewController.OnDestroy]");
 		}
 		
         public void OnLapChanged(int lap) {

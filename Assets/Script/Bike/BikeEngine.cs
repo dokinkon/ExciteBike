@@ -4,16 +4,7 @@ using System;
 
 public class BikeEngine : MonoBehaviour {
 
-    public AudioSource soundRPM1000;
-    public AudioSource soundRPM2000;
-    public AudioSource soundRPM3000;
-    public AudioSource soundRPM4000;
-    public AudioSource soundRPM5000;
-    public AudioSource soundRPM6000;
-    public bool selfTest = true;
-    private bool _risingRev = true;
     private float _currentRPM = 0.0f;
-    public float _selfTestFactor = 10.0f;
     public float pitchRange = 0.3f;
     public float maxHorsePower = 200;
     public BikeBoost _boost;
@@ -47,7 +38,7 @@ public class BikeEngine : MonoBehaviour {
         }
     }
 
-    private AudioSource[] rpmSounds;
+    public AudioSource[] rpmSounds;
     private int[] _rpmSamples = new int[] { 1000, 2000, 3000, 4000, 5000, 6000};
 
     public int rpm;
@@ -59,14 +50,6 @@ public class BikeEngine : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        rpmSounds = new AudioSource[6];
-        rpmSounds[0] = soundRPM1000;
-        rpmSounds[1] = soundRPM2000;
-        rpmSounds[2] = soundRPM3000;
-        rpmSounds[3] = soundRPM4000;
-        rpmSounds[4] = soundRPM5000;
-        rpmSounds[5] = soundRPM6000;
-
         for (int i=0;i<6;i++) {
             rpmSounds[i].enabled = false;
         }
@@ -81,13 +64,7 @@ public class BikeEngine : MonoBehaviour {
     }
 
     public void SetThrottle(float t) {
-        _currentThrottle = t;
-        if (_currentThrottle > 1.0f) 
-            _currentThrottle = 1.0f;
-
-        if (_currentThrottle < 0.0f)
-            _currentThrottle = 0.0f;
-
+        _currentThrottle = Mathf.Clamp(t, 0.0f, 1.0f);
         _currentMaxRPM = 1000.0f + 5000.0f * _currentThrottle;
     }
 	
@@ -117,7 +94,7 @@ public class BikeEngine : MonoBehaviour {
             if (crash.isCrashed) {
                 _currentRPM = 1000.0f;
             } else {
-                _currentRPM = Math.Min(Math.Max(1000.0f, _currentRPM), 4000.0f);
+                _currentRPM = Mathf.Clamp(_currentRPM, 1000.0f, 4000.0f);
             }
         }
 
