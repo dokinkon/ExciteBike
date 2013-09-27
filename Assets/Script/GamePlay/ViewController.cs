@@ -6,6 +6,9 @@ using System;
 namespace GamePlay {
 
 	public class ViewController : MonoBehaviour {
+
+        public int totalLaps = 10;
+        public GameObject testText;
 	
         // panels
 		public GameObject gamePlayPanel;
@@ -43,6 +46,7 @@ namespace GamePlay {
         public SmoothFollow smoothFollow;
 
         private Vector3 _cameraInitPosition;
+        private Camera _mainCamera;
 		
 		private Bike _localBike = null;
 		public Bike localBike {
@@ -125,6 +129,8 @@ namespace GamePlay {
 
 			_fsm.Start();
 			GameManager.Instance.localPlayerInfo.status = PlayerInfo.Status.PlayingReady;
+            GameObject camera = (GameObject)GameObject.FindGameObjectWithTag("MainCamera");
+            _mainCamera = camera.GetComponent<Camera>();
 		}
 
         void OnBikeStarted(Bike bike) {
@@ -199,6 +205,9 @@ namespace GamePlay {
             BikeCrash crash = _localBike.GetComponent<BikeCrash>();
             crash.OnCrashBegan += OnCrashBegan;
             crash.OnCrashEnded += OnCrashEnded;
+
+            GameObject lookAt = (GameObject)GameObject.Find("CameraLookAt");
+            lookAt.GetComponent<GamePlay.LookAtTarget>().target = _localBike.transform;
         }
 
         private void SpawnNPCBikes() {
@@ -253,8 +262,8 @@ namespace GamePlay {
 
             SortRacePosition();
 			_fsm.Update();
-            float speed = _localBike.rigidbody.velocity.z;
-            speedLabel.text = speed.ToString();
+            //float speed = _localBike.rigidbody.velocity.z;
+            speedLabel.text = _localBike.speedInKPH.ToString() + " KPH";
 
             if (_isPlaying) {
                 _lapTimer += Time.deltaTime;
@@ -370,7 +379,7 @@ namespace GamePlay {
             _lapTimer = 0;
 
             UpdateLapText();
-            if ( _lapCount > 2 /*GameManager.Instance.totalLaps*/ ) {
+            if ( _lapCount > totalLaps ) {
                 _shouldEnterFinishState = true;
             }
         }

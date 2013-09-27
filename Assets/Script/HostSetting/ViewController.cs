@@ -16,8 +16,7 @@ namespace HostSetting {
 	
 		// Use this for initialization
 		void Start () {
-			
-			GameManager.CreateNetworkNode();
+            GameManager.Create();
 			
 			UIEventListener.Get(goToLobbyButton).onClick = OnButtonGoToLobbyPressed;
 			_hostTitleInput = hostTitleInput.GetComponent<UIInput>();

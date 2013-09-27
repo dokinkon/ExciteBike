@@ -59,7 +59,8 @@ public class BikeEngine : MonoBehaviour {
         if (gearPosition == 0) {
             return 0.0f;
         } else {
-            return (_currentRPM - 1000.0f) / 5000.0f * maxHorsePower;
+            return maxHorsePower;
+            //return (_currentRPM - 1000.0f) / 5000.0f * maxHorsePower;
         }
     }
 

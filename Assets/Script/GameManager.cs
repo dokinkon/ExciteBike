@@ -112,7 +112,6 @@ public class GameManager : MonoSingleton< GameManager > {
 	
 	public static void OnViewControllerStarted() {
 		Create();
-		CreateNetworkNode();
 	}
 	
 	void Awake() {
@@ -171,25 +170,12 @@ public class GameManager : MonoSingleton< GameManager > {
 		if (go == null ) {
 			go = new GameObject("Game Manager");
 			go.AddComponent<GameManager>();
-			GameObject.DontDestroyOnLoad(go);
-		}
-	}
-	
-	static public void CreateNetworkNode() {
-		GameObject go = GameObject.Find ("Network");
-		if (go==null) {
-			go = new GameObject("Network");
 			NetworkView nv = go.AddComponent<NetworkView>();
 			nv.stateSynchronization = NetworkStateSynchronization.Off;
-			
 			go.AddComponent<Server>();
 			go.AddComponent<Client>();
 			GameObject.DontDestroyOnLoad(go);
 		}
-	}
-	
-	void OnLevelWasLoaded(int level) {
-		Debug.Log ("[GameManager] OnLevelWasLoaded:" + level);
 	}
 	
 	public void AddPlayer(PlayerInfo playerInfo) {

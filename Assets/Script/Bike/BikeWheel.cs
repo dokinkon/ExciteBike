@@ -14,20 +14,6 @@ public class BikeWheel : MonoBehaviour {
 		return _touchCount != 0;
 	}
 
-    /*
-    void OnCollisionEnter( Collider other) {
-        if (other.gameObject.tag == "road") {
-            _touchCount++;
-        }
-    }
-
-    void OnCollisionExit( Collider other ) {
-        if (other.gameObject.tag == "road") {
-            _touchCount--;
-        }
-    }
-    */
-		
 	void OnTriggerEnter ( Collider other ) {
 		if ( other.gameObject.tag == "road" ) {
 			_touchCount++;
@@ -38,10 +24,5 @@ public class BikeWheel : MonoBehaviour {
 		if ( other.gameObject.tag == "road" ) {
 			_touchCount--;
 		}
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }

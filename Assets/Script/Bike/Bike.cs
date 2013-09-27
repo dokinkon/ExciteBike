@@ -16,21 +16,26 @@ public class Bike : MonoBehaviour {
     public GameObject rearWheelCollider;
 
     public AudioSource itemBoxSound;
+
+    public int speedInKPH {
+        get {
+            return (int)Math.Abs(rigidbody.velocity.magnitude * 3.6f);
+        }
+    }
 	
 	public float maxSpeedZ = 1;
 	public float maxSpeedX = 10;
 	public float jumpSpeed = 20;
-	public Transform lookAt;
+	//public Transform lookAt;
 	public BikeWheel frontWheel;
 	public BikeWheel rearWheel;
     public ParticleEmitter hitParticleEmitter;
     
     public bool isLocal = false;
 	public bool isNPC = false;
-	public bool lookAtSnapGround = true;
-	public float lookAtOffset = 7;
 
     private int _jumpAvailbles = 2;
+    private Vector3 _roadVector = Vector3.forward;
 
     private AbstractItem _currentItem = null;
     public AbstractItem currentItem {
@@ -111,10 +116,11 @@ public class Bike : MonoBehaviour {
 
 	private bool _shouldJump = false;
     private bool _jumpedInAir = false;
-	private int _boostLevel;
-    public float boostMaxSpeed = 30;
 	private NetworkPlayer _networkPlayer;
     private int _currentTrackIndex;
+    public int trackIndex {
+        get { return _currentTrackIndex; }
+    }
     private int _targetTrackIndex;
     private bool _isShiftingTrack = false;
     private NetworkPlayer _owner;
@@ -156,6 +162,10 @@ public class Bike : MonoBehaviour {
             _bikeSteer.enabled = true;
             _pitch.enabled = true;
             _slowdown.enabled = true;
+
+            BikeHead head = GetComponentInChildren<BikeHead>();
+            head.OnHit += _bikeCrash.StartCrash;
+
         } else {
             _bikeCrash.enabled = false;
             _boost.enabled = false;
@@ -181,24 +191,6 @@ public class Bike : MonoBehaviour {
         }
     }
 	
-	void LimitVelocity() {
-		
-		Vector3 v = rigidbody.velocity;
-        v.z = Math.Min(v.z, maxSpeedZ * _maxSpeedMultipier);
-        v.x = Math.Max(Math.Min(v.x, maxSpeedX), -maxSpeedX);
-
-        if (_boost.shouldOverwriteVelocity) {
-            v.y = _boost.velocity.y;
-            v.z = _boost.velocity.z;
-        }
-
-        if ( _slowdown.shouldSlowdown) {
-            v.z = Math.Min(Math.Max(v.z, 0), _slowdown.speedLimit);
-        }
-			
-		rigidbody.velocity = v;
-	}
-	
 	void UpdateJump() {
         if (!_shouldJump)
             return;
@@ -222,7 +214,7 @@ public class Bike : MonoBehaviour {
 	}
 
     void GenerateItem() {
-        if (!isLocal)
+        if (!isLocal && !isNPC)
             return;
 
         itemBoxSound.Play();
@@ -262,10 +254,6 @@ public class Bike : MonoBehaviour {
 
 		if ( _bikeCrash.isCrashed ) {
 		} else {
-			if ( rearWheel.IsTouchingTheRoad() ) {
-				rigidbody.AddForce(Vector3.forward*engine.GetCurrentPower());
-			}
-
             if ( rearWheel.IsTouchingTheRoad() || frontWheel.IsTouchingTheRoad() ) {
                 if (!_isShiftingTrack && (_bikeSteer.state == BikeSteerState.Left)) {
                     StartShiftTrack(_currentTrackIndex + 1);
@@ -276,37 +264,29 @@ public class Bike : MonoBehaviour {
             UpdateShiftTrack();
 			UpdateJump();
 		}		
-		LimitVelocity();	
+
+        // Update Velocity
+        if (!_bikeCrash.isCrashed && rearWheel.IsTouchingTheRoad()) {
+            float v = rigidbody.velocity.magnitude;
+            v += Time.fixedDeltaTime * 27;
+
+            if (_slowdown.shouldSlowdown) {
+                v = Math.Min(v, 5.0f);
+            } else if (_boost.isBoosting) {
+                v = Math.Min(v, 30.0f);
+            } else {
+                v = Math.Min(v, 27);
+            }
+
+            rigidbody.velocity = _roadVector * v;
+        }
 	}
 
     public void Jump() {
         _shouldJump = true;
-        /*
-        if (isFlying()) {
-            if (_jumpedInAir) {
-                _shouldJump = false;
-                return;
-            } else {
-                _shouldJump = true;
-                _jumpedInAir = true;
-            }
-        } else {
-            _shouldJump = true;
-            _jumpedInAir = false;
-        }
-        */
     }
 	
 	void Update () {
-		if ( isLocal && lookAt ) {
-			Vector3 p = transform.position;
-			p.z += lookAtOffset;
-			p.x = 0;
-			if (lookAtSnapGround) {
-				p.y = 0;
-			}
-			lookAt.position = p;
-		}
 	}
 
     void OnCollisionEnter(Collision collision) {
@@ -314,6 +294,18 @@ public class Bike : MonoBehaviour {
         float dot = Vector3.Dot(Vector3.up, collision.relativeVelocity.normalized);
         if ( Math.Abs(dot) > 0.2f && collision.relativeVelocity.magnitude > 5) {
             hitParticleEmitter.Emit();
+        }
+    }
+
+    void OnCollisionStay(Collision collision) {
+        if (collision.collider.CompareTag("road")) {
+            Vector3 normal = Vector3.zero;
+            foreach (ContactPoint contact in collision.contacts ) {
+                normal += contact.normal.normalized;
+            }
+            normal.x = 0;
+            normal = normal.normalized;
+            _roadVector = Vector3.Cross(Vector3.right, normal).normalized;
         }
     }
 
@@ -334,7 +326,6 @@ public class Bike : MonoBehaviour {
 		if ( networkView.isMine ) {
 			networkRigidbody.enabled = false;
 			control.enabled = true;
-			lookAt = GameObject.FindWithTag ("camera_look_at").transform;
             networkView.RPC("SetOwner", RPCMode.All, Network.player);
 				
 		} else {

@@ -4,6 +4,12 @@ using System;
 
 public class NPCController : MonoBehaviour {
 
+    private static int MoveToTrack0 = 0;
+    private static int MoveToTrack1 = 1;
+    private static int MoveToTrack2 = 2;
+    private static int MoveToTrack3 = 3;
+    private static int Avoid = 4;
+
     private Bike _bike;
     private BikePitch _pitch;
     private BikeCrash _crash;
@@ -29,11 +35,12 @@ public class NPCController : MonoBehaviour {
         _crash = GetComponent<BikeCrash>();
         _bike.isNPC = true;
         _bike.follow.selfIndicator.SetActive(false);
+        StartCoroutine(UseItem());
 	}
 
     void FakeUpdate() {
         float distance = transform.position.z - _localBike.transform.position.z;
-        if (Math.Abs(distance) < _fakeUpdateDistance) {
+        if (Math.Abs(distance) < (_fakeUpdateDistance / 2) ) {
             StopFakeUpdate();
         } else {
             float fakeSpeed = 60;
@@ -44,7 +51,7 @@ public class NPCController : MonoBehaviour {
             Vector3 position = transform.position;
             position.z += Time.deltaTime * fakeSpeed;
             position.y = 1;
-            transform.position = position;
+            _bike.rigidbody.MovePosition(position);
         }
     }
 
@@ -58,6 +65,14 @@ public class NPCController : MonoBehaviour {
         _crash.enabled = false;
         _bike.enabled = false;
         _fakeUpdate = true;
+    }
+
+    IEnumerator UseItem() {
+        while (true) {
+            //int wait = _random.Next(5);
+            yield return new WaitForSeconds(_random.Next(5));
+            _bike.UseItem();
+        }
     }
 
     private void StopFakeUpdate() {
@@ -146,15 +161,32 @@ public class NPCController : MonoBehaviour {
         _bike.UseItem();
     }
 
+    void MoveTrack(int type) {
+        int targetTrack = 0;
+        if (type== MoveToTrack0) {
+            targetTrack = 0;
+        } else if (type == Avoid) {
+            if (_bike.trackIndex == 0) {
+                targetTrack = 1;
+            } else if (_bike.trackIndex == 3) {
+                targetTrack = 2;
+            } else {
+                targetTrack = _bike.trackIndex + 1;
+            }
+        }
+
+        _freeMove = false;
+        if (_hasDeferredMove) {
+            StopCoroutine("DeferredMoveTo");
+        }
+        StartCoroutine(DeferredMoveTo(targetTrack, 200, _random.Next(500)));
+    }
+
     void OnTriggerEnter(Collider collider) {
         if (collider.gameObject.tag=="moveto-1") {
-            _freeMove = false;
-            if (_hasDeferredMove) {
-                StopCoroutine("DeferredMoveTo");
-            }
-            StartCoroutine(DeferredMoveTo(1, 200, _random.Next(500)));
-        } else if (collider.gameObject.tag == "item-box") {
-            StartCoroutine(DelayUseItem());
+            MoveTrack(MoveToTrack1);
+        } else if (collider.CompareTag("avoid")) {
+            MoveTrack(Avoid);
         }
     }
 
