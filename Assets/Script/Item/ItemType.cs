@@ -14,4 +14,5 @@ public struct ItemType {
     public static int HomingMissileX3 = 5;
     public static int SpikeX1 = 6;
     public static int SpikeX3 = 7;
+    public static int SuperStar = 8;
 }

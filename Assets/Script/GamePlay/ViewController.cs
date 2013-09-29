@@ -411,9 +411,9 @@ namespace GamePlay {
         }
 
         void OnLookAtOffsetChanged(float v) {
-            if (_localBike != null) {
-                _localBike.lookAtOffset = 5.0f + v * 8.0f;
-            }
+            //if (_localBike != null) {
+                //_localBike.lookAtOffset = 5.0f + v * 8.0f;
+            //}
         }
 
         void OnDebugOKButtonPressed(GameObject button) {

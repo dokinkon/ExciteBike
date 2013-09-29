@@ -44,5 +44,7 @@ public class ItemFactory {
 
         RegisterCreator(ItemType.BoostX1, ItemBoost.CreateX1);
         RegisterCreator(ItemType.BoostX3, ItemBoost.CreateX3);
+
+        RegisterCreator(ItemType.SuperStar, ItemSuperStar.Create);
     }
 }

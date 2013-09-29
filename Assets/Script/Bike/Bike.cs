@@ -222,7 +222,7 @@ public class Bike : MonoBehaviour {
         if (_currentItem!=null)
             return;
 
-        int itemTypeId = Utility.random.Next(8);
+        int itemTypeId = ItemType.SuperStar;//Utility.random.Next(8);
         _currentItem = ItemFactory.Instance.Create(itemTypeId);
         if (OnItemGot!=null) {
             OnItemGot(this);
