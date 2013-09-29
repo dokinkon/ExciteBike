@@ -52,7 +52,7 @@ public class BikeCrash : MonoBehaviour {
             }
         } else if (collider.tag == "missile") {
             StartCrash();
-        } else if (collider.tag == "spike") {
+        } else if (collider.tag == "spike" || collider.CompareTag("car")) {
             StartCrash();
         }
     }
